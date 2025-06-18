@@ -1,0 +1,75 @@
+# Règles de développement pour Brainstorm AI
+# =========================================
+
+## Règles générales
+- Toujours répondre en français
+- Maintenir la cohérence du code et de la documentation
+- Suivre les bonnes pratiques Python (PEP 8)
+- Ajouter des tests pour les nouvelles fonctionnalités
+
+## Règle d'automatisation Git
+**IMPORTANT** : À chaque amélioration ou modification de l'application, tu dois AUTOMATIQUEMENT :
+
+1. **Ajouter les fichiers modifiés** : `git add .` ou spécifier les fichiers concernés
+2. **Créer un commit descriptif** : Message en français décrivant la modification
+3. **Pousser vers GitHub** : `git push origin main`
+
+### Format des messages de commit
+- **Ajout de fonctionnalité** : "Ajout de [fonctionnalité] - [description courte]"
+- **Correction de bug** : "Correction de [problème] - [description]" 
+- **Amélioration** : "Amélioration de [composant] - [description]"
+- **Refactoring** : "Refactoring de [module] - [description]"
+- **Documentation** : "Mise à jour de la documentation - [section]"
+- **Configuration** : "Modification de la configuration - [paramètre]"
+- **Tests** : "Ajout/Mise à jour des tests - [composant]"
+
+### Exemples de workflow complet
+```bash
+# 1. Ajouter les modifications
+git add .
+
+# 2. Commiter avec message descriptif
+git commit -m "Amélioration du système de scoring - ajout validation avancée"
+
+# 3. Pousser vers GitHub
+git push origin main
+```
+
+## Règles de développement spécifiques
+
+### Structure du code
+- Maintenir la séparation agents/ et core/
+- Respecter l'architecture modulaire existante
+- Ajouter des docstrings pour les nouvelles fonctions
+
+### Configuration
+- Toute nouvelle option doit être ajoutée dans config.yaml
+- Maintenir la compatibilité avec la configuration existante
+- Documenter les nouveaux paramètres dans CONFIG_README.md
+
+### Tests
+- Créer des tests pour chaque nouvel agent
+- Tester les modifications dans tests/
+- Maintenir la couverture de tests
+
+### Documentation
+- Mettre à jour le README.md pour les nouvelles fonctionnalités majeures
+- Ajouter des exemples d'utilisation
+- Maintenir la cohérence des emojis et du formatage
+
+## Checklist avant chaque commit/push
+
+- [ ] Code testé et fonctionnel
+- [ ] Configuration mise à jour si nécessaire
+- [ ] Documentation actualisée
+- [ ] Message de commit descriptif
+- [ ] Pas de clés API ou données sensibles dans le code
+- [ ] Respect des conventions de nommage
+
+## Exceptions
+Les seules situations où ne pas faire de commit/push automatique :
+- Travail en cours non fonctionnel (WIP)
+- Tests expérimentaux temporaires
+- Modifications demandant validation utilisateur
+
+**Dans tous les autres cas : TOUJOURS commit + push automatiquement après chaque amélioration !** 
