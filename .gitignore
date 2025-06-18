@@ -181,4 +181,8 @@ logs/*.log
 # API keys and secrets
 .env
 config_local.yaml
-secrets.yaml 
+secrets.yaml
+
+# IDE and editor specific files
+cursor.rules
+.cursor/ 
