@@ -1,0 +1,148 @@
+# Configuration du système de brainstorming IA
+# ============================================
+
+# Configuration générale du brainstorming
+general:
+  # Objectif principal du brainstorming
+  objectif: "Créer un concept innovant de service IA pour les freelancers"
+  
+  # Contexte du projet
+  contexte: "Utilisation croissante de l'IA dans les métiers indépendants, besoin d'outils personnalisés"
+  
+  # Contraintes à respecter
+  contraintes: "Pas de SaaS mensuel, doit fonctionner en local ou auto-hébergé"
+  
+  # Nombre de cycles de brainstorming (optimisé : 3-4 cycles suffisent généralement)
+  cycles: 3
+  
+  # Nombre d'idées top à extraire pour l'application (augmenté pour plus d'options)
+  top_ideas_count: 5
+  
+  # Demander confirmation avant de démarrer
+  ask_confirmation: true
+
+# Configuration des agents et modèles IA
+agents:
+  # Modèles GPT optimisés pour performance/coût
+  models:
+    creatif: "gpt-4"           # GPT-4 pour maximiser la créativité
+    critique: "gpt-4-turbo"    # GPT-4-turbo pour analyse approfondie et rapidité
+    revision: "gpt-4"          # GPT-4 pour révision de qualité (upgrade depuis 3.5)
+    synthese: "gpt-4-turbo"    # GPT-4-turbo pour synthèse complexe et rapide
+    score: "gpt-3.5-turbo"     # 3.5-turbo suffisant pour scoring structuré
+    application: "gpt-4-turbo" # GPT-4-turbo pour planification détaillée
+    default: "gpt-4-turbo"     # GPT-4-turbo comme défaut (meilleur rapport qualité/vitesse)
+  
+  # Températures optimisées par rôle
+  temperatures:
+    creatif: 0.9      # Température élevée pour maximiser la créativité
+    critique: 0.4     # Température basse pour analyse précise et factuelle
+    revision: 0.6     # Température modérée pour révision équilibrée
+    synthese: 0.5     # Température modérée-basse pour synthèse cohérente
+    score: 0.2        # Température très basse pour scoring précis
+    application: 0.6  # Température modérée pour planification pratique
+    default: 0.7      # Température équilibrée par défaut
+  
+  # Limites de contexte optimisées
+  max_context_chars: 150000  # Augmenté pour GPT-4-turbo (jusqu'à 128k tokens)
+
+# Configuration de l'API OpenAI
+api:
+  # La clé API est lue depuis les variables d'environnement pour la sécurité
+  # OPENAI_API_KEY doit être définie comme variable d'environnement système
+  # Le système supporte aussi les fichiers .env comme fallback
+  
+  # Paramètres de retry optimisés pour fiabilité
+  max_retries: 5        # Augmenté pour gérer les pics de charge
+  retry_delay_base: 1.5 # Délai plus court pour améliorer la réactivité
+  
+  # Timeout pour les requêtes (augmenté pour GPT-4)
+  request_timeout: 120
+
+# Configuration des exports et logs
+export:
+  # Formats d'export optimisés
+  formats:
+    yaml: true
+    json: true      # Activé pour compatibilité avec outils d'analyse
+    markdown: true  # Activé pour documentation lisible
+  
+  # Chemins de sauvegarde
+  paths:
+    logs_dir: "logs"
+    exports_dir: "exports"
+  
+  # Nom du fichier de log avec plus d'informations
+  log_filename_pattern: "brainstorm_{timestamp}_cycles{cycles}"
+  
+  # Sauvegarder automatiquement les idées individuelles
+  save_individual_ideas: true
+
+# Configuration de l'affichage
+display:
+  # Utiliser des emojis dans l'affichage console
+  use_emojis: true
+  
+  # Afficher les tokens consommés (important pour optimisation)
+  show_token_usage: true
+  
+  # Emojis optimisés pour meilleure lisibilité
+  emojis:
+    confirmation: "🧠"
+    objectif: "🎯"
+    contexte: "📚"
+    contraintes: "⚠️"
+    cycles: "🔁"
+    creatif: "💡"
+    critique: "🔍"
+    defense: "🛡️"
+    replique: "🔄"
+    revision: "✏️"
+    synthese: "🧠"
+    application: "📌"
+    success: "✅"
+    stats: "📊"
+    idea: "💭"      # Nouvel emoji pour les idées
+    warning: "⚠️"   # Pour les avertissements
+    info: "ℹ️"      # Pour les informations
+
+# Configuration des chemins de prompts personnalisés (optionnel)
+# Si définis, ces prompts remplaceront ceux par défaut dans le code
+custom_prompts:
+  # Laisser vide pour utiliser les prompts par défaut
+  # Exemple : 
+  # creatif: "prompts/custom_creatif.txt"
+  # critique: "prompts/custom_critique.txt"
+
+# Configuration avancée optimisée
+advanced:
+  # Stratégies d'extraction des idées top (ordre optimisé)
+  idea_extraction_strategies:
+    - "numbered"    # Priorité aux listes numérotées (plus structuré)
+    - "bullet"      # Puis listes avec - (commun)
+    - "starred"     # Puis listes avec * 
+    - "fallback"    # Fallback en dernier recours
+  
+  # Validation des scores optimisée
+  score_validation:
+    min_value: 1        # Min à 1 pour éviter les scores de 0 non informatifs
+    max_value: 10
+    required_keys: ["impact", "faisabilite", "originalite", "clarte"]
+    fallback_value: 6   # Valeur par défaut légèrement positive
+  
+  # Nouveaux paramètres d'optimisation
+  optimization:
+    # Détection de redondance entre cycles
+    detect_redundancy: true
+    
+    # Seuil de similarité pour considérer une idée comme redondante (0-1)
+    similarity_threshold: 0.8
+    
+    # Forcer la diversité des idées
+    enforce_diversity: true
+    
+    # Nombre minimum de mots par idée pour qu'elle soit considérée complète
+    min_idea_length: 20
+    
+    # Bonus de scoring pour l'originalité
+    originality_bonus: 1.2 

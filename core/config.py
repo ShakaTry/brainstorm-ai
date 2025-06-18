@@ -1,0 +1,188 @@
+"""
+Module de gestion de la configuration centralisée.
+Charge et gère les paramètres depuis config.yaml
+"""
+
+import os
+import yaml
+from typing import Dict, Any, Optional
+from pathlib import Path
+
+class Config:
+    """Gestionnaire de configuration singleton."""
+    
+    _instance = None
+    _config = None
+    
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+    
+    def __init__(self):
+        if self._config is None:
+            self.load_config()
+    
+    def load_config(self, config_path: str = "config.yaml"):
+        """Charge la configuration depuis le fichier YAML."""
+        # Chercher le fichier de config dans le répertoire racine du projet
+        root_dir = Path(__file__).parent.parent
+        config_file = root_dir / config_path
+        
+        if not config_file.exists():
+            raise FileNotFoundError(f"Fichier de configuration non trouvé : {config_file}")
+        
+        with open(config_file, "r", encoding="utf-8") as f:
+            self._config = yaml.safe_load(f)
+        
+        # Valider la configuration
+        self._validate_config()
+    
+    def _validate_config(self):
+        """Valide que la configuration contient toutes les sections requises."""
+        required_sections = ["general", "agents", "api", "export", "display"]
+        for section in required_sections:
+            if section not in self._config:
+                raise ValueError(f"Section requise manquante dans la configuration : {section}")
+    
+    def get(self, key_path: str, default: Any = None) -> Any:
+        """
+        Récupère une valeur de configuration avec notation pointée.
+        
+        Args:
+            key_path: Chemin vers la clé (ex: "agents.models.creatif")
+            default: Valeur par défaut si la clé n'existe pas
+            
+        Returns:
+            La valeur de configuration ou la valeur par défaut
+        """
+        keys = key_path.split(".")
+        value = self._config
+        
+        for key in keys:
+            if isinstance(value, dict) and key in value:
+                value = value[key]
+            else:
+                return default
+        
+        return value
+    
+    def get_model_for_role(self, role: str) -> str:
+        """Retourne le modèle GPT à utiliser pour un rôle donné."""
+        return self.get(f"agents.models.{role}", 
+                       self.get("agents.models.default", "gpt-3.5-turbo"))
+    
+    def get_temperature_for_role(self, role: str) -> float:
+        """Retourne la température à utiliser pour un rôle donné."""
+        return self.get(f"agents.temperatures.{role}", 
+                       self.get("agents.temperatures.default", 0.7))
+    
+    def get_emoji(self, name: str) -> str:
+        """Retourne l'emoji pour un nom donné, ou une chaîne vide si désactivé."""
+        if not self.get("display.use_emojis", True):
+            return ""
+        return self.get(f"display.emojis.{name}", "")
+    
+    @property
+    def objectif(self) -> str:
+        return self.get("general.objectif", "")
+    
+    @property
+    def contexte(self) -> str:
+        return self.get("general.contexte", "")
+    
+    @property
+    def contraintes(self) -> str:
+        return self.get("general.contraintes", "")
+    
+    @property
+    def cycles(self) -> int:
+        return self.get("general.cycles", 3)
+    
+    @property
+    def max_context_chars(self) -> int:
+        return self.get("agents.max_context_chars", 120000)
+    
+    @property
+    def max_retries(self) -> int:
+        return self.get("api.max_retries", 3)
+    
+    @property
+    def retry_delay_base(self) -> int:
+        return self.get("api.retry_delay_base", 2)
+    
+    @property
+    def logs_dir(self) -> str:
+        return self.get("export.paths.logs_dir", "logs")
+    
+    @property
+    def exports_dir(self) -> str:
+        return self.get("export.paths.exports_dir", "exports")
+    
+    @property
+    def top_ideas_count(self) -> int:
+        return self.get("general.top_ideas_count", 3)
+    
+    @property
+    def ask_confirmation(self) -> bool:
+        return self.get("general.ask_confirmation", True)
+    
+    @property
+    def show_token_usage(self) -> bool:
+        return self.get("display.show_token_usage", True)
+    
+    def get_log_filename(self, timestamp: str) -> str:
+        """Génère le nom du fichier de log avec le pattern configuré."""
+        pattern = self.get("export.log_filename_pattern", "brainstorm_{timestamp}")
+        return pattern.format(timestamp=timestamp)
+    
+    def should_export_format(self, format_name: str) -> bool:
+        """Vérifie si un format d'export est activé."""
+        return self.get(f"export.formats.{format_name}", False)
+    
+    def get_idea_extraction_strategies(self) -> list:
+        """Retourne les stratégies d'extraction d'idées."""
+        return self.get("advanced.idea_extraction_strategies", 
+                       ["numbered", "starred", "bullet", "fallback"])
+    
+    def get_score_validation_config(self) -> dict:
+        """Retourne la configuration de validation des scores."""
+        return self.get("advanced.score_validation", {
+            "min_value": 1,
+            "max_value": 10,
+            "required_keys": ["impact", "faisabilite", "originalite", "clarte"],
+            "fallback_value": 6
+        })
+    
+    def get_optimization_config(self) -> dict:
+        """Retourne la configuration d'optimisation."""
+        return self.get("advanced.optimization", {
+            "detect_redundancy": True,
+            "similarity_threshold": 0.8,
+            "enforce_diversity": True,
+            "min_idea_length": 20,
+            "originality_bonus": 1.2
+        })
+    
+    @property
+    def detect_redundancy(self) -> bool:
+        return self.get("advanced.optimization.detect_redundancy", True)
+    
+    @property
+    def similarity_threshold(self) -> float:
+        return self.get("advanced.optimization.similarity_threshold", 0.8)
+    
+    @property
+    def enforce_diversity(self) -> bool:
+        return self.get("advanced.optimization.enforce_diversity", True)
+    
+    @property
+    def min_idea_length(self) -> int:
+        return self.get("advanced.optimization.min_idea_length", 20)
+    
+    @property
+    def originality_bonus(self) -> float:
+        return self.get("advanced.optimization.originality_bonus", 1.2)
+
+# Instance globale de configuration
+config = Config() 
