@@ -172,7 +172,7 @@ Desktop.ini
 
 # Logs
 *.log
-logs/*.log
+data/logs/*.log
 
 # Temporary files
 *.tmp

@@ -3,6 +3,11 @@
 Script de test pour vérifier la correction du système d'export.
 """
 
+import sys
+from pathlib import Path as PathLib
+# Ajouter le répertoire src au path pour importer les modules
+sys.path.insert(0, str(PathLib(__file__).parent.parent / "src"))
+
 import os
 import tempfile
 from pathlib import Path

@@ -36,8 +36,11 @@ class Config:
                 self.load_config()
                 Config._initialized = True
     
-    def load_config(self, config_path: str = "config.yaml"):
+    def load_config(self, config_path: str = None):
         """Charge la configuration depuis un fichier YAML."""
+        if config_path is None:
+            # Chercher config.yaml dans le dossier config
+            config_path = Path(__file__).parent.parent.parent / "config" / "config.yaml"
         logger.info(f"Chargement de la configuration depuis {config_path}")
         try:
             config_file = Path(config_path)
@@ -60,7 +63,7 @@ class Config:
             logger.error(f"Erreur inattendue lors du chargement de la configuration : {e}")
             raise
     
-    def reload_config(self, config_path: str = "config.yaml"):
+    def reload_config(self, config_path: str = None):
         """Force le rechargement de la configuration."""
         self._config = None
         self.load_config(config_path)
@@ -140,11 +143,11 @@ class Config:
     
     @property
     def logs_dir(self) -> str:
-        return self.get("export.paths.logs_dir", "logs")
+        return self.get("export.paths.logs_dir", "data/logs")
     
     @property
     def exports_dir(self) -> str:
-        return self.get("export.paths.exports_dir", "exports")
+        return self.get("export.paths.exports_dir", "data/exports")
     
     @property
     def top_ideas_count(self) -> int:

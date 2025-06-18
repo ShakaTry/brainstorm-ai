@@ -27,18 +27,18 @@ test: ## Lance les tests avec coverage
 
 format: ## Formate le code avec Black et isort
 	@echo "$(BLUE)Formatage avec Black...$(NC)"
-	black agents core tests main.py setup.py
+	black src tests main.py setup.py scripts
 	@echo "$(BLUE)Tri des imports avec isort...$(NC)"
-	isort agents core tests main.py setup.py
+	isort src tests main.py setup.py scripts
 
 lint: ## Vérifie le code avec flake8 et mypy
 	@echo "$(BLUE)Vérification avec flake8...$(NC)"
-	flake8 agents core tests main.py
+	flake8 src tests main.py scripts
 	@echo "$(BLUE)Vérification des types avec mypy...$(NC)"
-	mypy agents core main.py
+	mypy src main.py
 
 type-check: ## Vérifie les types avec mypy (alias)
-	mypy agents core main.py
+	mypy src main.py
 
 clean: ## Nettoie les fichiers temporaires
 	@echo "$(BLUE)Nettoyage des fichiers temporaires...$(NC)"

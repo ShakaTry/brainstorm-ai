@@ -102,24 +102,32 @@ general:
 
 ```
 brainstorm_ai/
-├── agents/                 # Agents IA spécialisés
-│   ├── agent_creatif.py   # Génération d'idées
-│   ├── agent_critique.py  # Analyse critique
-│   ├── agent_revision.py  # Amélioration des idées
-│   ├── agent_synthese.py  # Synthèse finale
-│   ├── agent_score.py     # Évaluation quantitative
-│   └── agent_application.py # Plans d'action
-├── core/                   # Moteur principal
-│   ├── config.py          # Gestion de la configuration
-│   ├── gpt.py            # Interface OpenAI
-│   ├── loop_manager.py   # Orchestration des cycles
-│   ├── exporter.py       # Export multi-format
-│   └── utils.py          # Utilitaires
-├── logs/                  # Historique des sessions
-├── tests/                 # Tests unitaires
-├── config.yaml           # Configuration principale
-├── main.py               # Point d'entrée
-└── README.md             # Documentation
+├── src/                    # Code source principal
+│   ├── agents/            # Agents IA spécialisés
+│   │   ├── agent_creatif.py   # Génération d'idées
+│   │   ├── agent_critique.py  # Analyse critique
+│   │   ├── agent_revision.py  # Amélioration des idées
+│   │   ├── agent_synthese.py  # Synthèse finale
+│   │   ├── agent_score.py     # Évaluation quantitative
+│   │   └── agent_application.py # Plans d'action
+│   ├── core/              # Moteur principal
+│   │   ├── config.py      # Gestion de la configuration
+│   │   ├── gpt.py         # Interface OpenAI
+│   │   ├── loop_manager.py # Orchestration des cycles
+│   │   ├── exporter.py    # Export multi-format
+│   │   └── utils.py       # Utilitaires
+│   └── main.py            # Point d'entrée principal
+├── config/                # Configuration
+│   ├── config.yaml        # Configuration principale
+│   └── env.example        # Exemple de variables d'environnement
+├── tests/                 # Tests unitaires et d'intégration
+├── scripts/               # Scripts utilitaires et démos
+├── data/                  # Données du projet
+│   ├── exports/           # Exports générés
+│   └── logs/              # Historique des sessions
+├── docs/                  # Documentation complète
+├── main.py                # Point d'entrée racine
+└── README.md              # Documentation
 ```
 
 ## ⚙️ Configuration avancée
