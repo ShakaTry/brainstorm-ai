@@ -70,7 +70,7 @@ class Config:
     def get_model_for_role(self, role: str) -> str:
         """Retourne le modèle GPT à utiliser pour un rôle donné."""
         return self.get(f"agents.models.{role}", 
-                       self.get("agents.models.default", "gpt-3.5-turbo"))
+                       self.get("agents.models.default", "gpt-4o"))
     
     def get_temperature_for_role(self, role: str) -> float:
         """Retourne la température à utiliser pour un rôle donné."""

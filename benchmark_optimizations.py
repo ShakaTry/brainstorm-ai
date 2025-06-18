@@ -44,9 +44,10 @@ class BrainstormBenchmark:
         """Calcule un score de performance basé sur les modèles et cycles."""
         # Points par modèle (arbitraires mais cohérents)
         model_scores = {
-            "gpt-4-turbo": 9,
-            "gpt-4": 8,
-            "gpt-3.5-turbo": 6
+                "gpt-4o": 10,
+    "gpt-4-turbo": 9,
+    "gpt-4": 8,
+    "gpt-3.5-turbo": 6
         }
         
         # Score basé sur les modèles utilisés
@@ -153,7 +154,7 @@ class BrainstormBenchmark:
         # Configuration de base théorique
         base_config = {
             "cycles": 5,
-            "models": {"default": "gpt-3.5-turbo"},
+            "models": {"default": "gpt-4o"},
             "temperatures": {"default": 0.7},
             "export_formats": 1,
             "optimizations": False

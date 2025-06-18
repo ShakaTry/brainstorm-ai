@@ -24,12 +24,12 @@ general:
 ```yaml
 agents:
   models:
-    creatif: "gpt-4"      # Pour la génération d'idées
-    critique: "gpt-4"     # Pour l'analyse critique
-    revision: "gpt-3.5-turbo"  # Pour la reformulation
-    synthese: "gpt-4"     # Pour la synthèse finale
-    score: "gpt-3.5-turbo"  # Pour l'évaluation
-    application: "gpt-4"  # Pour la planification
+    creatif: "gpt-4o"     # Pour la génération d'idées innovantes
+    critique: "gpt-4o"    # Pour l'analyse critique approfondie
+    revision: "gpt-4o"    # Pour la reformulation optimale
+    synthese: "gpt-4o"    # Pour la synthèse finale structurée
+    score: "gpt-4o"       # Pour l'évaluation précise
+    application: "gpt-4o" # Pour la planification détaillée
 ```
 
 #### Températures (créativité vs précision)
@@ -87,13 +87,13 @@ general:
   objectif: "Développer une application mobile innovante"
 ```
 
-### Utiliser GPT-3.5 pour économiser des tokens
+### Configuration unifiée avec GPT-4o
 
 ```yaml
 agents:
   models:
-    creatif: "gpt-3.5-turbo"
-    critique: "gpt-3.5-turbo"
+    creatif: "gpt-4o"     # Modèle unifié pour tous les agents
+    critique: "gpt-4o"    # Performance optimale garantie
 ```
 
 ### Désactiver l'affichage des emojis

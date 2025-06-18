@@ -5,14 +5,15 @@
 ### 1. **Optimisation des Modèles IA**
 
 #### Changements effectués :
-- **GPT-4-turbo** pour critique, synthèse et application (vitesse + qualité)
-- **GPT-4** maintenu pour créatif et révision (qualité maximale)
-- **Défaut** upgradé vers GPT-4-turbo (meilleur rapport qualité/vitesse)
+- **GPT-4o uniformément** pour tous les agents (performance et cohérence maximales)
+- **Architecture unifiée** éliminant la complexité multi-modèles
+- **Configuration simplifiée** avec un seul modèle haute performance
 
 #### Bénéfices :
-- ⚡ **Vitesse** : GPT-4-turbo est 2x plus rapide que GPT-4
-- 💰 **Coût** : GPT-4-turbo coûte moins cher que GPT-4 classique
-- 📏 **Contexte** : Support jusqu'à 128k tokens vs 8k pour GPT-3.5
+- ⚡ **Performance** : GPT-4o offre la vitesse et qualité optimales
+- 🎯 **Cohérence** : Responses uniformes entre tous les agents
+- 🛠️ **Simplicité** : Configuration et maintenance facilitées
+- 📏 **Contexte** : Support complet jusqu'à 128k tokens
 
 ### 2. **Optimisation des Températures**
 
@@ -81,8 +82,8 @@ originality_bonus: 1.2
 ## 📊 Impact Attendu des Optimisations
 
 ### Performance :
-- ⚡ **-30% temps d'exécution** (GPT-4-turbo + moins de cycles)
-- 💰 **-25% coût en tokens** (optimisation modèles + cycles)
+- ⚡ **Temps d'exécution optimisé** (GPT-4o uniforme + moins de cycles)
+- 🎯 **Cohérence maximale** (un seul modèle pour tous les agents)
 - 🔄 **+50% fiabilité** (retry amélioré)
 
 ### Qualité :
@@ -105,14 +106,14 @@ agents:
     critique: 0.3  # Analyse stricte
 ```
 
-### Pour l'Efficacité Économique :
+### Pour l'Efficacité Optimisée :
 ```yaml
 agents:
   models:
-    critique: "gpt-3.5-turbo"  # Économie sur la critique
-    synthese: "gpt-4"          # Qualité sur la synthèse
+    default: "gpt-4o"          # Modèle unifié haute performance
 general:
-  cycles: 2  # Cycles minimaux
+  cycles: 2                    # Cycles minimaux pour rapidité
+  top_ideas_count: 3          # Nombre d'idées réduit
 ```
 
 ### Pour Projets Complexes :

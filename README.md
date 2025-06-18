@@ -18,7 +18,7 @@ Brainstorm AI est un outil de génération d'idées qui simule un processus de b
 
 - **Processus itératif** : Système de cycles d'amélioration continue
 - **Configuration flexible** : Personnalisation complète via `config.yaml`
-- **Modèles IA optimisés** : Support GPT-3.5 et GPT-4 avec paramètres adaptés
+- **Modèles IA optimisés** : Powered by GPT-4o pour des performances maximales
 - **Export multi-format** : YAML, JSON, et Markdown
 - **Gestion intelligente** : Détection de redondance et optimisation des tokens
 - **Interface intuitive** : Affichage avec emojis et progression claire
@@ -129,11 +129,11 @@ brainstorm_ai/
 ```yaml
 agents:
   models:
-    creatif: "gpt-4"           # Créativité maximale
-    critique: "gpt-4-turbo"    # Analyse rapide et précise
-    revision: "gpt-4"          # Qualité de révision
-    synthese: "gpt-4-turbo"    # Synthèse complexe
-    score: "gpt-3.5-turbo"     # Évaluation efficace
+    creatif: "gpt-4o"          # Créativité maximale et rapidité
+    critique: "gpt-4o"         # Analyse approfondie et précise
+    revision: "gpt-4o"         # Révision de qualité optimale
+    synthese: "gpt-4o"         # Synthèse complexe et structurée
+    score: "gpt-4o"            # Évaluation précise et cohérente
 ```
 
 ### Températures par rôle

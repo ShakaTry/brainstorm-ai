@@ -4,13 +4,13 @@
 # Configuration générale du brainstorming
 general:
   # Objectif principal du brainstorming
-  objectif: "Créer un concept innovant de service IA pour les freelancers"
+  objectif: "Développer un écosystème d'IA collaborative pour la création de villes intelligentes citoyennes"
   
   # Contexte du projet
-  contexte: "Utilisation croissante de l'IA dans les métiers indépendants, besoin d'outils personnalisés"
+  contexte: "Face à l'urbanisation croissante et aux défis climatiques, les citoyens veulent participer activement à la transformation de leur environnement urbain. Les municipalités cherchent des solutions pour impliquer les habitants dans la co-création de services urbains intelligents."
   
   # Contraintes à respecter
-  contraintes: "Pas de SaaS mensuel, doit fonctionner en local ou auto-hébergé"
+  contraintes: "Solution open-source et décentralisée, respect strict de la vie privée des citoyens, interopérable avec les systèmes municipaux existants, accessible sans smartphone pour l'inclusion numérique"
   
   # Nombre de cycles de brainstorming (optimisé : 3-4 cycles suffisent généralement)
   cycles: 3
@@ -25,13 +25,13 @@ general:
 agents:
   # Modèles GPT optimisés pour performance/coût
   models:
-    creatif: "gpt-4"           # GPT-4 pour maximiser la créativité
-    critique: "gpt-4-turbo"    # GPT-4-turbo pour analyse approfondie et rapidité
-    revision: "gpt-4"          # GPT-4 pour révision de qualité (upgrade depuis 3.5)
-    synthese: "gpt-4-turbo"    # GPT-4-turbo pour synthèse complexe et rapide
-    score: "gpt-3.5-turbo"     # 3.5-turbo suffisant pour scoring structuré
-    application: "gpt-4-turbo" # GPT-4-turbo pour planification détaillée
-    default: "gpt-4-turbo"     # GPT-4-turbo comme défaut (meilleur rapport qualité/vitesse)
+    creatif: "gpt-4o"           # GPT-4o pour créativité maximale et rapidité
+    critique: "gpt-4o"          # GPT-4o pour analyse approfondie et précise
+    revision: "gpt-4o"          # GPT-4o pour révision de qualité optimale
+    synthese: "gpt-4o"          # GPT-4o pour synthèse complexe et structurée
+    score: "gpt-4o"             # GPT-4o pour évaluation précise et cohérente
+    application: "gpt-4o"       # GPT-4o pour planification détaillée
+    default: "gpt-4o"           # GPT-4o comme défaut (meilleur modèle disponible)
   
   # Températures optimisées par rôle
   temperatures:
@@ -44,7 +44,7 @@ agents:
     default: 0.7      # Température équilibrée par défaut
   
   # Limites de contexte optimisées
-  max_context_chars: 150000  # Augmenté pour GPT-4-turbo (jusqu'à 128k tokens)
+  max_context_chars: 150000  # Optimisé pour GPT-4o (jusqu'à 128k tokens)
 
 # Configuration de l'API OpenAI
 api:
@@ -56,7 +56,7 @@ api:
   max_retries: 5        # Augmenté pour gérer les pics de charge
   retry_delay_base: 1.5 # Délai plus court pour améliorer la réactivité
   
-  # Timeout pour les requêtes (augmenté pour GPT-4)
+  # Timeout pour les requêtes (optimisé pour GPT-4o)
   request_timeout: 120
 
 # Configuration des exports et logs
