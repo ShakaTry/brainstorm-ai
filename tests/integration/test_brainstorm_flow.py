@@ -1,5 +1,8 @@
 """
 Tests d'intégration pour le flux complet de brainstorming.
+
+Ces tests vérifient le bon fonctionnement de l'ensemble du système
+en simulant des sessions complètes de brainstorming.
 """
 
 import os
@@ -9,9 +12,9 @@ from unittest.mock import patch, MagicMock
 import pytest
 import yaml
 
-from core.loop_manager import run_brainstorm_loop
-from core.config import config
-from core.gpt import reset_gpt_stats, get_gpt_stats
+from brainstorm_ai.core.loop_manager import run_brainstorm_loop
+from brainstorm_ai.core.config import config
+from brainstorm_ai.core.gpt import reset_gpt_stats, get_gpt_stats
 
 
 class TestBrainstormFlow:

@@ -3,7 +3,7 @@ Agent de synthèse pour la consolidation des résultats.
 """
 
 from typing import List
-from agents.base_agent import BaseAgent, PromptRegistry
+from .base import BaseAgent, PromptRegistry
 
 
 class AgentSynthese(BaseAgent):

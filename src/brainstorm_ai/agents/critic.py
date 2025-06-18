@@ -2,7 +2,7 @@
 Agent critique pour l'analyse constructive des idées.
 """
 
-from agents.base_agent import BaseAgent, PromptRegistry
+from .base import BaseAgent, PromptRegistry
 
 
 class AgentCritique(BaseAgent):

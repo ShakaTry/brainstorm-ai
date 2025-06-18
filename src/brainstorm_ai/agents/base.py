@@ -6,7 +6,7 @@ Fournit une classe abstraite et des utilitaires communs.
 import logging
 from abc import ABC, abstractmethod
 from typing import Dict, Any, Optional
-from core.gpt import gpt
+from ..core.gpt import gpt
 
 logger = logging.getLogger(__name__)
 

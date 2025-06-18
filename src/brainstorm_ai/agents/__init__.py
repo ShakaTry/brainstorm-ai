@@ -10,13 +10,13 @@ Ce module contient tous les agents spécialisés du système :
 - Agent Application : planification de mise en œuvre
 """
 
-from agents.base_agent import BaseAgent, PromptRegistry
-from agents.agent_creatif import AgentCreatif, prompt_creatif, prompt_defense
-from agents.agent_critique import prompt_critique, prompt_replique
-from agents.agent_revision import prompt_revision
-from agents.agent_score import prompt_score
-from agents.agent_synthese import prompt_synthese
-from agents.agent_application import (
+from .base import BaseAgent, PromptRegistry
+from .creative import AgentCreatif, prompt_creatif, prompt_defense
+from .critic import prompt_critique, prompt_replique
+from .revision import prompt_revision
+from .score import prompt_score
+from .synthesis import prompt_synthese
+from .application import (
     prompt_plan, 
     prompt_critique_plan, 
     prompt_defense_plan, 

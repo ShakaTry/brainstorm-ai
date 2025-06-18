@@ -2,7 +2,7 @@
 Agent créatif pour la génération d'idées innovantes.
 """
 
-from agents.base_agent import BaseAgent, PromptRegistry
+from .base import BaseAgent, PromptRegistry
 
 
 class AgentCreatif(BaseAgent):

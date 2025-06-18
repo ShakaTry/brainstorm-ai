@@ -2,7 +2,7 @@
 Agent de scoring pour l'évaluation objective des idées.
 """
 
-from agents.base_agent import BaseAgent, PromptRegistry
+from .base import BaseAgent, PromptRegistry
 
 
 class AgentScore(BaseAgent):

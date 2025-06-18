@@ -1,5 +1,5 @@
 import pytest
-from agents.agent_revision import prompt_revision
+from brainstorm_ai.agents.revision import prompt_revision
 
 def test_prompt_revision():
     """

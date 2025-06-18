@@ -2,7 +2,7 @@
 Agent de révision pour l'amélioration des idées.
 """
 
-from agents.base_agent import BaseAgent, PromptRegistry
+from .base import BaseAgent, PromptRegistry
 
 
 class AgentRevision(BaseAgent):

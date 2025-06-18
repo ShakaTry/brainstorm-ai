@@ -4,7 +4,7 @@ import logging
 from typing import Optional, Dict, Any
 from functools import lru_cache
 from openai import OpenAI
-from core.config import config
+from .config import config
 
 logger = logging.getLogger(__name__)
 

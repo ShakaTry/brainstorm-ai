@@ -5,18 +5,18 @@ import re
 import logging
 from pathlib import Path
 from typing import List, Dict, Any, Optional
-from agents.agent_creatif import prompt_creatif, prompt_defense
-from agents.agent_critique import prompt_critique, prompt_replique
-from agents.agent_revision import prompt_revision
-from agents.agent_synthese import prompt_synthese
-from agents.agent_score import prompt_score
-from agents.agent_application import prompt_plan, prompt_critique_plan, prompt_defense_plan, prompt_revision_plan
-from core.exporter import export_yaml, export_json, export_markdown
-from core.utils import dedupe
-from core.config import config
-from core.progress_tracker import ProgressTracker
-from core.gpt import get_gpt_stats
-from core.types import CycleLog, ApplicationLog, BrainstormLog, ScoreDict
+from ..agents.creative import prompt_creatif, prompt_defense
+from ..agents.critic import prompt_critique, prompt_replique
+from ..agents.revision import prompt_revision
+from ..agents.synthesis import prompt_synthese
+from ..agents.score import prompt_score
+from ..agents.application import prompt_plan, prompt_critique_plan, prompt_defense_plan, prompt_revision_plan
+from .exporter import export_yaml, export_json, export_markdown
+from .utils import dedupe
+from .config import config
+from .progress_tracker import ProgressTracker
+from .gpt import get_gpt_stats
+from .types import CycleLog, ApplicationLog, BrainstormLog, ScoreDict
 
 logger = logging.getLogger(__name__)
 

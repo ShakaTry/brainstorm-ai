@@ -1,5 +1,5 @@
 import pytest
-from core.utils import dedupe, extract_numbered_ideas
+from brainstorm_ai.core.utils import dedupe, extract_numbered_ideas
 
 def test_dedupe():
     """

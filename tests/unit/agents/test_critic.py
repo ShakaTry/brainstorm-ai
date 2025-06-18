@@ -1,5 +1,5 @@
 import pytest
-from agents.agent_critique import prompt_critique, prompt_replique
+from brainstorm_ai.agents.critic import prompt_critique, prompt_replique
 
 def test_prompt_critique():
     """

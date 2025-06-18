@@ -2,7 +2,7 @@
 Agent d'application pour la planification de mise en œuvre.
 """
 
-from agents.base_agent import BaseAgent, PromptRegistry
+from .base import BaseAgent, PromptRegistry
 
 
 class AgentApplication(BaseAgent):

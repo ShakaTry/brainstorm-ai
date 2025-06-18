@@ -1,5 +1,5 @@
 import pytest
-from agents.agent_creatif import prompt_creatif, prompt_defense
+from brainstorm_ai.agents.creative import prompt_creatif, prompt_defense
 
 def test_prompt_creatif():
     """

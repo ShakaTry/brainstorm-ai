@@ -6,7 +6,7 @@ Affiche une barre de progression et des indicateurs visuels pour suivre l'avance
 import sys
 import time
 from typing import Optional
-from core.config import config
+from .config import config
 
 class ProgressTracker:
     """Gestionnaire de progression pour le brainstorm."""

@@ -1,5 +1,5 @@
 import pytest
-from agents.agent_score import prompt_score
+from brainstorm_ai.agents.score import prompt_score
 
 def test_prompt_score():
     """

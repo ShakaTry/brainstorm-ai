@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Point d'entrée principal du projet Brainstorm AI.
-Redirige vers le fichier main.py dans le dossier src.
+Redirige vers le fichier main.py dans le dossier src/brainstorm_ai/cli.
 """
 
 import sys
@@ -11,7 +11,8 @@ from pathlib import Path
 src_path = Path(__file__).parent / "src"
 sys.path.insert(0, str(src_path))
 
-# Importer et exécuter le main depuis src
-from main import *
+# Importer et exécuter le main depuis brainstorm_ai.cli
+from brainstorm_ai.cli.main import main
 
-# Le code s'exécute automatiquement grâce au if __name__ == "__main__" dans src/main.py 
+if __name__ == "__main__":
+    main() 

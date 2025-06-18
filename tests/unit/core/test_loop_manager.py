@@ -1,7 +1,7 @@
 import pytest
 import json
 import os
-from core.loop_manager import traiter_cycle, save_full_log
+from brainstorm_ai.core.loop_manager import traiter_cycle, save_full_log
 from unittest.mock import patch
 
 def test_traiter_cycle_success(mock_gpt):

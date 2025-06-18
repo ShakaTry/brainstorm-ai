@@ -1,5 +1,5 @@
 import pytest
-from agents.agent_application import (
+from brainstorm_ai.agents.application import (
     prompt_plan,
     prompt_critique_plan,
     prompt_defense_plan,

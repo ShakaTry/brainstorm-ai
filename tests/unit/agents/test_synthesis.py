@@ -1,5 +1,5 @@
 import pytest
-from agents.agent_synthese import prompt_synthese
+from brainstorm_ai.agents.synthesis import prompt_synthese
 
 def test_prompt_synthese():
     """

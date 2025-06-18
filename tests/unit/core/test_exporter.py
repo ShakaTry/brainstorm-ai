@@ -2,7 +2,7 @@ import pytest
 import yaml
 import json
 from pathlib import Path
-from core.exporter import export_yaml, export_json, escape_markdown, export_markdown
+from brainstorm_ai.core.exporter import export_yaml, export_json, escape_markdown, export_markdown
 
 @pytest.fixture
 def sample_data():

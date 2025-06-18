@@ -2,13 +2,10 @@ import os
 import sys
 import logging
 from pathlib import Path
-import sys
-import os
-# Ajouter le dossier parent au path pour les imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from core.loop_manager import run_brainstorm_loop
-from core.config import config
 import openai
+
+from ..core.loop_manager import run_brainstorm_loop
+from ..core.config import config
 
 # Configuration du logging
 log_dir = Path("data/logs")
@@ -53,7 +50,8 @@ if not api_key.startswith(('sk-', 'sk-proj-')):
 openai.api_key = api_key
 logger.info("Clé API OpenAI configurée avec succès")
 
-if __name__ == "__main__":
+def main():
+    """Point d'entrée principal du CLI."""
     # Charger les paramètres depuis la configuration
     objectif = config.objectif
     contexte = config.contexte
@@ -95,3 +93,6 @@ if __name__ == "__main__":
         print(f"\n❌ Erreur fatale : {str(e)}")
         print("Consultez logs/brainstorm.log pour plus de détails")
         sys.exit(1)
+
+if __name__ == "__main__":
+    main()
