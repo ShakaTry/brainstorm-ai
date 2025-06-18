@@ -16,6 +16,13 @@ Le système de progression visuelle a été ajouté pour offrir un suivi en temp
 - **Émojis contextuels** : Chaque étape a son emoji dédié
 - **Messages de statut** : Indique ce qui se passe actuellement
 
+### 💰 **Suivi des Coûts et Tokens (NOUVEAU)**
+- **Suivi temps réel** : `💰 15,247 tokens | $0.0654`
+- **Estimation préalable** : Coût total estimé avant confirmation
+- **Résumé détaillé** : Récapitulatif complet en fin de session
+- **Support multi-modèles** : Calcul précis selon les prix OpenAI
+- **Transparence totale** : Aucune surprise sur les coûts
+
 ### Suivi Multi-niveaux
 1. **Cycles de brainstorming** (6 étapes par cycle)
    - 🎨 Créatif
@@ -161,4 +168,107 @@ Le brainstorm fonctionnera normalement sans affichage de progression.
 ### Compatibilité Terminal
 - Fonctionne avec la plupart des terminaux modernes
 - Supporte les caractères Unicode pour les barres de progression et émojis
-- Fallback gracieux si les émojis ne sont pas supportés 
+- Fallback gracieux si les émojis ne sont pas supportés
+
+## 💰 **Système de Suivi des Coûts et Tokens**
+
+### 🎯 **Vue d'Ensemble**
+Le système de suivi des coûts offre une transparence totale sur la consommation de tokens et les coûts associés aux appels API OpenAI.
+
+### 📊 **Fonctionnalités**
+
+#### 📋 **Estimation Préalable**
+Avant le démarrage du brainstorm, une estimation complète est affichée :
+
+```
+💰 === ESTIMATION DU COÛT ===
+📞 Appels API prévus: 21
+💵 Coût estimé: $0.2730
+
+📊 Répartition par modèle:
+   • gpt-4o: 21 appels - $0.2730
+```
+
+#### 📈 **Suivi Temps Réel**
+Pendant l'exécution, les informations de coût sont intégrées à la barre de progression :
+
+```
+[████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 35.2% | Phase: Cycle 2/3 - Critique | 💰 15,247 tokens | $0.0654 | 🔍 Analyse...
+```
+
+**Éléments affichés :**
+- `💰 15,247 tokens` : Nombre total de tokens consommés
+- `$0.0654` : Coût cumulé en dollars américains
+- Mise à jour automatique après chaque appel API
+
+#### 📊 **Résumé Final Détaillé**
+À la fin du brainstorm, un résumé complet est affiché :
+
+```
+💰 === RÉSUMÉ DES COÛTS ===
+📝 Total d'appels API: 21
+🔤 Tokens d'entrée: 47,668
+🔤 Tokens de sortie: 15,644
+🔤 Tokens totaux: 63,312
+💵 Coût total: $0.2756
+
+📊 Répartition par modèle:
+   • gpt-4o: 21 appels - $0.2756
+```
+
+### ⚙️ **Configuration des Prix**
+
+Les prix des modèles OpenAI sont configurés dans `config.yaml` :
+
+```yaml
+api:
+  # Prix des modèles OpenAI (en dollars par 1000 tokens)
+  pricing:
+    gpt-4o:
+      input: 0.0025      # $2.50 per 1K input tokens
+      output: 0.01       # $10.00 per 1K output tokens
+    gpt-4o-mini:
+      input: 0.00015     # $0.15 per 1K input tokens
+      output: 0.0006     # $0.60 per 1K output tokens
+    gpt-4:
+      input: 0.03        # $30.00 per 1K input tokens
+      output: 0.06       # $60.00 per 1K output tokens
+    gpt-3.5-turbo:
+      input: 0.0005      # $0.50 per 1K input tokens
+      output: 0.0015     # $1.50 per 1K output tokens
+```
+
+### 🔧 **Méthodes de Calcul**
+
+#### Estimation du Coût Total
+```python
+config.estimate_total_cost(cycles, ideas_count)
+```
+
+#### Calcul du Coût d'un Appel
+```python
+config.calculate_cost(model, input_tokens, output_tokens)
+```
+
+#### Suivi des Appels API
+```python
+progress_tracker.add_api_call(model, input_tokens, output_tokens)
+```
+
+### 📈 **Avantages**
+
+1. **Transparence totale** : Aucune surprise sur les coûts
+2. **Contrôle budgétaire** : Estimation avant confirmation
+3. **Optimisation** : Identification des phases coûteuses
+4. **Historique** : Suivi détaillé par session
+5. **Multi-modèles** : Support de tous les modèles OpenAI
+
+### 🎮 **Test du Système**
+
+Utilisez la démonstration pour voir le système en action :
+
+```bash
+python demo_progression.py
+```
+
+La démonstration simule les appels API et montre le suivi des coûts sans consommer de tokens réels. 

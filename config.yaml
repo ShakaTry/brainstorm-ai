@@ -58,6 +58,21 @@ api:
   
   # Timeout pour les requêtes (optimisé pour GPT-4o)
   request_timeout: 120
+  
+  # Prix des modèles OpenAI (en dollars par 1000 tokens) - Mis à jour Décembre 2024
+  pricing:
+    gpt-4o:
+      input: 0.0025      # $2.50 per 1K input tokens
+      output: 0.01       # $10.00 per 1K output tokens
+    gpt-4o-mini:
+      input: 0.00015     # $0.15 per 1K input tokens
+      output: 0.0006     # $0.60 per 1K output tokens
+    gpt-4:
+      input: 0.03        # $30.00 per 1K input tokens
+      output: 0.06       # $60.00 per 1K output tokens
+    gpt-3.5-turbo:
+      input: 0.0005      # $0.50 per 1K input tokens
+      output: 0.0015     # $1.50 per 1K output tokens
 
 # Configuration des exports et logs
 export:

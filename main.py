@@ -29,6 +29,19 @@ if __name__ == "__main__":
     print(f"{config.get_emoji('contraintes')} Contraintes  : {contraintes}")
     print(f"{config.get_emoji('cycles')} Cycles       : {cycles}")
     
+    # Estimation du coût total
+    cost_estimate = config.estimate_total_cost(cycles, config.top_ideas_count)
+    print(f"\n💰 === ESTIMATION DU COÛT ===")
+    print(f"📞 Appels API prévus: {cost_estimate['total_calls']}")
+    print(f"💵 Coût estimé: ${cost_estimate['total_cost']:.4f}")
+    
+    # Affichage détaillé par modèle si plusieurs
+    if len(cost_estimate['estimates']) > 1:
+        print(f"\n📊 Répartition par modèle:")
+        for model, estimate in cost_estimate['estimates'].items():
+            if estimate['cost'] > 0:
+                print(f"   • {model}: {estimate['calls']} appels - ${estimate['cost']:.4f}")
+    
     if config.ask_confirmation:
         input("\nAppuyez sur ENTRÉE pour valider et démarrer le brainstorming...\n")
 

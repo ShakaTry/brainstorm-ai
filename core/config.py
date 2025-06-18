@@ -183,6 +183,63 @@ class Config:
     @property
     def originality_bonus(self) -> float:
         return self.get("advanced.optimization.originality_bonus", 1.2)
+    
+    def get_model_pricing(self, model: str) -> dict:
+        """Retourne les prix d'un modèle (input/output en $ per 1000 tokens)."""
+        return self.get(f"api.pricing.{model}", {
+            "input": 0.001,   # Prix par défaut si non trouvé
+            "output": 0.002
+        })
+    
+    def calculate_cost(self, model: str, input_tokens: int, output_tokens: int) -> float:
+        """Calcule le coût d'un appel API en dollars."""
+        pricing = self.get_model_pricing(model)
+        input_cost = (input_tokens / 1000) * pricing["input"]
+        output_cost = (output_tokens / 1000) * pricing["output"]
+        return input_cost + output_cost
+    
+    def estimate_total_cost(self, cycles: int, ideas_count: int) -> dict:
+        """Estime le coût total d'un brainstorm complet."""
+        # Estimation basée sur l'usage moyen observé
+        avg_input_per_call = 2000    # tokens d'input moyens par appel
+        avg_output_per_call = 800    # tokens d'output moyens par appel
+        
+        # Calcul du nombre d'appels total
+        calls_per_cycle = 6  # créatif, critique, défense, réplique, révision, score
+        synthesis_calls = 1
+        idea_calls = ideas_count * 4  # plan, critique, défense, révision par idée
+        
+        total_calls = (cycles * calls_per_cycle) + synthesis_calls + idea_calls
+        
+        # Estimation par modèle
+        estimates = {}
+        for role in ["creatif", "critique", "revision", "synthese", "score", "application"]:
+            model = self.get_model_for_role(role)
+            if model not in estimates:
+                estimates[model] = {
+                    "calls": 0,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "cost": 0.0
+                }
+        
+        # Répartition des appels par type de modèle
+        default_model = self.get_model_for_role("default")
+        
+        estimates[default_model]["calls"] = total_calls
+        estimates[default_model]["input_tokens"] = total_calls * avg_input_per_call
+        estimates[default_model]["output_tokens"] = total_calls * avg_output_per_call
+        estimates[default_model]["cost"] = self.calculate_cost(
+            default_model,
+            estimates[default_model]["input_tokens"],
+            estimates[default_model]["output_tokens"]
+        )
+        
+        return {
+            "total_calls": total_calls,
+            "estimates": estimates,
+            "total_cost": sum(est["cost"] for est in estimates.values())
+        }
 
 # Instance globale de configuration
 config = Config() 

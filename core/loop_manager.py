@@ -33,10 +33,11 @@ def get_client():
         client = OpenAI()
     return client
 
-def gpt(prompt, temperature=0.7):
+def gpt(prompt, temperature=0.7, progress_tracker=None):
     global total_tokens_used
+    model = config.get_model_for_role("default")
     response = get_client().chat.completions.create(
-        model=config.get_model_for_role("default"),
+        model=model,
         messages=[{"role": "user", "content": prompt}],
         temperature=temperature
     )
@@ -44,20 +45,34 @@ def gpt(prompt, temperature=0.7):
     prompt_tokens = usage.prompt_tokens if usage else 0
     completion_tokens = usage.completion_tokens if usage else 0
     total_tokens_used += prompt_tokens + completion_tokens
+    
+    # Ajouter au suivi de progression si disponible
+    if progress_tracker:
+        progress_tracker.add_api_call(model, prompt_tokens, completion_tokens)
+    
     return response.choices[0].message.content.strip()
 
-def gpt_with_retry(prompt, temperature=0.7, max_retries=None):
+def gpt_with_retry(prompt, temperature=0.7, max_retries=None, progress_tracker=None):
     """Appel GPT avec retry automatique."""
     if max_retries is None:
         max_retries = config.max_retries
     
+    model = config.get_model_for_role("default")
     for attempt in range(max_retries):
         try:
             response = get_client().chat.completions.create(
-                model=config.get_model_for_role("default"),
+                model=model,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=temperature
             )
+            
+            # Ajouter au suivi de progression si disponible
+            if progress_tracker:
+                usage = response.usage
+                prompt_tokens = usage.prompt_tokens if usage else 0
+                completion_tokens = usage.completion_tokens if usage else 0
+                progress_tracker.add_api_call(model, prompt_tokens, completion_tokens)
+            
             return response.choices[0].message.content.strip()
         except Exception as e:
             if attempt == max_retries - 1:
@@ -71,7 +86,7 @@ def traiter_cycle(objectif, contexte, contraintes, historique, cycle_num, progre
     if progress_tracker:
         progress_tracker.start_cycle_step(0)
     prompt1 = prompt_creatif(objectif, contexte, contraintes, "\n".join(historique))
-    creation = gpt_with_retry(prompt1)
+    creation = gpt_with_retry(prompt1, progress_tracker=progress_tracker)
     if progress_tracker:
         progress_tracker.complete_cycle_step(0)
 
@@ -81,7 +96,7 @@ def traiter_cycle(objectif, contexte, contraintes, historique, cycle_num, progre
     if progress_tracker:
         progress_tracker.start_cycle_step(1)
     prompt2 = prompt_critique(creation)
-    critique = gpt_with_retry(prompt2)
+    critique = gpt_with_retry(prompt2, progress_tracker=progress_tracker)
     if progress_tracker:
         progress_tracker.complete_cycle_step(1)
 
@@ -89,7 +104,7 @@ def traiter_cycle(objectif, contexte, contraintes, historique, cycle_num, progre
     if progress_tracker:
         progress_tracker.start_cycle_step(2)
     prompt3 = prompt_defense(creation, critique)
-    defense = gpt_with_retry(prompt3)
+    defense = gpt_with_retry(prompt3, progress_tracker=progress_tracker)
     if progress_tracker:
         progress_tracker.complete_cycle_step(2)
 
@@ -97,7 +112,7 @@ def traiter_cycle(objectif, contexte, contraintes, historique, cycle_num, progre
     if progress_tracker:
         progress_tracker.start_cycle_step(3)
     prompt4 = prompt_replique(defense, creation)
-    replique = gpt_with_retry(prompt4)
+    replique = gpt_with_retry(prompt4, progress_tracker=progress_tracker)
     if progress_tracker:
         progress_tracker.complete_cycle_step(3)
 
@@ -105,7 +120,7 @@ def traiter_cycle(objectif, contexte, contraintes, historique, cycle_num, progre
     if progress_tracker:
         progress_tracker.start_cycle_step(4)
     prompt5 = prompt_revision(creation, critique)
-    revision = gpt_with_retry(prompt5)
+    revision = gpt_with_retry(prompt5, progress_tracker=progress_tracker)
     if progress_tracker:
         progress_tracker.complete_cycle_step(4)
 
@@ -113,7 +128,7 @@ def traiter_cycle(objectif, contexte, contraintes, historique, cycle_num, progre
     if progress_tracker:
         progress_tracker.start_cycle_step(5)
     score_prompt = prompt_score(revision)
-    score_json = gpt_with_retry(score_prompt)
+    score_json = gpt_with_retry(score_prompt, progress_tracker=progress_tracker)
     score = validate_score(score_json)
     if progress_tracker:
         progress_tracker.complete_cycle_step(5)
@@ -153,7 +168,7 @@ def run_brainstorm_loop(objectif, contexte, contraintes, cycles=3):
     progress_tracker.start_synthesis()
     revisions_uniques = dedupe([log["revision"] for log in logs])
     synth_prompt = prompt_synthese(revisions_uniques)
-    synthese = gpt(synth_prompt)
+    synthese = gpt(synth_prompt, progress_tracker=progress_tracker)
     progress_tracker.complete_synthesis()
 
     print(f"\n{config.get_emoji('synthese')} [Synthèse Finale]\n" + synthese)
@@ -197,28 +212,28 @@ def save_full_log(objectif, contexte, contraintes, logs, synthese, progress_trac
         # Étape 1: Plan
         if progress_tracker:
             progress_tracker.start_idea_step(0)
-        plan = gpt(prompt_plan(idee))
+        plan = gpt(prompt_plan(idee), progress_tracker=progress_tracker)
         if progress_tracker:
             progress_tracker.complete_idea_step(0)
 
         # Étape 2: Critique du plan
         if progress_tracker:
             progress_tracker.start_idea_step(1)
-        critique_plan = gpt(prompt_critique_plan(plan))
+        critique_plan = gpt(prompt_critique_plan(plan), progress_tracker=progress_tracker)
         if progress_tracker:
             progress_tracker.complete_idea_step(1)
 
         # Étape 3: Défense du plan
         if progress_tracker:
             progress_tracker.start_idea_step(2)
-        defense_plan = gpt(prompt_defense_plan(plan, critique_plan))
+        defense_plan = gpt(prompt_defense_plan(plan, critique_plan), progress_tracker=progress_tracker)
         if progress_tracker:
             progress_tracker.complete_idea_step(2)
 
         # Étape 4: Révision du plan
         if progress_tracker:
             progress_tracker.start_idea_step(3)
-        plan_revise = gpt(prompt_revision_plan(plan, critique_plan))
+        plan_revise = gpt(prompt_revision_plan(plan, critique_plan), progress_tracker=progress_tracker)
         if progress_tracker:
             progress_tracker.complete_idea_step(3)
 

@@ -33,6 +33,12 @@ class ProgressTracker:
         )
         self.completed_steps = 0
         
+        # Suivi des tokens et coûts
+        self.total_input_tokens = 0
+        self.total_output_tokens = 0
+        self.total_cost = 0.0
+        self.session_costs = []  # Liste des coûts par appel
+        
         # Emojis et labels pour chaque étape
         self.cycle_steps = [
             ("🎨", "Créatif"),
@@ -57,22 +63,49 @@ class ProgressTracker:
         percentage = (self.completed_steps / self.total_steps) * 100
         return f"[{bar}] {percentage:.1f}%"
     
+    def add_api_call(self, model: str, input_tokens: int, output_tokens: int):
+        """Ajoute un appel API au suivi des coûts."""
+        self.total_input_tokens += input_tokens
+        self.total_output_tokens += output_tokens
+        
+        # Calcul du coût de cet appel
+        call_cost = config.calculate_cost(model, input_tokens, output_tokens)
+        self.total_cost += call_cost
+        self.session_costs.append({
+            "model": model,
+            "input_tokens": input_tokens,
+            "output_tokens": output_tokens,
+            "cost": call_cost
+        })
+    
+    def _get_cost_info(self) -> str:
+        """Génère l'information de coût."""
+        if self.total_cost == 0:
+            return ""
+        
+        total_tokens = self.total_input_tokens + self.total_output_tokens
+        return f"💰 {total_tokens:,} tokens | ${self.total_cost:.4f}"
+    
     def _print_status(self, message: str = ""):
         """Affiche le statut actuel avec la barre de progression."""
         if not config.get("display.show_progress", True):
             return
             
         # Effacer la ligne précédente
-        print("\r" + " " * 100 + "\r", end="")
+        print("\r" + " " * 120 + "\r", end="")
         
         progress_bar = self._get_progress_bar()
         phase_info = f"Phase: {self.current_phase}"
+        cost_info = self._get_cost_info()
         
+        # Construction de la ligne de status
+        parts = [progress_bar, phase_info]
+        if cost_info:
+            parts.append(cost_info)
         if message:
-            status_line = f"{progress_bar} | {phase_info} | {message}"
-        else:
-            status_line = f"{progress_bar} | {phase_info}"
+            parts.append(message)
         
+        status_line = " | ".join(parts)
         print(f"\r{status_line}", end="", flush=True)
     
     def start_brainstorm(self):
@@ -165,6 +198,40 @@ class ProgressTracker:
         print(f"\n\n{config.get_emoji('success')} === BRAINSTORM TERMINÉ ===")
         print(f"✅ Toutes les étapes ont été complétées avec succès!")
         print(f"📊 {self.completed_steps}/{self.total_steps} étapes accomplies")
+        
+        # Affichage du résumé des coûts
+        if self.total_cost > 0:
+            print(f"\n💰 === RÉSUMÉ DES COÛTS ===")
+            print(f"📝 Total d'appels API: {len(self.session_costs)}")
+            print(f"🔤 Tokens d'entrée: {self.total_input_tokens:,}")
+            print(f"🔤 Tokens de sortie: {self.total_output_tokens:,}")
+            print(f"🔤 Tokens totaux: {self.total_input_tokens + self.total_output_tokens:,}")
+            print(f"💵 Coût total: ${self.total_cost:.4f}")
+            
+            # Affichage par modèle
+            model_costs = {}
+            for call in self.session_costs:
+                model = call["model"]
+                if model not in model_costs:
+                    model_costs[model] = {"calls": 0, "cost": 0.0}
+                model_costs[model]["calls"] += 1
+                model_costs[model]["cost"] += call["cost"]
+            
+            if len(model_costs) > 1:
+                print(f"\n📊 Répartition par modèle:")
+                for model, stats in model_costs.items():
+                    print(f"   • {model}: {stats['calls']} appels - ${stats['cost']:.4f}")
+    
+    def get_cost_summary(self) -> dict:
+        """Retourne un résumé des coûts."""
+        return {
+            "total_calls": len(self.session_costs),
+            "total_input_tokens": self.total_input_tokens,
+            "total_output_tokens": self.total_output_tokens,
+            "total_tokens": self.total_input_tokens + self.total_output_tokens,
+            "total_cost": self.total_cost,
+            "session_costs": self.session_costs
+        }
     
     def update_total_ideas(self, count: int):
         """Met à jour le nombre total d'idées (utile si extrait différemment)."""
