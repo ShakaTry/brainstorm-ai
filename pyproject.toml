@@ -57,7 +57,7 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 
 [tool.coverage.run]
-source = ["src"]
+source = ["src/brainstorm_ai"]
 omit = ["*/tests/*", "*/test_*.py", "*/__init__.py", "scripts/*"]
 
 [tool.coverage.report]
@@ -93,7 +93,7 @@ ignore = [
 
 [tool.poetry]
 name = "brainstorm-ai"
-version = "1.1.0"
+version = "2.1.0"
 description = "Système multi-agents pour le brainstorming créatif avec GPT"
 authors = ["Brainstorm AI Team"]
 license = "MIT"

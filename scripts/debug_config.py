@@ -8,7 +8,7 @@ from pathlib import Path
 # Ajouter le répertoire src au path pour importer les modules
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from core.config import config
+from brainstorm_ai.core.config import config
 import datetime
 
 def debug_config():

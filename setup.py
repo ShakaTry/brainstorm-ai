@@ -19,7 +19,7 @@ with open("requirements.txt", "r", encoding="utf-8") as f:
 
 setup(
     name="brainstorm-ai",
-    version="1.1.0",
+    version="2.1.0",
     author="Brainstorm AI Team",
     description="Système multi-agents pour le brainstorming créatif avec GPT",
     long_description=long_description,
@@ -62,7 +62,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "brainstorm-ai=main:main",
+            "brainstorm-ai=brainstorm_ai.cli:main",
         ],
     },
     include_package_data=True,

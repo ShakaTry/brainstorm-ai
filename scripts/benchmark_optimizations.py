@@ -12,7 +12,7 @@ import time
 import json
 import os
 from datetime import datetime
-from core.config import config
+from brainstorm_ai.core.config import config
 
 class BrainstormBenchmark:
     def __init__(self):

@@ -11,8 +11,8 @@ sys.path.insert(0, str(PathLib(__file__).parent.parent / "src"))
 import os
 import tempfile
 from pathlib import Path
-from core.config import config
-from core.loop_manager import save_full_log
+from brainstorm_ai.core.config import config
+from brainstorm_ai.core.loop_manager import save_full_log
 
 def test_export_fix():
     """Test de la correction des exports."""

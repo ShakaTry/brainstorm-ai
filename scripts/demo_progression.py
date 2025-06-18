@@ -11,8 +11,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 import time
 import random
-from core.progress_tracker import ProgressTracker
-from core.config import config
+from brainstorm_ai.core.progress_tracker import ProgressTracker
+from brainstorm_ai.core.config import config
 
 def simulate_gpt_call(min_delay=0.5, max_delay=2.0, progress_tracker=None):
     """Simule un appel GPT avec un délai aléatoire et suivi des tokens."""
