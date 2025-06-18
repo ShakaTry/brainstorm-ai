@@ -253,11 +253,32 @@ def save_full_log(objectif, contexte, contraintes, logs, synthese, progress_trac
         import re
 
         os.makedirs(config.exports_dir, exist_ok=True)
-        for idx, idee in enumerate(lignes, 1):
+        for idx, app_log in enumerate(application_logs, 1):
+            idee = app_log["idee"]
             safe_title = re.sub(r'[^a-zA-Z0-9_\-]', '_', idee[:40]).strip('_')
-            filename = Path(config.exports_dir) / f"{idx}_{safe_title}.txt"
+            filename = Path(config.exports_dir) / f"{idx}_{safe_title}.md"
+            
+            # Créer un contenu détaillé avec l'idée et son plan développé
+            content = f"""# Idée #{idx}: {idee}
+
+## 📋 Plan Initial
+{app_log["plan_initial"]}
+
+## 🔍 Critique du Plan
+{app_log["critique"]}
+
+## 🛡️ Défense du Plan
+{app_log["defense"]}
+
+## ✏️ Plan Final Révisé
+{app_log["revision"]}
+
+---
+*Généré automatiquement par le système de brainstorm AI*
+"""
+            
             with open(filename, "w", encoding="utf-8") as f:
-                f.write(idee)
+                f.write(content)
 
     log_data["application"] = application_logs
 

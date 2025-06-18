@@ -24,19 +24,20 @@ class Config:
             self.load_config()
     
     def load_config(self, config_path: str = "config.yaml"):
-        """Charge la configuration depuis le fichier YAML."""
-        # Chercher le fichier de config dans le répertoire racine du projet
-        root_dir = Path(__file__).parent.parent
-        config_file = root_dir / config_path
-        
-        if not config_file.exists():
-            raise FileNotFoundError(f"Fichier de configuration non trouvé : {config_file}")
-        
-        with open(config_file, "r", encoding="utf-8") as f:
-            self._config = yaml.safe_load(f)
-        
-        # Valider la configuration
-        self._validate_config()
+        """Charge la configuration depuis un fichier YAML."""
+        try:
+            with open(config_path, "r", encoding="utf-8") as f:
+                self._config = yaml.safe_load(f)
+            self._validate_config()
+        except FileNotFoundError:
+            raise FileNotFoundError(f"Fichier de configuration non trouvé : {config_path}")
+        except yaml.YAMLError as e:
+            raise ValueError(f"Erreur dans le fichier YAML : {e}")
+    
+    def reload_config(self, config_path: str = "config.yaml"):
+        """Force le rechargement de la configuration."""
+        self._config = None
+        self.load_config(config_path)
     
     def _validate_config(self):
         """Valide que la configuration contient toutes les sections requises."""
