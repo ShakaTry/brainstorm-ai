@@ -1,0 +1,77 @@
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# GitHub
+.github/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+.env
+.env.*
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.tox/
+*.egg-info/
+dist/
+build/
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Project specific
+logs/
+exports/
+*.log
+*.yaml.bak
+*.json.bak
+
+# Documentation
+docs/
+*.md
+!README.md
+mkdocs.yml
+
+# Tests
+tests/
+test_*.py
+*_test.py
+pytest.ini
+.benchmarks/
+
+# Development
+Makefile
+docker-compose*.yml
+Dockerfile*
+.dockerignore
+.editorconfig
+.pre-commit-config.yaml
+pyproject.toml
+setup.py
+CONTRIBUTING.md
+CHANGELOG.md
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.cache 

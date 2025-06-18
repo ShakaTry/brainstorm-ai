@@ -2,8 +2,9 @@ import os
 import datetime
 import json
 import re
-import time
-from openai import OpenAI
+import logging
+from pathlib import Path
+from typing import List, Dict, Any, Optional
 from agents.agent_creatif import prompt_creatif, prompt_defense
 from agents.agent_critique import prompt_critique, prompt_replique
 from agents.agent_revision import prompt_revision
@@ -14,8 +15,12 @@ from core.exporter import export_yaml, export_json, export_markdown
 from core.utils import dedupe
 from core.config import config
 from core.progress_tracker import ProgressTracker
+from core.gpt import get_gpt_stats
+from core.types import CycleLog, ApplicationLog, BrainstormLog, ScoreDict
 
-def limiter_historique(historique: list[str]) -> list[str]:
+logger = logging.getLogger(__name__)
+
+def limiter_historique(historique: List[str]) -> List[str]:
     """Réduit la taille du contexte historique en supprimant les plus anciennes entrées."""
     max_context_chars = config.max_context_chars
     contenu = "\n".join(historique)
@@ -24,69 +29,16 @@ def limiter_historique(historique: list[str]) -> list[str]:
         contenu = "\n".join(historique)
     return historique
 
-client = None
-total_tokens_used = 0
-
-def get_client():
-    global client
-    if client is None:
-        client = OpenAI()
-    return client
-
-def gpt(prompt, temperature=0.7, progress_tracker=None):
-    global total_tokens_used
-    model = config.get_model_for_role("default")
-    response = get_client().chat.completions.create(
-        model=model,
-        messages=[{"role": "user", "content": prompt}],
-        temperature=temperature
-    )
-    usage = response.usage
-    prompt_tokens = usage.prompt_tokens if usage else 0
-    completion_tokens = usage.completion_tokens if usage else 0
-    total_tokens_used += prompt_tokens + completion_tokens
-    
-    # Ajouter au suivi de progression si disponible
-    if progress_tracker:
-        progress_tracker.add_api_call(model, prompt_tokens, completion_tokens)
-    
-    return response.choices[0].message.content.strip()
-
-def gpt_with_retry(prompt, temperature=0.7, max_retries=None, progress_tracker=None):
-    """Appel GPT avec retry automatique."""
-    if max_retries is None:
-        max_retries = config.max_retries
-    
-    model = config.get_model_for_role("default")
-    for attempt in range(max_retries):
-        try:
-            response = get_client().chat.completions.create(
-                model=model,
-                messages=[{"role": "user", "content": prompt}],
-                temperature=temperature
-            )
-            
-            # Ajouter au suivi de progression si disponible
-            if progress_tracker:
-                usage = response.usage
-                prompt_tokens = usage.prompt_tokens if usage else 0
-                completion_tokens = usage.completion_tokens if usage else 0
-                progress_tracker.add_api_call(model, prompt_tokens, completion_tokens)
-            
-            return response.choices[0].message.content.strip()
-        except Exception as e:
-            if attempt == max_retries - 1:
-                raise GPTError(f"Échec GPT après {max_retries} tentatives: {e}")
-            time.sleep(config.retry_delay_base ** attempt)  # Backoff exponentiel
-
-def traiter_cycle(objectif, contexte, contraintes, historique, cycle_num, progress_tracker=None):
+def traiter_cycle(objectif: str, contexte: str, contraintes: str, 
+                  historique: List[str], cycle_num: int, 
+                  progress_tracker: Optional[ProgressTracker] = None) -> CycleLog:
+    """Traite un cycle complet de brainstorming."""
     historique = limiter_historique(historique)
     
     # Étape 1: Créatif
     if progress_tracker:
         progress_tracker.start_cycle_step(0)
-    prompt1 = prompt_creatif(objectif, contexte, contraintes, "\n".join(historique))
-    creation = gpt_with_retry(prompt1, progress_tracker=progress_tracker)
+    creation = prompt_creatif(objectif, contexte, contraintes, "\n".join(historique))
     if progress_tracker:
         progress_tracker.complete_cycle_step(0)
 
@@ -95,40 +47,35 @@ def traiter_cycle(objectif, contexte, contraintes, historique, cycle_num, progre
     # Étape 2: Critique
     if progress_tracker:
         progress_tracker.start_cycle_step(1)
-    prompt2 = prompt_critique(creation)
-    critique = gpt_with_retry(prompt2, progress_tracker=progress_tracker)
+    critique = prompt_critique(creation)
     if progress_tracker:
         progress_tracker.complete_cycle_step(1)
 
     # Étape 3: Défense
     if progress_tracker:
         progress_tracker.start_cycle_step(2)
-    prompt3 = prompt_defense(creation, critique)
-    defense = gpt_with_retry(prompt3, progress_tracker=progress_tracker)
+    defense = prompt_defense(creation, critique)
     if progress_tracker:
         progress_tracker.complete_cycle_step(2)
 
     # Étape 4: Réplique
     if progress_tracker:
         progress_tracker.start_cycle_step(3)
-    prompt4 = prompt_replique(defense, creation)
-    replique = gpt_with_retry(prompt4, progress_tracker=progress_tracker)
+    replique = prompt_replique(defense, creation)
     if progress_tracker:
         progress_tracker.complete_cycle_step(3)
 
     # Étape 5: Révision
     if progress_tracker:
         progress_tracker.start_cycle_step(4)
-    prompt5 = prompt_revision(creation, critique)
-    revision = gpt_with_retry(prompt5, progress_tracker=progress_tracker)
+    revision = prompt_revision(creation, critique)
     if progress_tracker:
         progress_tracker.complete_cycle_step(4)
 
     # Étape 6: Score
     if progress_tracker:
         progress_tracker.start_cycle_step(5)
-    score_prompt = prompt_score(revision)
-    score_json = gpt_with_retry(score_prompt, progress_tracker=progress_tracker)
+    score_json = prompt_score(revision)
     score = validate_score(score_json)
     if progress_tracker:
         progress_tracker.complete_cycle_step(5)
@@ -167,8 +114,7 @@ def run_brainstorm_loop(objectif, contexte, contraintes, cycles=3):
     # Synthèse
     progress_tracker.start_synthesis()
     revisions_uniques = dedupe([log["revision"] for log in logs])
-    synth_prompt = prompt_synthese(revisions_uniques)
-    synthese = gpt(synth_prompt, progress_tracker=progress_tracker)
+    synthese = prompt_synthese(revisions_uniques)
     progress_tracker.complete_synthesis()
 
     print(f"\n{config.get_emoji('synthese')} [Synthèse Finale]\n" + synthese)
@@ -177,63 +123,60 @@ def run_brainstorm_loop(objectif, contexte, contraintes, cycles=3):
     save_full_log(objectif, contexte, contraintes, logs, synthese, progress_tracker)
     
     if config.show_token_usage:
-        print(f"\n{config.get_emoji('stats')} Total de tokens consommés : {total_tokens_used}")
+        stats = get_gpt_stats()
+        print(f"\n{config.get_emoji('stats')} === STATISTIQUES D'UTILISATION ===")
+        print(f"📊 Appels API : {stats['api_calls']}")
+        print(f"📝 Tokens utilisés : {stats['total_tokens']} (entrée: {stats['prompt_tokens']}, sortie: {stats['completion_tokens']})")
+        print(f"💰 Coût total : ${stats['total_cost']:.4f}")
     
     # Terminer le suivi de progression
     progress_tracker.finish()
 
-def save_full_log(objectif, contexte, contraintes, logs, synthese, progress_tracker=None):
-    log_data = {
-        "objectif": objectif,
-        "contexte": contexte,
-        "contraintes": contraintes,
-        "date": datetime.datetime.now().isoformat(),
-        "logs": logs,
-        "synthese_finale": synthese
-    }
-
-    lignes = extract_top_ideas_robust(synthese, config.top_ideas_count)
+def process_ideas(idees: List[str], progress_tracker: Optional[ProgressTracker] = None) -> List[ApplicationLog]:
+    """
+    Traite chaque idée sélectionnée pour créer des plans détaillés.
     
-    # Mettre à jour le nombre d'idées si différent de la configuration
-    if progress_tracker and len(lignes) != progress_tracker.top_ideas_count:
-        progress_tracker.update_total_ideas(len(lignes))
-    
-    # Démarrer le traitement des idées
-    if progress_tracker:
-        progress_tracker.start_idea_processing(len(lignes))
-
+    Args:
+        idees: Liste des idées à traiter
+        progress_tracker: Tracker de progression optionnel
+        
+    Returns:
+        Liste des logs d'application
+    """
     application_logs = []
-    for idx, idee in enumerate(lignes, 1):
+    
+    for idx, idee in enumerate(idees, 1):
         if progress_tracker:
             progress_tracker.start_idea(idx, idee)
         
+        logger.info(f"Traitement de l'idée {idx}: {idee[:50]}...")
         print(f"\n{config.get_emoji('application')} Traitement de l'idée sélectionnée :\n", idee)
 
         # Étape 1: Plan
         if progress_tracker:
             progress_tracker.start_idea_step(0)
-        plan = gpt(prompt_plan(idee), progress_tracker=progress_tracker)
+        plan = prompt_plan(idee)
         if progress_tracker:
             progress_tracker.complete_idea_step(0)
 
         # Étape 2: Critique du plan
         if progress_tracker:
             progress_tracker.start_idea_step(1)
-        critique_plan = gpt(prompt_critique_plan(plan), progress_tracker=progress_tracker)
+        critique_plan = prompt_critique_plan(plan)
         if progress_tracker:
             progress_tracker.complete_idea_step(1)
 
         # Étape 3: Défense du plan
         if progress_tracker:
             progress_tracker.start_idea_step(2)
-        defense_plan = gpt(prompt_defense_plan(plan, critique_plan), progress_tracker=progress_tracker)
+        defense_plan = prompt_defense_plan(plan, critique_plan)
         if progress_tracker:
             progress_tracker.complete_idea_step(2)
 
         # Étape 4: Révision du plan
         if progress_tracker:
             progress_tracker.start_idea_step(3)
-        plan_revise = gpt(prompt_revision_plan(plan, critique_plan), progress_tracker=progress_tracker)
+        plan_revise = prompt_revision_plan(plan, critique_plan)
         if progress_tracker:
             progress_tracker.complete_idea_step(3)
 
@@ -246,6 +189,47 @@ def save_full_log(objectif, contexte, contraintes, logs, synthese, progress_trac
         })
 
         print(f"\n{config.get_emoji('success')} Plan final révisé :\n", plan_revise)
+    
+    return application_logs
+
+
+def save_full_log(objectif: str, contexte: str, contraintes: str, 
+                  logs: List[CycleLog], synthese: str, 
+                  progress_tracker: Optional[ProgressTracker] = None) -> None:
+    """
+    Sauvegarde les résultats complets du brainstorming.
+    
+    Args:
+        objectif: L'objectif du brainstorming
+        contexte: Le contexte
+        contraintes: Les contraintes
+        logs: Les logs de tous les cycles
+        synthese: La synthèse finale
+        progress_tracker: Tracker de progression optionnel
+    """
+    log_data: BrainstormLog = {
+        "objectif": objectif,
+        "contexte": contexte,
+        "contraintes": contraintes,
+        "date": datetime.datetime.now().isoformat(),
+        "logs": logs,
+        "synthese_finale": synthese,
+        "application": []
+    }
+
+    # Extraire les meilleures idées
+    lignes = extract_top_ideas_robust(synthese, config.top_ideas_count)
+    
+    # Mettre à jour le nombre d'idées si différent de la configuration
+    if progress_tracker and len(lignes) != progress_tracker.top_ideas_count:
+        progress_tracker.update_total_ideas(len(lignes))
+    
+    # Démarrer le traitement des idées
+    if progress_tracker:
+        progress_tracker.start_idea_processing(len(lignes))
+
+    # Traiter chaque idée
+    application_logs = process_ideas(lignes, progress_tracker)
 
     # Export des idées dans des fichiers séparés si activé
     if config.get("export.save_individual_ideas", True):
@@ -351,6 +335,3 @@ def extract_top_ideas_robust(synthese_text: str, count: int = 3) -> list[str]:
     lines = [l.strip() for l in synthese_text.splitlines() if l.strip()]
     return lines[:count] if len(lines) >= count else lines
 
-class GPTError(Exception):
-    """Exception personnalisée pour les erreurs GPT."""
-    pass

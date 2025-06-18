@@ -1,0 +1,113 @@
+name: 🐛 Rapport de Bug
+description: Signaler un bug pour nous aider à améliorer
+title: "[BUG] "
+labels: ["bug", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de prendre le temps de signaler ce bug ! 
+        Veuillez remplir les sections ci-dessous avec autant de détails que possible.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description du bug
+      description: Une description claire et concise du bug
+      placeholder: |
+        Décrivez le problème que vous rencontrez...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Étapes pour reproduire
+      description: Étapes pour reproduire le comportement
+      placeholder: |
+        1. Configurer '...'
+        2. Lancer la commande '...'
+        3. Observer l'erreur
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportement attendu
+      description: Description claire de ce qui devrait se passer
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Comportement actuel
+      description: Description de ce qui se passe actuellement
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Messages d'erreur
+      description: |
+        Copiez-collez les logs pertinents. 
+        Ils seront automatiquement formatés en code.
+      render: shell
+
+  - type: dropdown
+    id: python-version
+    attributes:
+      label: Version de Python
+      description: Quelle version de Python utilisez-vous ?
+      options:
+        - Python 3.8
+        - Python 3.9
+        - Python 3.10
+        - Python 3.11
+        - Python 3.12
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Système d'exploitation
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Autre
+    validations:
+      required: true
+
+  - type: input
+    id: openai-version
+    attributes:
+      label: Version du package OpenAI
+      description: Résultat de `pip show openai`
+      placeholder: ex. 1.12.0
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Contexte additionnel
+      description: |
+        Ajoutez tout contexte supplémentaire concernant le problème.
+        Configuration spéciale, environnement particulier, etc.
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      description: En soumettant cette issue, je confirme que
+      options:
+        - label: J'ai cherché dans les issues existantes
+          required: true
+        - label: J'utilise la dernière version du projet
+          required: true
+        - label: J'ai lu la documentation
+          required: true 

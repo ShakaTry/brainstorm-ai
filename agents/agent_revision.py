@@ -1,13 +1,42 @@
-from core.gpt import gpt
+"""
+Agent de révision pour l'amélioration des idées.
+"""
 
+from agents.base_agent import BaseAgent, PromptRegistry
+
+
+class AgentRevision(BaseAgent):
+    """Agent responsable de la révision et amélioration des idées."""
+    
+    def __init__(self):
+        super().__init__("revision")
+    
+    def get_prompts(self):
+        """Retourne les prompts utilisés par l'agent de révision."""
+        return {
+            "amelioration": PromptRegistry.get_prompt("revision", "amelioration")
+        }
+    
+    def ameliorer_idee(self, idee: str, critique: str) -> str:
+        """
+        Propose une version améliorée d'une idée en tenant compte des critiques.
+        
+        Args:
+            idee: L'idée originale
+            critique: Les critiques émises
+            
+        Returns:
+            La version améliorée de l'idée
+        """
+        prompt = PromptRegistry.get_prompt("revision", "amelioration")
+        return self.execute_prompt(prompt, idee=idee, critique=critique)
+
+
+# Instance globale pour compatibilité avec l'ancien code
+_agent = AgentRevision()
+
+
+# Fonction de compatibilité avec l'ancien code
 def prompt_revision(idee: str, critique: str) -> str:
-    """Tu es un agent de révision. Améliore ou reformule une idée sur base de la critique reçue.
-
-Idée initiale :
-{idee}
-
-Critique reçue :
-{critique}
-
-Corrige les faiblesses, clarifie l'idée, ou propose une variante plus robuste, sans trahir l'intention initiale."""
-    return gpt(prompt_revision.__doc__.format(**locals()), role="revision")
+    """Wrapper pour compatibilité avec l'ancien code."""
+    return _agent.ameliorer_idee(idee, critique)

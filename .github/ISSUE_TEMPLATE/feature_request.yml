@@ -1,0 +1,85 @@
+name: 💡 Demande de Fonctionnalité
+description: Suggérer une idée pour ce projet
+title: "[FEATURE] "
+labels: ["enhancement"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de proposer une nouvelle fonctionnalité !
+        Veuillez remplir les sections ci-dessous pour nous aider à comprendre votre idée.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problème à résoudre
+      description: |
+        Une description claire et concise du problème que cette fonctionnalité résoudrait.
+        Ex. Je suis toujours frustré quand [...]
+      placeholder: |
+        Décrivez le problème ou le besoin...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solution proposée
+      description: |
+        Une description claire et concise de ce que vous aimeriez voir.
+        Comment cette fonctionnalité devrait-elle fonctionner ?
+      placeholder: |
+        Je voudrais pouvoir...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considérées
+      description: |
+        Description claire et concise des solutions alternatives que vous avez considérées.
+        Pourquoi la solution proposée est-elle meilleure ?
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Cas d'usage
+      description: |
+        Donnez des exemples concrets de comment cette fonctionnalité serait utilisée.
+        Qui en bénéficierait et dans quelles situations ?
+      placeholder: |
+        1. En tant que [type d'utilisateur]
+        2. Je veux [action]
+        3. Pour [bénéfice]
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priorité suggérée
+      description: Quelle est l'importance de cette fonctionnalité pour vous ?
+      options:
+        - Nice to have
+        - Importante
+        - Critique
+    validations:
+      required: true
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Suggestions d'implémentation
+      description: |
+        Si vous avez des idées sur comment implémenter cette fonctionnalité,
+        partagez-les ici (optionnel).
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: Je suis prêt à contribuer à l'implémentation de cette fonctionnalité
+        - label: J'ai besoin d'aide pour l'implémentation
+        - label: Je peux aider à tester cette fonctionnalité 

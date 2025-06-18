@@ -5,34 +5,60 @@ Charge et gère les paramètres depuis config.yaml
 
 import os
 import yaml
+import threading
 from typing import Dict, Any, Optional
 from pathlib import Path
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class Config:
-    """Gestionnaire de configuration singleton."""
+    """Gestionnaire de configuration singleton thread-safe."""
     
     _instance = None
+    _lock = threading.Lock()
     _config = None
+    _initialized = False
     
     def __new__(cls):
+        # Double-checked locking pattern pour thread-safety
         if cls._instance is None:
-            cls._instance = super().__new__(cls)
+            with cls._lock:
+                if cls._instance is None:
+                    cls._instance = super().__new__(cls)
         return cls._instance
     
     def __init__(self):
-        if self._config is None:
-            self.load_config()
+        # S'assurer que l'initialisation ne se fait qu'une fois avec protection thread-safe
+        with self._lock:
+            if not Config._initialized:
+                self.load_config()
+                Config._initialized = True
     
     def load_config(self, config_path: str = "config.yaml"):
         """Charge la configuration depuis un fichier YAML."""
+        logger.info(f"Chargement de la configuration depuis {config_path}")
         try:
-            with open(config_path, "r", encoding="utf-8") as f:
+            config_file = Path(config_path)
+            if not config_file.exists():
+                raise FileNotFoundError(f"Fichier de configuration non trouvé : {config_path}")
+            
+            with open(config_file, "r", encoding="utf-8") as f:
                 self._config = yaml.safe_load(f)
+            
             self._validate_config()
+            logger.info("Configuration chargée avec succès")
+            
         except FileNotFoundError:
-            raise FileNotFoundError(f"Fichier de configuration non trouvé : {config_path}")
+            logger.error(f"Fichier de configuration non trouvé : {config_path}")
+            raise
         except yaml.YAMLError as e:
+            logger.error(f"Erreur de parsing YAML : {e}")
             raise ValueError(f"Erreur dans le fichier YAML : {e}")
+        except Exception as e:
+            logger.error(f"Erreur inattendue lors du chargement de la configuration : {e}")
+            raise
     
     def reload_config(self, config_path: str = "config.yaml"):
         """Force le rechargement de la configuration."""
