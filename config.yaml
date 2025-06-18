@@ -105,6 +105,12 @@ display:
     idea: "💭"      # Nouvel emoji pour les idées
     warning: "⚠️"   # Pour les avertissements
     info: "ℹ️"      # Pour les informations
+    start: "🚀"     # Pour le démarrage
+    cycle: "🔄"     # Pour les cycles
+    export: "💾"    # Pour l'export
+  
+  # Afficher la barre de progression
+  show_progress: true
 
 # Configuration des chemins de prompts personnalisés (optionnel)
 # Si définis, ces prompts remplaceront ceux par défaut dans le code

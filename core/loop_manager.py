@@ -13,6 +13,7 @@ from agents.agent_application import prompt_plan, prompt_critique_plan, prompt_d
 from core.exporter import export_yaml, export_json, export_markdown
 from core.utils import dedupe
 from core.config import config
+from core.progress_tracker import ProgressTracker
 
 def limiter_historique(historique: list[str]) -> list[str]:
     """Réduit la taille du contexte historique en supprimant les plus anciennes entrées."""
@@ -63,29 +64,59 @@ def gpt_with_retry(prompt, temperature=0.7, max_retries=None):
                 raise GPTError(f"Échec GPT après {max_retries} tentatives: {e}")
             time.sleep(config.retry_delay_base ** attempt)  # Backoff exponentiel
 
-def traiter_cycle(objectif, contexte, contraintes, historique, cycle_num):
+def traiter_cycle(objectif, contexte, contraintes, historique, cycle_num, progress_tracker=None):
     historique = limiter_historique(historique)
+    
+    # Étape 1: Créatif
+    if progress_tracker:
+        progress_tracker.start_cycle_step(0)
     prompt1 = prompt_creatif(objectif, contexte, contraintes, "\n".join(historique))
     creation = gpt_with_retry(prompt1)
+    if progress_tracker:
+        progress_tracker.complete_cycle_step(0)
 
     historique.append(creation)
 
+    # Étape 2: Critique
+    if progress_tracker:
+        progress_tracker.start_cycle_step(1)
     prompt2 = prompt_critique(creation)
     critique = gpt_with_retry(prompt2)
+    if progress_tracker:
+        progress_tracker.complete_cycle_step(1)
 
+    # Étape 3: Défense
+    if progress_tracker:
+        progress_tracker.start_cycle_step(2)
     prompt3 = prompt_defense(creation, critique)
     defense = gpt_with_retry(prompt3)
+    if progress_tracker:
+        progress_tracker.complete_cycle_step(2)
 
+    # Étape 4: Réplique
+    if progress_tracker:
+        progress_tracker.start_cycle_step(3)
     prompt4 = prompt_replique(defense, creation)
     replique = gpt_with_retry(prompt4)
+    if progress_tracker:
+        progress_tracker.complete_cycle_step(3)
 
+    # Étape 5: Révision
+    if progress_tracker:
+        progress_tracker.start_cycle_step(4)
     prompt5 = prompt_revision(creation, critique)
     revision = gpt_with_retry(prompt5)
+    if progress_tracker:
+        progress_tracker.complete_cycle_step(4)
 
+    # Étape 6: Score
+    if progress_tracker:
+        progress_tracker.start_cycle_step(5)
     score_prompt = prompt_score(revision)
     score_json = gpt_with_retry(score_prompt)
-
     score = validate_score(score_json)
+    if progress_tracker:
+        progress_tracker.complete_cycle_step(5)
 
     return {
         "cycle": cycle_num,
@@ -100,9 +131,15 @@ def traiter_cycle(objectif, contexte, contraintes, historique, cycle_num):
 def run_brainstorm_loop(objectif, contexte, contraintes, cycles=3):
     historique = []
     logs = []
+    
+    # Initialiser le tracker de progression
+    progress_tracker = ProgressTracker(cycles, config.top_ideas_count)
+    progress_tracker.start_brainstorm()
 
+    # Cycles de brainstorming
     for i in range(1, cycles + 1):
-        log = traiter_cycle(objectif, contexte, contraintes, historique, i)
+        progress_tracker.start_cycle(i)
+        log = traiter_cycle(objectif, contexte, contraintes, historique, i, progress_tracker)
         logs.append(log)
 
         print(f"\n=== Cycle {i} ===")
@@ -112,16 +149,25 @@ def run_brainstorm_loop(objectif, contexte, contraintes, cycles=3):
         print(f"\n{config.get_emoji('replique')} [Réplique]\n{log['replique']}")
         print(f"\n{config.get_emoji('revision')} [Révision]\n{log['revision']}")
 
+    # Synthèse
+    progress_tracker.start_synthesis()
     revisions_uniques = dedupe([log["revision"] for log in logs])
     synth_prompt = prompt_synthese(revisions_uniques)
     synthese = gpt(synth_prompt)
+    progress_tracker.complete_synthesis()
 
     print(f"\n{config.get_emoji('synthese')} [Synthèse Finale]\n" + synthese)
-    save_full_log(objectif, contexte, contraintes, logs, synthese)
+    
+    # Traitement des idées et sauvegarde avec progression
+    save_full_log(objectif, contexte, contraintes, logs, synthese, progress_tracker)
+    
     if config.show_token_usage:
         print(f"\n{config.get_emoji('stats')} Total de tokens consommés : {total_tokens_used}")
+    
+    # Terminer le suivi de progression
+    progress_tracker.finish()
 
-def save_full_log(objectif, contexte, contraintes, logs, synthese):
+def save_full_log(objectif, contexte, contraintes, logs, synthese, progress_tracker=None):
     log_data = {
         "objectif": objectif,
         "contexte": contexte,
@@ -132,15 +178,49 @@ def save_full_log(objectif, contexte, contraintes, logs, synthese):
     }
 
     lignes = extract_top_ideas_robust(synthese, config.top_ideas_count)
+    
+    # Mettre à jour le nombre d'idées si différent de la configuration
+    if progress_tracker and len(lignes) != progress_tracker.top_ideas_count:
+        progress_tracker.update_total_ideas(len(lignes))
+    
+    # Démarrer le traitement des idées
+    if progress_tracker:
+        progress_tracker.start_idea_processing(len(lignes))
 
     application_logs = []
-    for idee in lignes:
+    for idx, idee in enumerate(lignes, 1):
+        if progress_tracker:
+            progress_tracker.start_idea(idx, idee)
+        
         print(f"\n{config.get_emoji('application')} Traitement de l'idée sélectionnée :\n", idee)
 
+        # Étape 1: Plan
+        if progress_tracker:
+            progress_tracker.start_idea_step(0)
         plan = gpt(prompt_plan(idee))
+        if progress_tracker:
+            progress_tracker.complete_idea_step(0)
+
+        # Étape 2: Critique du plan
+        if progress_tracker:
+            progress_tracker.start_idea_step(1)
         critique_plan = gpt(prompt_critique_plan(plan))
+        if progress_tracker:
+            progress_tracker.complete_idea_step(1)
+
+        # Étape 3: Défense du plan
+        if progress_tracker:
+            progress_tracker.start_idea_step(2)
         defense_plan = gpt(prompt_defense_plan(plan, critique_plan))
+        if progress_tracker:
+            progress_tracker.complete_idea_step(2)
+
+        # Étape 4: Révision du plan
+        if progress_tracker:
+            progress_tracker.start_idea_step(3)
         plan_revise = gpt(prompt_revision_plan(plan, critique_plan))
+        if progress_tracker:
+            progress_tracker.complete_idea_step(3)
 
         application_logs.append({
             "idee": idee,
@@ -166,6 +246,10 @@ def save_full_log(objectif, contexte, contraintes, logs, synthese):
 
     log_data["application"] = application_logs
 
+    # Démarrer l'export
+    if progress_tracker:
+        progress_tracker.start_export()
+
     os.makedirs(config.logs_dir, exist_ok=True)
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     log_filename = config.get_log_filename(timestamp)
@@ -179,6 +263,10 @@ def save_full_log(objectif, contexte, contraintes, logs, synthese):
     
     if config.should_export_format("markdown"):
         export_markdown(log_data, filename=os.path.join(config.logs_dir, f"{log_filename}.md"))
+    
+    # Terminer l'export
+    if progress_tracker:
+        progress_tracker.complete_export()
 
 def validate_score(score_json: str) -> dict:
     """Validation et nettoyage des scores avec fallback intelligent."""
