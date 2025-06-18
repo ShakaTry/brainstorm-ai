@@ -73,7 +73,7 @@ export:
     exports_dir: "exports"
   
   # Nom du fichier de log avec plus d'informations
-  log_filename_pattern: "brainstorm_{timestamp}_cycles{cycles}"
+  log_filename_pattern: "brainstorm_{timestamp}"
   
   # Sauvegarder automatiquement les idées individuelles
   save_individual_ideas: true

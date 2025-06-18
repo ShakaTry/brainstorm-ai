@@ -184,5 +184,4 @@ config_local.yaml
 secrets.yaml
 
 # IDE and editor specific files
-cursor.rules
 .cursor/ 
