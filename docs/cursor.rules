@@ -17,6 +17,36 @@
 2. **Créer un commit descriptif** : Message en français spécifique au contexte IA
 3. **Pousser vers GitHub** : `git push origin main`
 
+### ⚠️ RÈGLES CRITIQUES DE SYNCHRONISATION GITHUB
+**LEÇON APPRISE** : Toujours vérifier et maintenir la cohérence des branches GitHub
+
+#### 🔧 Vérifications Obligatoires Avant Chaque Push
+```bash
+# 1. Vérifier la branche par défaut GitHub
+gh api repos/ShakaTry/brainstorm-ai --jq '.default_branch'
+
+# 2. S'assurer qu'on pousse vers la bonne branche
+git branch  # Vérifier la branche locale active
+git status  # Confirmer l'état de synchronisation
+
+# 3. Si changement de branche principale, mettre à jour GitHub
+gh repo edit --default-branch main  # Ou la branche souhaitée
+```
+
+#### 🚨 Problème à Éviter
+- **Ne JAMAIS laisser GitHub afficher une branche obsolète par défaut**
+- **Toujours synchroniser TOUTES les branches actives après changements majeurs**
+- **Vérifier visuellement GitHub après push important**
+
+#### ✅ Workflow de Synchronisation Complet
+```bash
+# Après modifications importantes ou restructurations :
+git push origin main                           # Push branche principale
+git push origin main:reorganization-totale     # Sync autres branches actives
+gh repo edit --default-branch main            # Mettre à jour branche par défaut GitHub
+gh repo view --web                            # Vérification visuelle finale
+```
+
 ### Messages de commit spécifiques au projet
 - **Agent** : "Amélioration agent [créatif/critique/révision/synthèse/score/application] - [modification]"
 - **Prompts** : "Optimisation des prompts [agent] - [amélioration]"
@@ -86,6 +116,12 @@ git push origin main
 - [ ] **Scoring** : Validation des scores (impact, faisabilité, originalité, clarté)
 - [ ] **Historique** : Gestion mémoire et contexte optimisée
 - [ ] **Variables environnement** : OPENAI_API_KEY non exposée dans le code
+
+### ⚠️ Vérifications GitHub (CRITIQUE)
+- [ ] **Branche par défaut** : `gh api repos/ShakaTry/brainstorm-ai --jq '.default_branch'` = main
+- [ ] **Synchronisation** : Toutes les branches actives pushées
+- [ ] **Vérification visuelle** : `gh repo view --web` après push important
+- [ ] **Cohérence branches** : Pas de décalage entre local et remote
 
 ### Tests critiques à valider
 - [ ] **main.py** s'exécute sans erreur
