@@ -12,6 +12,9 @@ pytest-mock>=3.10.0
 # Code formatting and linting
 ruff>=0.1.0
 
+# Version management
+bump2version>=1.0.0
+
 
 
  
