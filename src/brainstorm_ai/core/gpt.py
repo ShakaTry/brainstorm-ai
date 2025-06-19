@@ -4,9 +4,25 @@ import logging
 from typing import Optional, Dict, Any
 from functools import lru_cache
 from openai import OpenAI
+from openai import APIError, APIConnectionError, RateLimitError, Timeout
 from .config import config
 
 logger = logging.getLogger(__name__)
+
+
+class GPTError(Exception):
+    """Exception de base pour les erreurs liées à GPT."""
+    pass
+
+
+class GPTConfigError(GPTError):
+    """Exception levée pour les erreurs de configuration GPT."""
+    pass
+
+
+class GPTAPIError(GPTError):
+    """Exception levée pour les erreurs d'API GPT."""
+    pass
 
 
 class GPTClient:
@@ -31,7 +47,10 @@ class GPTClient:
         """Initialise le client OpenAI une seule fois."""
         api_key = os.environ.get("OPENAI_API_KEY")
         if not api_key:
-            raise ValueError("La clé API OpenAI n'est pas configurée dans OPENAI_API_KEY")
+            raise GPTConfigError("La clé API OpenAI n'est pas configurée dans OPENAI_API_KEY")
+        
+        if not api_key.startswith(('sk-', 'sk-proj-')):
+            logger.warning("Le format de la clé API OpenAI semble incorrect")
         
         self._client = OpenAI(api_key=api_key)
         logger.info("Client OpenAI initialisé avec succès")
@@ -85,6 +104,9 @@ def gpt(prompt: str, role: str, model_override: Optional[str] = None,
         
     Returns:
         Le contenu de la réponse de l'API
+        
+    Raises:
+        GPTAPIError: En cas d'échec après toutes les tentatives
     """
     # Configuration
     model = model_override if model_override else config.get_model_for_role(role)
@@ -122,19 +144,33 @@ def gpt(prompt: str, role: str, model_override: Optional[str] = None,
             # Retourner uniquement le contenu de la réponse
             return response.choices[0].message.content.strip()
             
-        except Exception as e:
+        except RateLimitError as e:
             last_error = e
-            logger.warning(f"Erreur GPT tentative {attempt + 1}/{max_retries}: {str(e)}")
+            logger.warning(f"Limite de taux atteinte, tentative {attempt + 1}/{max_retries}: {str(e)}")
+            # Pour les erreurs de rate limit, on attend plus longtemps
+            if attempt < max_retries - 1:
+                delay = config.retry_delay_base ** (attempt + 1) * 2
+                logger.debug(f"Attente de {delay}s avant nouvelle tentative...")
+                time.sleep(delay)
+                
+        except (APIError, APIConnectionError, Timeout) as e:
+            last_error = e
+            logger.warning(f"Erreur API tentative {attempt + 1}/{max_retries}: {str(e)}")
             
             if attempt < max_retries - 1:
                 # Backoff exponentiel
                 delay = config.retry_delay_base ** attempt
                 logger.debug(f"Attente de {delay}s avant nouvelle tentative...")
                 time.sleep(delay)
-            else:
-                # Dernière tentative échouée
-                logger.error(f"Échec définitif après {max_retries} tentatives")
-                raise Exception(f"Échec GPT après {max_retries} tentatives: {str(last_error)}")
+                
+        except Exception as e:
+            # Pour les erreurs inattendues, on les logue et on les relance
+            logger.error(f"Erreur inattendue lors de l'appel GPT: {type(e).__name__}: {str(e)}")
+            raise GPTAPIError(f"Erreur inattendue: {type(e).__name__}: {str(e)}")
+    
+    # Dernière tentative échouée
+    logger.error(f"Échec définitif après {max_retries} tentatives")
+    raise GPTAPIError(f"Échec GPT après {max_retries} tentatives: {type(last_error).__name__}: {str(last_error)}")
 
 
 def get_gpt_stats() -> Dict[str, Any]:

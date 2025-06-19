@@ -4,8 +4,10 @@ Fournit une classe abstraite et des utilitaires communs.
 """
 
 import logging
+import yaml
 from abc import ABC, abstractmethod
 from typing import Dict, Any, Optional
+from pathlib import Path
 from ..core.gpt import gpt
 
 logger = logging.getLogger(__name__)
@@ -65,9 +67,46 @@ class BaseAgent(ABC):
 class PromptRegistry:
     """Registre centralisé pour tous les prompts du système."""
     
-    _prompts = {
-        "creatif": {
-            "generation": """Tu es un agent créatif. Ta mission est de générer des idées innovantes, réalistes et utiles.
+    _prompts: Dict[str, Dict[str, str]] = {}
+    _loaded = False
+    
+    @classmethod
+    def _load_prompts(cls) -> None:
+        """Charge les prompts depuis le fichier de configuration."""
+        if cls._loaded:
+            return
+            
+        try:
+            # Chemin vers le fichier de prompts
+            prompts_path = Path(__file__).parent.parent.parent.parent / "config" / "prompts.yaml"
+            
+            if not prompts_path.exists():
+                logger.warning(f"Fichier de prompts non trouvé : {prompts_path}")
+                cls._load_default_prompts()
+                return
+            
+            with open(prompts_path, "r", encoding="utf-8") as f:
+                data = yaml.safe_load(f)
+            
+            if "prompts" in data:
+                cls._prompts = data["prompts"]
+                logger.info(f"Prompts chargés depuis {prompts_path}")
+            else:
+                logger.warning("Structure de prompts invalide, chargement des prompts par défaut")
+                cls._load_default_prompts()
+                
+            cls._loaded = True
+            
+        except Exception as e:
+            logger.error(f"Erreur lors du chargement des prompts : {e}")
+            cls._load_default_prompts()
+    
+    @classmethod
+    def _load_default_prompts(cls) -> None:
+        """Charge les prompts par défaut en cas d'erreur."""
+        cls._prompts = {
+            "creatif": {
+                "generation": """Tu es un agent créatif. Ta mission est de générer des idées innovantes, réalistes et utiles.
 
 Objectif : {objectif}
 Contexte : {contexte}
@@ -77,42 +116,42 @@ Idées déjà proposées :
 {historique}
 
 Génère 3 nouvelles idées numérotées, originales et non redondantes. Pour la plus prometteuse, fournis un plan de mise en œuvre synthétique.""",
-            
-            "defense": """Tu es un agent créatif. Voici une idée qui a été critiquée :
+                
+                "defense": """Tu es un agent créatif. Voici une idée qui a été critiquée :
 
 Idée : {idee}
 Critique : {critique}
 
 Défends ton idée en expliquant pourquoi elle est valable et comment elle peut être améliorée pour répondre aux critiques."""
-        },
-        
-        "critique": {
-            "analyse": """Tu es un agent critique constructif. Analyse cette idée/proposition de manière objective :
+            },
+            
+            "critique": {
+                "analyse": """Tu es un agent critique constructif. Analyse cette idée/proposition de manière objective :
 
 {texte}
 
 Identifie les faiblesses, risques et limites potentiels. Propose des améliorations concrètes.""",
-            
-            "replique": """Tu es un agent critique. Suite à cette défense :
+                
+                "replique": """Tu es un agent critique. Suite à cette défense :
 
 {defense}
 
 Concernant l'idée originale : {idee}
 
 Évalue si la défense répond vraiment aux critiques. Identifie les points qui restent problématiques."""
-        },
-        
-        "revision": {
-            "amelioration": """Tu es un agent de révision. Voici une idée et sa critique :
+            },
+            
+            "revision": {
+                "amelioration": """Tu es un agent de révision. Voici une idée et sa critique :
 
 Idée : {idee}
 Critique : {critique}
 
 Propose une version améliorée de cette idée qui tient compte des critiques tout en préservant ses points forts."""
-        },
-        
-        "score": {
-            "evaluation": """Tu es un agent d'évaluation. Évalue objectivement cette proposition selon 4 critères :
+            },
+            
+            "score": {
+                "evaluation": """Tu es un agent d'évaluation. Évalue objectivement cette proposition selon 4 critères :
 
 {texte}
 
@@ -123,10 +162,10 @@ Retourne UNIQUEMENT un JSON avec ces scores (1-10) :
     "originalite": <score>,
     "clarte": <score>
 }}"""
-        },
-        
-        "synthese": {
-            "consolidation": """Tu es un agent de synthèse. Voici toutes les idées révisées :
+            },
+            
+            "synthese": {
+                "consolidation": """Tu es un agent de synthèse. Voici toutes les idées révisées :
 
 {idees}
 
@@ -135,10 +174,10 @@ Sélectionne les 3 meilleures idées en les classant par ordre de pertinence. Po
 2. Une description claire
 3. Les principaux avantages
 4. Les étapes clés de mise en œuvre"""
-        },
-        
-        "application": {
-            "plan": """Tu es un agent d'application. Pour cette idée :
+            },
+            
+            "application": {
+                "plan": """Tu es un agent d'application. Pour cette idée :
 
 {idee}
 
@@ -148,28 +187,30 @@ Développe un plan de mise en œuvre détaillé avec :
 - Ressources nécessaires
 - Timeline réaliste
 - Indicateurs de succès""",
-            
-            "critique_plan": """Tu es un agent critique spécialisé dans l'évaluation de plans. Analyse ce plan :
+                
+                "critique_plan": """Tu es un agent critique spécialisé dans l'évaluation de plans. Analyse ce plan :
 
 {plan}
 
 Identifie les lacunes, les risques d'exécution et les points d'amélioration.""",
-            
-            "defense_plan": """Tu es un agent d'application. Voici ton plan et les critiques :
+                
+                "defense_plan": """Tu es un agent d'application. Voici ton plan et les critiques :
 
 Plan : {plan}
 Critique : {critique}
 
 Défends la viabilité du plan et propose des ajustements pour répondre aux critiques.""",
-            
-            "revision_plan": """Tu es un agent de révision de plans. En tenant compte de ces éléments :
+                
+                "revision_plan": """Tu es un agent de révision de plans. En tenant compte de ces éléments :
 
 Plan initial : {plan}
 Critiques : {critique}
 
 Propose une version finale optimisée du plan qui intègre les retours constructifs."""
+            }
         }
-    }
+        cls._loaded = True
+        logger.info("Prompts par défaut chargés")
     
     @classmethod
     def get_prompt(cls, role: str, prompt_name: str) -> str:
@@ -186,6 +227,10 @@ Propose une version finale optimisée du plan qui intègre les retours construct
         Raises:
             KeyError: Si le rôle ou le prompt n'existe pas
         """
+        # S'assurer que les prompts sont chargés
+        if not cls._loaded:
+            cls._load_prompts()
+        
         if role not in cls._prompts:
             raise KeyError(f"Rôle inconnu : {role}")
         
@@ -195,7 +240,7 @@ Propose une version finale optimisée du plan qui intègre les retours construct
         return cls._prompts[role][prompt_name]
     
     @classmethod
-    def register_prompt(cls, role: str, prompt_name: str, template: str):
+    def register_prompt(cls, role: str, prompt_name: str, template: str) -> None:
         """
         Enregistre un nouveau prompt ou met à jour un existant.
         
@@ -204,6 +249,10 @@ Propose une version finale optimisée du plan qui intègre les retours construct
             prompt_name: Le nom du prompt
             template: Le template du prompt
         """
+        # S'assurer que les prompts sont chargés
+        if not cls._loaded:
+            cls._load_prompts()
+            
         if role not in cls._prompts:
             cls._prompts[role] = {}
         

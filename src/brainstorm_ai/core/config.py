@@ -13,6 +13,21 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+class ConfigError(Exception):
+    """Exception de base pour les erreurs de configuration."""
+    pass
+
+
+class ConfigFileError(ConfigError):
+    """Exception levée pour les erreurs liées aux fichiers de configuration."""
+    pass
+
+
+class ConfigValidationError(ConfigError):
+    """Exception levée pour les erreurs de validation de configuration."""
+    pass
+
+
 class Config:
     """Gestionnaire de configuration singleton thread-safe."""
     
@@ -36,44 +51,77 @@ class Config:
                 self.load_config()
                 Config._initialized = True
     
-    def load_config(self, config_path: str = None):
-        """Charge la configuration depuis un fichier YAML."""
+    def load_config(self, config_path: Optional[str] = None):
+        """
+        Charge la configuration depuis un fichier YAML.
+        
+        Args:
+            config_path: Chemin vers le fichier de configuration (optionnel)
+            
+        Raises:
+            ConfigFileError: Si le fichier n'est pas trouvé ou illisible
+            ConfigValidationError: Si le fichier YAML est invalide ou incomplet
+        """
         if config_path is None:
             # Chercher config.yaml dans le dossier config
             config_path = Path(__file__).parent.parent.parent.parent / "config" / "config.yaml"
+        
+        config_path = Path(config_path)
         logger.info(f"Chargement de la configuration depuis {config_path}")
+        
         try:
-            config_file = Path(config_path)
-            if not config_file.exists():
-                raise FileNotFoundError(f"Fichier de configuration non trouvé : {config_path}")
+            if not config_path.exists():
+                raise ConfigFileError(f"Fichier de configuration non trouvé : {config_path}")
             
-            with open(config_file, "r", encoding="utf-8") as f:
+            if not config_path.is_file():
+                raise ConfigFileError(f"Le chemin n'est pas un fichier : {config_path}")
+                
+            with open(config_path, "r", encoding="utf-8") as f:
                 self._config = yaml.safe_load(f)
             
+            if self._config is None:
+                raise ConfigValidationError("Le fichier de configuration est vide")
+                
             self._validate_config()
             logger.info("Configuration chargée avec succès")
             
-        except FileNotFoundError:
+        except FileNotFoundError as e:
             logger.error(f"Fichier de configuration non trouvé : {config_path}")
-            raise
+            raise ConfigFileError(f"Fichier de configuration non trouvé : {config_path}") from e
         except yaml.YAMLError as e:
             logger.error(f"Erreur de parsing YAML : {e}")
-            raise ValueError(f"Erreur dans le fichier YAML : {e}")
+            raise ConfigValidationError(f"Erreur dans le fichier YAML : {e}") from e
+        except PermissionError as e:
+            logger.error(f"Permission refusée pour lire le fichier : {config_path}")
+            raise ConfigFileError(f"Permission refusée : {config_path}") from e
         except Exception as e:
-            logger.error(f"Erreur inattendue lors du chargement de la configuration : {e}")
-            raise
+            logger.error(f"Erreur inattendue lors du chargement de la configuration : {type(e).__name__}: {e}")
+            raise ConfigError(f"Erreur inattendue : {type(e).__name__}: {e}") from e
     
-    def reload_config(self, config_path: str = None):
+    def reload_config(self, config_path: Optional[str] = None):
         """Force le rechargement de la configuration."""
-        self._config = None
-        self.load_config(config_path)
+        with self._lock:
+            self._config = None
+            self.load_config(config_path)
     
     def _validate_config(self):
-        """Valide que la configuration contient toutes les sections requises."""
+        """
+        Valide que la configuration contient toutes les sections requises.
+        
+        Raises:
+            ConfigValidationError: Si des sections requises sont manquantes
+        """
         required_sections = ["general", "agents", "api", "export", "display"]
+        missing_sections = []
+        
         for section in required_sections:
             if section not in self._config:
-                raise ValueError(f"Section requise manquante dans la configuration : {section}")
+                missing_sections.append(section)
+        
+        if missing_sections:
+            raise ConfigValidationError(
+                f"Sections requises manquantes dans la configuration : {', '.join(missing_sections)}"
+            )
     
     def get(self, key_path: str, default: Any = None) -> Any:
         """
@@ -86,6 +134,10 @@ class Config:
         Returns:
             La valeur de configuration ou la valeur par défaut
         """
+        if self._config is None:
+            logger.warning("Configuration non chargée, utilisation de la valeur par défaut")
+            return default
+            
         keys = key_path.split(".")
         value = self._config
         

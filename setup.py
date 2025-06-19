@@ -62,7 +62,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "brainstorm-ai=brainstorm_ai.cli:main",
+            "brainstorm-ai=brainstorm_ai.cli.main:main",
         ],
     },
     include_package_data=True,

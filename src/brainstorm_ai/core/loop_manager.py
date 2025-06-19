@@ -104,12 +104,12 @@ def run_brainstorm_loop(objectif, contexte, contraintes, cycles=3):
         log = traiter_cycle(objectif, contexte, contraintes, historique, i, progress_tracker)
         logs.append(log)
 
-        print(f"\n=== Cycle {i} ===")
-        print(f"\n{config.get_emoji('creatif')} [Créatif]\n{log['creation']}")
-        print(f"\n{config.get_emoji('critique')} [Critique]\n{log['critique']}")
-        print(f"\n{config.get_emoji('defense')} [Défense]\n{log['defense']}")
-        print(f"\n{config.get_emoji('replique')} [Réplique]\n{log['replique']}")
-        print(f"\n{config.get_emoji('revision')} [Révision]\n{log['revision']}")
+        logger.info(f"=== Cycle {i} ===")
+        logger.info(f"{config.get_emoji('creatif')} [Créatif]\n{log['creation']}")
+        logger.info(f"{config.get_emoji('critique')} [Critique]\n{log['critique']}")
+        logger.info(f"{config.get_emoji('defense')} [Défense]\n{log['defense']}")
+        logger.info(f"{config.get_emoji('replique')} [Réplique]\n{log['replique']}")
+        logger.info(f"{config.get_emoji('revision')} [Révision]\n{log['revision']}")
 
     # Synthèse
     progress_tracker.start_synthesis()
@@ -117,17 +117,17 @@ def run_brainstorm_loop(objectif, contexte, contraintes, cycles=3):
     synthese = prompt_synthese(revisions_uniques)
     progress_tracker.complete_synthesis()
 
-    print(f"\n{config.get_emoji('synthese')} [Synthèse Finale]\n" + synthese)
+    logger.info(f"{config.get_emoji('synthese')} [Synthèse Finale]\n" + synthese)
     
     # Traitement des idées et sauvegarde avec progression
     save_full_log(objectif, contexte, contraintes, logs, synthese, progress_tracker)
     
     if config.show_token_usage:
         stats = get_gpt_stats()
-        print(f"\n{config.get_emoji('stats')} === STATISTIQUES D'UTILISATION ===")
-        print(f"📊 Appels API : {stats['api_calls']}")
-        print(f"📝 Tokens utilisés : {stats['total_tokens']} (entrée: {stats['prompt_tokens']}, sortie: {stats['completion_tokens']})")
-        print(f"💰 Coût total : ${stats['total_cost']:.4f}")
+        logger.info(f"{config.get_emoji('stats')} === STATISTIQUES D'UTILISATION ===")
+        logger.info(f"📊 Appels API : {stats['api_calls']}")
+        logger.info(f"📝 Tokens utilisés : {stats['total_tokens']} (entrée: {stats['prompt_tokens']}, sortie: {stats['completion_tokens']})")
+        logger.info(f"💰 Coût total : ${stats['total_cost']:.4f}")
     
     # Terminer le suivi de progression
     progress_tracker.finish()
@@ -150,7 +150,7 @@ def process_ideas(idees: List[str], progress_tracker: Optional[ProgressTracker] 
             progress_tracker.start_idea(idx, idee)
         
         logger.info(f"Traitement de l'idée {idx}: {idee[:50]}...")
-        print(f"\n{config.get_emoji('application')} Traitement de l'idée sélectionnée :\n", idee)
+        logger.info(f"{config.get_emoji('application')} Traitement de l'idée sélectionnée :\n{idee}")
 
         # Étape 1: Plan
         if progress_tracker:
@@ -188,7 +188,7 @@ def process_ideas(idees: List[str], progress_tracker: Optional[ProgressTracker] 
             "revision": plan_revise
         })
 
-        print(f"\n{config.get_emoji('success')} Plan final révisé :\n", plan_revise)
+        logger.info(f"{config.get_emoji('success')} Plan final révisé :\n{plan_revise}")
     
     return application_logs
 

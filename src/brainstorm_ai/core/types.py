@@ -2,7 +2,7 @@
 Définitions de types pour le système de brainstorming.
 """
 
-from typing import TypedDict, Dict, List, Optional, Any
+from typing import TypedDict, Dict, List, Optional, Any, Union
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
@@ -19,7 +19,7 @@ class AgentRole(str, Enum):
 
 
 class ScoreDict(TypedDict):
-    """Structure des scores d'évaluation."""
+    """Structure d'un score d'évaluation."""
     impact: int
     faisabilite: int
     originalite: int
@@ -48,7 +48,7 @@ class ApplicationLog(TypedDict):
 
 
 class BrainstormLog(TypedDict):
-    """Structure complète d'un log de brainstorming."""
+    """Structure complète d'un log de brainstorm."""
     objectif: str
     contexte: str
     contraintes: str
@@ -56,6 +56,33 @@ class BrainstormLog(TypedDict):
     logs: List[CycleLog]
     synthese_finale: str
     application: List[ApplicationLog]
+
+
+class TokenUsage(TypedDict):
+    """Structure pour le suivi de l'utilisation des tokens."""
+    prompt_tokens: int
+    completion_tokens: int
+    total_tokens: int
+    cost: float
+
+
+class APIStats(TypedDict):
+    """Structure pour les statistiques d'utilisation de l'API."""
+    total_tokens: int
+    prompt_tokens: int
+    completion_tokens: int
+    total_cost: float
+    api_calls: int
+
+
+class ProgressState(TypedDict):
+    """Structure pour l'état de progression."""
+    current_step: int
+    total_steps: int
+    percentage: float
+    current_phase: str
+    current_cycle: Optional[int]
+    current_idea: Optional[int]
 
 
 @dataclass
