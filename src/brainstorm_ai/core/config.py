@@ -40,7 +40,7 @@ class Config:
         """Charge la configuration depuis un fichier YAML."""
         if config_path is None:
             # Chercher config.yaml dans le dossier config
-            config_path = Path(__file__).parent.parent.parent / "config" / "config.yaml"
+            config_path = Path(__file__).parent.parent.parent.parent / "config" / "config.yaml"
         logger.info(f"Chargement de la configuration depuis {config_path}")
         try:
             config_file = Path(config_path)
