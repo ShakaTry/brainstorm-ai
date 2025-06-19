@@ -44,3 +44,34 @@ class AgentCritique(BaseAgent):
         """
         prompt = PromptRegistry.get_prompt("critique", "replique")
         return self.execute_prompt(prompt, defense=defense, idee=idee)
+
+
+# Instance globale pour les fonctions de compatibilité
+_agent_critique = AgentCritique()
+
+# Fonctions de compatibilité avec l'interface attendue
+def prompt_critique(texte: str) -> str:
+    """
+    Interface de compatibilité pour l'analyse critique.
+    
+    Args:
+        texte: Le texte à analyser
+        
+    Returns:
+        L'analyse critique constructive
+    """
+    return _agent_critique.analyser(texte)
+
+
+def prompt_replique(defense: str, idee: str) -> str:
+    """
+    Interface de compatibilité pour l'évaluation des défenses.
+    
+    Args:
+        defense: La défense proposée
+        idee: L'idée originale
+        
+    Returns:
+        L'évaluation de la défense
+    """
+    return _agent_critique.repliquer(defense, idee)

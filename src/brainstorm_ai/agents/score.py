@@ -29,3 +29,20 @@ class AgentScore(BaseAgent):
         """
         prompt = PromptRegistry.get_prompt("score", "evaluation")
         return self.execute_prompt(prompt, texte=texte)
+
+
+# Instance globale pour les fonctions de compatibilité
+_agent_score = AgentScore()
+
+# Fonction de compatibilité avec l'interface attendue
+def prompt_score(texte: str) -> str:
+    """
+    Interface de compatibilité pour l'évaluation d'idées.
+    
+    Args:
+        texte: Le texte/idée à évaluer
+        
+    Returns:
+        Un JSON avec les scores d'évaluation
+    """
+    return _agent_score.evaluer(texte)

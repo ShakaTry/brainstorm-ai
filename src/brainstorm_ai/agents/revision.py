@@ -30,3 +30,21 @@ class AgentRevision(BaseAgent):
         """
         prompt = PromptRegistry.get_prompt("revision", "amelioration")
         return self.execute_prompt(prompt, idee=idee, critique=critique)
+
+
+# Instance globale pour les fonctions de compatibilité
+_agent_revision = AgentRevision()
+
+# Fonction de compatibilité avec l'interface attendue
+def prompt_revision(idee: str, critique: str) -> str:
+    """
+    Interface de compatibilité pour la révision d'idées.
+    
+    Args:
+        idee: L'idée originale
+        critique: Les critiques émises
+        
+    Returns:
+        La version améliorée de l'idée
+    """
+    return _agent_revision.ameliorer_idee(idee, critique)

@@ -2,7 +2,6 @@ import os
 import sys
 import logging
 from pathlib import Path
-import openai
 
 from ..core.loop_manager import run_brainstorm_loop
 from ..core.config import config
@@ -47,7 +46,6 @@ if not api_key.startswith(('sk-', 'sk-proj-')):
     print("\n⚠️  ATTENTION : Le format de la clé API semble incorrect")
     print("   Les clés OpenAI commencent généralement par 'sk-' ou 'sk-proj-'")
 
-openai.api_key = api_key
 logger.info("Clé API OpenAI configurée avec succès")
 
 def main():

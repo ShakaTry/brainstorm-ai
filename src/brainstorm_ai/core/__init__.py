@@ -12,7 +12,7 @@ Ce module contient toutes les fonctionnalités centrales :
 
 from .config import Config, config
 from .gpt import gpt, get_gpt_stats, reset_gpt_stats, GPTClient
-from .loop_manager import run_brainstorm_loop
+# from .loop_manager import run_brainstorm_loop  # Removed to prevent circular import
 from .exporter import export_yaml, export_json, export_markdown
 from .progress_tracker import ProgressTracker
 from .utils import dedupe
@@ -35,7 +35,7 @@ __all__ = [
     'GPTClient',
     
     # Loop Manager
-    'run_brainstorm_loop',
+    # 'run_brainstorm_loop',  # Removed to prevent circular import
     
     # Exporters
     'export_yaml',

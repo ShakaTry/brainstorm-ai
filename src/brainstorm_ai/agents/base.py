@@ -157,10 +157,10 @@ Propose une version améliorée de cette idée qui tient compte des critiques to
 
 Retourne UNIQUEMENT un JSON avec ces scores (1-10) :
 {{
-    "impact": <score>,
-    "faisabilite": <score>,
-    "originalite": <score>,
-    "clarte": <score>
+    "impact": [score_de_1_a_10],
+    "faisabilite": [score_de_1_a_10],
+    "originalite": [score_de_1_a_10],
+    "clarte": [score_de_1_a_10]
 }}"""
             },
             

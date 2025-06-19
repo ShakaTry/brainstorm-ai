@@ -98,6 +98,12 @@ general:
 
     Architecture, agents et flux de travail
 
+-   :material-flow-chart: __[Flux du Système](SYSTEM_FLOW.md)__
+
+    ---
+
+    Diagramme complet et détaillé du flux d'exécution
+
 -   :material-api: __[Référence API](api/core/config.md)__
 
     ---

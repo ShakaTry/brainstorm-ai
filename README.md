@@ -56,6 +56,41 @@ Brainstorm AI simule un processus de brainstorming professionnel avec une équip
 | **📊 Score** | Évaluation | 0.2 | Notation quantitative |
 | **📌 Application** | Plans d'action | 0.6 | Mise en œuvre concrète |
 
+## 🏗️ Architecture et Flux d'Exécution
+
+Voici comment tous les composants interagissent lors d'une session de brainstorming :
+
+```mermaid
+graph TD
+    A["🚀 Point d'entrée<br/>main.py ou run.py"] --> B["🔧 CLI Module<br/>src/brainstorm_ai/cli/main.py"]
+    B --> C["⚙️ Configuration<br/>src/brainstorm_ai/core/config.py"]
+    C --> D["📋 Chargement Prompts<br/>config/prompts.yaml"]
+    B --> E["🔄 Loop Manager<br/>src/brainstorm_ai/core/loop_manager.py"]
+    
+    E --> F["🧠 Agents Spécialisés<br/>src/brainstorm_ai/agents/"]
+    F --> F1["💡 Creative Agent<br/>creative.py"]
+    F --> F2["🔍 Critic Agent<br/>critic.py"]
+    F --> F3["✏️ Revision Agent<br/>revision.py"]
+    F --> F4["📊 Score Agent<br/>score.py"]
+    F --> F5["🧠 Synthesis Agent<br/>synthesis.py"]
+    F --> F6["📋 Application Agent<br/>application.py"]
+    
+    F1 --> G["🔌 GPT Interface<br/>src/brainstorm_ai/core/gpt.py"]
+    F2 --> G
+    F3 --> G
+    F4 --> G
+    F5 --> G
+    F6 --> G
+    
+    G --> H["🤖 OpenAI API<br/>GPT-4o Models"]
+    
+    E --> I["📈 Progress Tracker<br/>src/brainstorm_ai/core/progress_tracker.py"]
+    E --> J["💾 Exporter<br/>src/brainstorm_ai/core/exporter.py"]
+    J --> K["📁 Résultats<br/>data/logs/ et data/exports/"]
+```
+
+> 📋 **Documentation complète** : [Flux d'Exécution Détaillé](docs/SYSTEM_FLOW.md)
+
 ## ✨ Caractéristiques Avancées
 
 ### 🔥 Nouvelles Fonctionnalités 2024
@@ -193,7 +228,7 @@ graph TD
 3. **📌 Sélection TOP** : Extraction des 3-5 idées les plus prometteuses
 4. **📋 Plans détaillés** : Roadmap de mise en œuvre pour chaque idée
 
-## 📁 Architecture du Projet
+## 📁 Structure du Projet
 
 ```
 brainstorm_ai/

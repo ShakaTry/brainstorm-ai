@@ -33,3 +33,20 @@ class AgentSynthese(BaseAgent):
         
         prompt = PromptRegistry.get_prompt("synthese", "consolidation")
         return self.execute_prompt(prompt, idees=idees_text)
+
+
+# Instance globale pour les fonctions de compatibilité
+_agent_synthese = AgentSynthese()
+
+# Fonction de compatibilité avec l'interface attendue
+def prompt_synthese(idees_revisees: List[str]) -> str:
+    """
+    Interface de compatibilité pour la synthèse d'idées.
+    
+    Args:
+        idees_revisees: Liste des idées révisées
+        
+    Returns:
+        La synthèse des meilleures idées
+    """
+    return _agent_synthese.consolider(idees_revisees)

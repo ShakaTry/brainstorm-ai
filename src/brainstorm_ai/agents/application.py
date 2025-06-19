@@ -73,3 +73,61 @@ class AgentApplication(BaseAgent):
         """
         prompt = PromptRegistry.get_prompt("application", "revision_plan")
         return self.execute_prompt(prompt, plan=plan, critique=critique)
+
+
+# Instance globale pour les fonctions de compatibilité
+_agent_application = AgentApplication()
+
+# Fonctions de compatibilité avec l'interface attendue
+def prompt_plan(idee: str) -> str:
+    """
+    Interface de compatibilité pour la création de plans.
+    
+    Args:
+        idee: L'idée pour laquelle créer un plan
+        
+    Returns:
+        Le plan de mise en œuvre détaillé
+    """
+    return _agent_application.creer_plan(idee)
+
+
+def prompt_critique_plan(plan: str) -> str:
+    """
+    Interface de compatibilité pour la critique de plans.
+    
+    Args:
+        plan: Le plan à critiquer
+        
+    Returns:
+        L'analyse critique du plan
+    """
+    return _agent_application.critiquer_plan(plan)
+
+
+def prompt_defense_plan(plan: str, critique: str) -> str:
+    """
+    Interface de compatibilité pour la défense de plans.
+    
+    Args:
+        plan: Le plan original
+        critique: Les critiques émises
+        
+    Returns:
+        La défense du plan
+    """
+    return _agent_application.defendre_plan(plan, critique)
+
+
+def prompt_revision_plan(plan: str, critique: str) -> str:
+    """
+    Interface de compatibilité pour la révision de plans.
+    
+    Args:
+        plan: Le plan initial
+        critique: Les critiques émises
+        
+    Returns:
+        Le plan révisé
+    """
+    return _agent_application.reviser_plan(plan, critique)
