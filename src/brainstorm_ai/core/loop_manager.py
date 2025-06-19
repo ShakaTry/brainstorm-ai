@@ -1,22 +1,28 @@
-import os
 import datetime
 import json
-import re
 import logging
+import os
+import re
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
+
+from ..agents.application import (
+    prompt_critique_plan,
+    prompt_defense_plan,
+    prompt_plan,
+    prompt_revision_plan,
+)
 from ..agents.creative import prompt_creatif, prompt_defense
 from ..agents.critic import prompt_critique, prompt_replique
 from ..agents.revision import prompt_revision
-from ..agents.synthesis import prompt_synthese
 from ..agents.score import prompt_score
-from ..agents.application import prompt_plan, prompt_critique_plan, prompt_defense_plan, prompt_revision_plan
-from .exporter import export_yaml, export_json, export_markdown
-from .utils import dedupe
+from ..agents.synthesis import prompt_synthese
 from .config import config
-from .progress_tracker import ProgressTracker
+from .exporter import export_json, export_markdown, export_yaml
 from .gpt import get_gpt_stats
-from .types import CycleLog, ApplicationLog, BrainstormLog, ScoreDict
+from .progress_tracker import ProgressTracker
+from .types import ApplicationLog, BrainstormLog, CycleLog, ScoreDict
+from .utils import dedupe
 
 logger = logging.getLogger(__name__)
 
@@ -233,17 +239,15 @@ def save_full_log(objectif: str, contexte: str, contraintes: str,
 
     # Export des idées dans des fichiers séparés si activé
     if config.get("export.save_individual_ideas", True):
-        from pathlib import Path
-        import re
-
-        os.makedirs(config.exports_dir, exist_ok=True)
-        for idx, app_log in enumerate(application_logs, 1):
-            idee = app_log["idee"]
-            safe_title = re.sub(r'[^a-zA-Z0-9_\-]', '_', idee[:40]).strip('_')
-            filename = Path(config.exports_dir) / f"{idx}_{safe_title}.md"
-            
-            # Créer un contenu détaillé avec l'idée et son plan développé
-            content = f"""# Idée #{idx}: {idee}
+        try:
+            os.makedirs(config.exports_dir, exist_ok=True)
+            for idx, app_log in enumerate(application_logs, 1):
+                idee = app_log["idee"]
+                safe_title = re.sub(r'[^a-zA-Z0-9_\-]', '_', idee[:40]).strip('_')
+                filename = Path(config.exports_dir) / f"{idx}_{safe_title}.md"
+                
+                # Créer un contenu détaillé avec l'idée et son plan développé
+                content = f"""# Idée #{idx}: {idee}
 
 ## 📋 Plan Initial
 {app_log["plan_initial"]}
@@ -260,9 +264,14 @@ def save_full_log(objectif: str, contexte: str, contraintes: str,
 ---
 *Généré automatiquement par le système de brainstorm AI*
 """
-            
-            with open(filename, "w", encoding="utf-8") as f:
-                f.write(content)
+                
+                try:
+                    with open(filename, "w", encoding="utf-8") as f:
+                        f.write(content)
+                except OSError as e:
+                    logger.error(f"Erreur lors de l'écriture du fichier {filename}: {e}")
+        except OSError as e:
+            logger.error(f"Erreur lors de la création du dossier {config.exports_dir}: {e}")
 
     log_data["application"] = application_logs
 
@@ -270,19 +279,31 @@ def save_full_log(objectif: str, contexte: str, contraintes: str,
     if progress_tracker:
         progress_tracker.start_export()
 
-    os.makedirs(config.logs_dir, exist_ok=True)
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    log_filename = config.get_log_filename(timestamp)
-    
-    # Export dans les formats activés
-    if config.should_export_format("yaml"):
-        export_yaml(log_data, filename=os.path.join(config.logs_dir, f"{log_filename}.yaml"))
-    
-    if config.should_export_format("json"):
-        export_json(log_data, filename=os.path.join(config.logs_dir, f"{log_filename}.json"))
-    
-    if config.should_export_format("markdown"):
-        export_markdown(log_data, filename=os.path.join(config.logs_dir, f"{log_filename}.md"))
+    try:
+        os.makedirs(config.logs_dir, exist_ok=True)
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        log_filename = config.get_log_filename(timestamp)
+        
+        # Export dans les formats activés
+        if config.should_export_format("yaml"):
+            try:
+                export_yaml(log_data, filename=os.path.join(config.logs_dir, f"{log_filename}.yaml"))
+            except Exception as e:
+                logger.error(f"Erreur lors de l'export YAML: {e}")
+        
+        if config.should_export_format("json"):
+            try:
+                export_json(log_data, filename=os.path.join(config.logs_dir, f"{log_filename}.json"))
+            except Exception as e:
+                logger.error(f"Erreur lors de l'export JSON: {e}")
+        
+        if config.should_export_format("markdown"):
+            try:
+                export_markdown(log_data, filename=os.path.join(config.logs_dir, f"{log_filename}.md"))
+            except Exception as e:
+                logger.error(f"Erreur lors de l'export Markdown: {e}")
+    except OSError as e:
+        logger.error(f"Erreur lors de la création du dossier de logs {config.logs_dir}: {e}")
     
     # Terminer l'export
     if progress_tracker:

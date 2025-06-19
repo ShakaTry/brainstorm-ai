@@ -83,9 +83,59 @@ def test_configuration():
     
     print("\n✅ Test terminé avec succès!")
 
+def validate_config_structure():
+    """Valide la structure complète de la configuration."""
+    print("\n🔍 Validation de la structure de configuration...")
+    
+    required_sections = {
+        "general": ["cycles", "top_ideas_count", "ask_confirmation"],
+        "agents": ["models", "temperatures"],
+        "api": ["max_retries", "retry_delay_base", "pricing"],
+        "export": ["formats", "paths", "save_individual_ideas"],
+        "display": ["show_progress", "use_emojis", "emojis"],
+        "advanced": ["idea_extraction_strategies", "score_validation", "optimization"]
+    }
+    
+    errors = []
+    warnings = []
+    
+    for section, keys in required_sections.items():
+        if not config.get(section):
+            errors.append(f"Section manquante : {section}")
+            continue
+            
+        for key in keys:
+            if not config.get(f"{section}.{key}"):
+                warnings.append(f"Clé manquante ou vide : {section}.{key}")
+    
+    # Vérifications spécifiques
+    if config.get("general.cycles", 0) < 1:
+        errors.append("Le nombre de cycles doit être au moins 1")
+    
+    if config.get("general.top_ideas_count", 0) < 1:
+        errors.append("Le nombre d'idées top doit être au moins 1")
+    
+    # Affichage des résultats
+    if errors:
+        print("\n❌ ERREURS CRITIQUES :")
+        for error in errors:
+            print(f"   • {error}")
+    
+    if warnings:
+        print("\n⚠️  AVERTISSEMENTS :")
+        for warning in warnings:
+            print(f"   • {warning}")
+    
+    if not errors and not warnings:
+        print("   ✅ Structure de configuration valide !")
+    
+    return len(errors) == 0
+
+
 if __name__ == "__main__":
     try:
         test_configuration()
+        validate_config_structure()
     except Exception as e:
         print(f"\n❌ Erreur lors du test: {e}")
         print("\nVérifiez que le fichier config.yaml existe et est correctement formaté.") 

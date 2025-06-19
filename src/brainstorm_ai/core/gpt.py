@@ -1,10 +1,17 @@
+import logging
 import os
 import time
-import logging
-from typing import Optional, Dict, Any
 from functools import lru_cache
-from openai import OpenAI
-from openai import APIError, APIConnectionError, RateLimitError, Timeout
+from typing import Any, Dict, Optional
+
+from openai import (
+    APIConnectionError,
+    APIError,
+    OpenAI,
+    RateLimitError,
+    Timeout,
+)
+
 from .config import config
 
 logger = logging.getLogger(__name__)

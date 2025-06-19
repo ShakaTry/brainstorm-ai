@@ -3,11 +3,6 @@
 Script de benchmark pour mesurer l'impact des optimisations du brainstorming IA.
 """
 
-import sys
-from pathlib import Path
-# Ajouter le répertoire src au path pour importer les modules
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-
 import time
 import json
 import os
