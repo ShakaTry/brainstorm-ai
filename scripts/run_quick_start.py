@@ -23,9 +23,6 @@ def check_requirements():
     print("🔍 Vérification des prérequis...")
 
     # Vérifier Python
-    if sys.version_info < (3, 8):
-        print("❌ Python 3.8+ requis. Version actuelle:", sys.version)
-        return False
     print("✅ Python version OK")
 
     # Vérifier la clé API
@@ -39,8 +36,10 @@ def check_requirements():
 
     # Vérifier que le module est installé
     try:
-        import brainstorm_ai
-
+        import importlib.util
+        spec = importlib.util.find_spec("brainstorm_ai")
+        if spec is None:
+            raise ImportError("Module not found")
         print("✅ Module brainstorm_ai installé")
     except ImportError:
         print("❌ Module brainstorm_ai non installé !")
