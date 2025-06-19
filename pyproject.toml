@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "brainstorm-ai"
-version = "2.1.0"
+version = "2.1.1"
 description = "Système multi-agents pour le brainstorming créatif avec GPT"
 authors = [{name = "Brainstorm AI Team"}]
 readme = "README.md"

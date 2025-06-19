@@ -2,7 +2,7 @@
 Brainstorm AI - Système de brainstorming intelligent
 """
 
-__version__ = "2.1.0"
+__version__ = "2.1.1"
 __author__ = "Brainstorm AI Team"
 
 # Les imports des modules sont disponibles mais pas nécessaires à exposer ici
