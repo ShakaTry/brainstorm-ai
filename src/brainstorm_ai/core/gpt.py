@@ -185,7 +185,7 @@ def gpt(
         except Exception as e:
             # Pour les erreurs inattendues, on les logue et on les relance
             logger.error(f"Erreur inattendue lors de l'appel GPT: {type(e).__name__}: {str(e)}")
-            raise GPTAPIError(f"Erreur inattendue: {type(e).__name__}: {str(e)}")
+            raise GPTAPIError(f"Erreur inattendue: {type(e).__name__}: {str(e)}") from e
 
     # Dernière tentative échouée
     logger.error(f"Échec définitif après {max_retries} tentatives")

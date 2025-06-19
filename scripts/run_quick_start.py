@@ -37,6 +37,7 @@ def check_requirements():
     # Vérifier que le module est installé
     try:
         import importlib.util
+
         spec = importlib.util.find_spec("brainstorm_ai")
         if spec is None:
             raise ImportError("Module not found")

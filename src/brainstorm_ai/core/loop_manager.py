@@ -368,10 +368,7 @@ def extract_top_ideas_robust(synthese_text: str, count: int = 3) -> list[str]:
     strategies = config.get_idea_extraction_strategies()
 
     # Construire le pattern numéroté correctement
-    if count == 1:
-        numbered_pattern = r"^\s*1\.\s*(.+)$"
-    else:
-        numbered_pattern = rf"^\s*[1-{count}]\.\s*(.+)$"
+    numbered_pattern = r"^\s*1\.\s*(.+)$" if count == 1 else rf"^\s*[1-{count}]\.\s*(.+)$"
 
     pattern_map = {
         "numbered": numbered_pattern,
@@ -389,5 +386,5 @@ def extract_top_ideas_robust(synthese_text: str, count: int = 3) -> list[str]:
                 return matches[:count]
 
     # Fallback: prendre les premières lignes non vides
-    lines = [l.strip() for l in synthese_text.splitlines() if l.strip()]
+    lines = [line.strip() for line in synthese_text.splitlines() if line.strip()]
     return lines[:count] if len(lines) >= count else lines

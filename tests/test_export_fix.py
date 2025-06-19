@@ -37,7 +37,7 @@ def test_export_fix():
     test_synthese = """Voici les meilleures idées du brainstorm :
 
 1. Plateforme collaborative de co-création urbaine avec IA distribuée
-2. Réseau de capteurs citoyens pour la gouvernance participative  
+2. Réseau de capteurs citoyens pour la gouvernance participative
 3. Application mobile de participation citoyenne gamifiée
 
 Ces idées représentent les solutions les plus prometteuses."""
