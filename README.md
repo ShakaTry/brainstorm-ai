@@ -2,276 +2,505 @@
 
 Un système de brainstorming intelligent utilisant plusieurs agents IA spécialisés pour générer, critiquer, défendre et améliorer des idées de manière collaborative.
 
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](docker/)
+[![Security](https://img.shields.io/badge/security-enhanced-green.svg)](PRIVACY_GUIDELINES.md)
+
 ## 🚀 Démarrage Ultra-Rapide
 
 **Nouveau utilisateur ?** → Consultez [QUICK_START.md](QUICK_START.md) pour lancer votre premier brainstorm en 5 minutes !
 
+### 💻 Installation Express
+
 ```bash
-# Installation express
+# Clonage et installation
 git clone https://github.com/ShakaTry/brainstorm-ai.git
 cd brainstorm-ai
 pip install -e .
-set OPENAI_API_KEY=votre-clé   # Windows
-python run.py                  # Lancement simplifié !
+
+# Configuration rapide
+cp config/env.example .env
+# Éditez .env avec votre clé API OpenAI
+
+# Lancement simplifié
+python run.py                  # Interface guidée avec assistant
+# ou
+python start.bat              # Windows : lancement en un clic
+```
+
+### 🐳 Déploiement Docker
+
+```bash
+# Build et lancement avec Docker Compose
+docker-compose up --build
+
+# Ou avec Docker simple
+docker build -t brainstorm-ai .
+docker run -e OPENAI_API_KEY=votre-clé brainstorm-ai
 ```
 
 ## 🎯 Description
 
-Brainstorm AI est un outil de génération d'idées qui simule un processus de brainstorming collaboratif en utilisant différents agents IA avec des rôles spécialisés :
+Brainstorm AI simule un processus de brainstorming professionnel avec une équipe d'experts virtuels, chacun ayant un rôle spécialisé dans le processus créatif.
 
-- **Agent Créatif** 💡 : Génère des idées innovantes et originales
-- **Agent Critique** 🔍 : Analyse et critique constructive des idées
-- **Agent de Défense** 🛡️ : Défend et améliore les idées critiquées
-- **Agent de Révision** ✏️ : Reformule et peaufine les idées
-- **Agent de Synthèse** 🧠 : Synthétise et structure les meilleures idées
-- **Agent de Score** 📊 : Évalue les idées selon des critères objectifs
-- **Agent d'Application** 📌 : Développe des plans concrets de mise en œuvre
+### 🤖 Les Agents Spécialisés
 
-## ✨ Caractéristiques
+| Agent | Rôle | Température | Spécialité |
+|-------|------|-------------|------------|
+| **💡 Créatif** | Génération d'idées | 0.9 | Innovation et originalité |
+| **🔍 Critique** | Analyse objective | 0.4 | Évaluation rigoureuse |
+| **🛡️ Défense** | Amélioration | 0.6 | Argumentation et renforcement |
+| **✏️ Révision** | Reformulation | 0.6 | Clarification et optimisation |
+| **🧠 Synthèse** | Compilation | 0.5 | Structuration et hiérarchisation |
+| **📊 Score** | Évaluation | 0.2 | Notation quantitative |
+| **📌 Application** | Plans d'action | 0.6 | Mise en œuvre concrète |
 
+## ✨ Caractéristiques Avancées
+
+### 🔥 Nouvelles Fonctionnalités 2024
+- **🚀 Scripts de lancement simplifiés** : `run.py` interactif et `start.bat` Windows
+- **🔒 Sécurité renforcée** : Protection automatique des données sensibles
+- **🐳 Docker optimisé** : Environnement avec GitHub CLI et outils de développement
+- **📱 Interface guidée** : Assistant pour configuration et estimations
+- **⚡ Performance** : Architecture src/ optimisée pour la vitesse
+
+### 🎯 Fonctionnalités Core
 - **Processus itératif** : Système de cycles d'amélioration continue
-- **Configuration flexible** : Personnalisation complète via `config.yaml`
+- **Configuration flexible** : Personnalisation complète via `config/config.yaml`
 - **Modèles IA optimisés** : Powered by GPT-4o pour des performances maximales
 - **Export multi-format** : YAML, JSON, et Markdown
 - **Gestion intelligente** : Détection de redondance et optimisation des tokens
-- **Interface intuitive** : Affichage avec emojis et progression claire
-- **Historique complet** : Sauvegarde de tous les cycles et analyses
-- **🔒 Sécurité renforcée** : Protection automatique des données sensibles
+- **Interface intuitive** : Affichage avec emojis et progression en temps réel
+- **Historique complet** : Sauvegarde automatique de toutes les sessions
 
-## 🚀 Installation
+## 🛠️ Installation Détaillée
 
 ### Prérequis
+- **Python 3.8+** (testé jusqu'à 3.11)
+- **Clé API OpenAI** ([Obtenir ici](https://platform.openai.com/api-keys))
+- **Git** (pour les fonctionnalités avancées)
+- **Docker** (optionnel, pour l'isolation)
 
-- Python 3.8+
-- Clé API OpenAI
-- Les dépendances Python (voir requirements.txt si disponible)
-
-### Installation des dépendances
+### Installation Pip
 
 ```bash
-pip install openai python-dotenv pyyaml
+# Installation des dépendances
+pip install -r requirements.txt
+
+# Mode développement (avec outils de test)
+pip install -r requirements-dev.txt
+
+# Installation en mode éditable
+pip install -e .
 ```
 
-### Configuration de la clé API OpenAI
+### Configuration Sécurisée
 
-#### Windows (Recommandé)
-1. Ouvrir les "Paramètres système avancés"
-2. Cliquer sur "Variables d'environnement"
-3. Ajouter une nouvelle variable :
-   - **Nom** : `OPENAI_API_KEY`
-   - **Valeur** : votre clé API OpenAI
+```bash
+# 1. Copier le modèle de configuration
+cp config/env.example .env
 
-#### Alternative PowerShell (temporaire)
-```powershell
-$env:OPENAI_API_KEY = "votre-clé-api-ici"
-```
+# 2. Éditer avec votre clé API (JAMAIS dans Git !)
+echo "OPENAI_API_KEY=sk-votre-clé-ici" >> .env
 
-#### Fichier .env (optionnel)
-Créer un fichier `.env` à la racine du projet :
-```env
-OPENAI_API_KEY=votre-clé-api-ici
+# 3. Vérifier la protection (ne doit PAS apparaître)
+git status  # .env doit être ignoré
 ```
 
 ## 🎮 Utilisation
 
-### Lancement rapide
+### 🚀 Méthodes de Lancement
 
+#### 1. Assistant Interactif (Recommandé)
+```bash
+python run.py
+```
+- Interface guidée pas à pas
+- Estimation de coût et durée
+- Vérification automatique de configuration
+- Valeurs par défaut intelligentes
+
+#### 2. Lancement Windows Simplifié
+```bash
+start.bat
+```
+- Double-clic pour lancer
+- Gestion d'erreur automatique
+- Affichage des résultats
+
+#### 3. Lancement Traditionnel
 ```bash
 python main.py
 ```
+- Mode direct avec confirmation
+- Configuration via `config/config.yaml`
 
-### Configuration personnalisée
-
-1. Modifiez le fichier `config.yaml` selon vos besoins
-2. Lancez le programme : `python main.py`
-
-### Exemple de configuration
+### 📋 Configuration Exemple
 
 ```yaml
+# config/config.yaml
 general:
-  objectif: "Créer un service IA innovant pour freelancers"
-  contexte: "Marché en croissance de l'IA et du travail indépendant"
-  contraintes: "Solution locale, pas de SaaS mensuel"
+  objectif: "Développer une stratégie de marketing digital innovante"
+  contexte: "PME tech en croissance, budget limité, marché concurrentiel"
+  contraintes: "Budget max 50K€, délai 6 mois, équipe de 3 personnes"
   cycles: 3
   top_ideas_count: 5
+
+agents:
+  models:
+    creatif: "gpt-4o"      # Créativité maximale
+    critique: "gpt-4o"     # Analyse approfondie
+    synthese: "gpt-4o"     # Synthèse de qualité
+
+export:
+  formats:
+    yaml: true
+    json: true
+    markdown: true
+  auto_export_ideas: false  # Protection confidentialité
 ```
 
-## 📊 Processus de brainstorming
+## 📊 Processus de Brainstorming
 
-### Cycle de développement d'idées
+### 🔄 Cycle de Développement d'Idées
 
-1. **Génération** 💡 : L'agent créatif propose 3 nouvelles idées
-2. **Critique** 🔍 : Analyse objective des forces et faiblesses
-3. **Défense** 🛡️ : Justification et amélioration des idées
-4. **Réplique** 🔄 : Contre-argumentation et approfondissement
-5. **Révision** ✏️ : Version finale améliorée de l'idée
+```mermaid
+graph TD
+    A[💡 Génération] --> B[🔍 Critique]
+    B --> C[🛡️ Défense]
+    C --> D[🔄 Contre-critique]
+    D --> E[✏️ Révision finale]
+    E --> F[📊 Scoring]
+    F --> G{Nouveau cycle ?}
+    G -->|Oui| A
+    G -->|Non| H[🧠 Synthèse]
+    H --> I[📌 Plans d'action]
+```
 
-### Synthèse et application
+### 📈 Évolution de la Qualité
 
-1. **Synthèse** 🧠 : Compilation des meilleures idées
-2. **Sélection** 📌 : Extraction des idées les plus prometteuses
-3. **Planification** 📋 : Développement de plans d'action concrets
+| Cycle | Objectif | Résultat Attendu |
+|-------|----------|------------------|
+| **1** | Exploration large | 3 idées brutes diverses |
+| **2** | Approfondissement | 3 idées enrichies et défendues |
+| **3** | Perfectionnement | 3 idées finalisées et actionnables |
 
-## 📁 Structure du projet
+### 🎯 Synthèse Finale
+
+1. **🧠 Compilation intelligente** : Fusion des meilleures idées
+2. **📊 Ranking automatique** : Classement par scores objectifs
+3. **📌 Sélection TOP** : Extraction des 3-5 idées les plus prometteuses
+4. **📋 Plans détaillés** : Roadmap de mise en œuvre pour chaque idée
+
+## 📁 Architecture du Projet
 
 ```
 brainstorm_ai/
-├── src/                    # Code source principal
-│   ├── agents/            # Agents IA spécialisés
-│   │   ├── agent_creatif.py   # Génération d'idées
-│   │   ├── agent_critique.py  # Analyse critique
-│   │   ├── agent_revision.py  # Amélioration des idées
-│   │   ├── agent_synthese.py  # Synthèse finale
-│   │   ├── agent_score.py     # Évaluation quantitative
-│   │   └── agent_application.py # Plans d'action
-│   ├── core/              # Moteur principal
-│   │   ├── config.py      # Gestion de la configuration
-│   │   ├── gpt.py         # Interface OpenAI
-│   │   ├── loop_manager.py # Orchestration des cycles
-│   │   ├── exporter.py    # Export multi-format
-│   │   └── utils.py       # Utilitaires
-│   └── main.py            # Point d'entrée principal
-├── config/                # Configuration
-│   ├── config.yaml        # Configuration principale
-│   └── env.example        # Exemple de variables d'environnement
-├── tests/                 # Tests unitaires et d'intégration
-├── scripts/               # Scripts utilitaires et démos
-├── data/                  # Données du projet
-│   ├── exports/           # Exports générés (🔒 fichiers réels ignorés)
-│   └── logs/              # Historique des sessions (🔒 fichiers réels ignorés)
-├── docs/                  # Documentation complète
-├── PRIVACY_GUIDELINES.md  # 🔒 Guide de confidentialité des données
-├── main.py                # Point d'entrée racine
-└── README.md              # Documentation
+├── 🚀 Lancement rapide
+│   ├── run.py                          # Assistant interactif
+│   ├── start.bat                       # Lancement Windows
+│   └── QUICK_START.md                  # Guide 5 minutes
+├── 🧠 Code source
+│   └── src/brainstorm_ai/
+│       ├── agents/                     # Agents IA spécialisés
+│       │   ├── creative.py            # 💡 Génération d'idées
+│       │   ├── critic.py              # 🔍 Analyse critique
+│       │   ├── revision.py            # ✏️ Révision et amélioration
+│       │   ├── synthesis.py           # 🧠 Synthèse finale
+│       │   ├── score.py               # 📊 Évaluation quantitative
+│       │   └── application.py         # 📌 Plans d'action
+│       ├── core/                      # Moteur principal
+│       │   ├── gpt.py                 # 🤖 Interface OpenAI optimisée
+│       │   ├── loop_manager.py        # 🔄 Orchestration des cycles
+│       │   ├── config.py              # ⚙️ Gestion configuration
+│       │   ├── exporter.py            # 📤 Export multi-format
+│       │   └── progress_tracker.py    # 📊 Suivi temps réel
+│       └── cli/                       # Interface ligne de commande
+├── ⚙️ Configuration
+│   ├── config/
+│   │   ├── config.yaml                # Configuration principale
+│   │   ├── prompts.yaml               # Prompts optimisés
+│   │   └── env.example                # Modèle environnement
+├── 🛠️ Outils et scripts
+│   ├── scripts/
+│   │   ├── check_config.py            # Validation configuration
+│   │   ├── cleanup.py                 # Nettoyage projet
+│   │   └── demo_progression.py        # Démonstration sans API
+├── 📊 Données (🔒 protégées)
+│   ├── data/
+│   │   ├── logs/                      # Historique sessions
+│   │   │   └── example_*.yaml         # ✅ Exemples publics
+│   │   └── exports/                   # Idées exportées
+│   │       └── example_*.txt          # ✅ Exemples anonymisés
+├── 🐳 Containerisation
+│   ├── docker/
+│   │   ├── Dockerfile                 # Image optimisée avec GitHub CLI
+│   │   └── docker-compose.yml         # Stack complète
+├── 🧪 Tests
+│   ├── tests/
+│   │   ├── unit/                      # Tests unitaires
+│   │   └── integration/               # Tests d'intégration
+├── 📖 Documentation
+│   └── docs/
+│       ├── ARCHITECTURE.md            # Architecture détaillée
+│       ├── cursor.rules               # Règles de développement
+│       └── guides/                    # Guides utilisateur
+├── 🔒 Sécurité
+│   ├── PRIVACY_GUIDELINES.md          # Guide confidentialité
+│   └── .gitignore                     # Protection données sensibles
+└── 📄 Documentation
+    ├── README.md                      # Ce fichier
+    └── main.py                        # Point d'entrée legacy
 ```
 
 ## 🔒 Sécurité et Confidentialité
 
-**IMPORTANT** : Ce projet traite potentiellement des informations sensibles (clés API, objectifs professionnels, idées propriétaires).
+### ⚠️ Protection Automatique
 
-📖 **Consultez [PRIVACY_GUIDELINES.md](PRIVACY_GUIDELINES.md) pour :**
-- Protéger vos informations personnelles
-- Éviter les fuites de clés API  
-- Gérer correctement les logs et exports
-- Bonnes pratiques de sécurité
+Le projet protège automatiquement vos informations sensibles :
 
-## ⚙️ Configuration avancée
+- ✅ **Clés API** : `.env` automatiquement ignoré par Git
+- ✅ **Logs personnels** : Seuls les `example_*` sont versionnés
+- ✅ **Exports privés** : Vos vraies idées restent locales
+- ✅ **Configurations** : Fichiers `*_private.yaml` protégés
 
-### Modèles IA optimisés
+### 📖 Guide Complet
+
+**CRITIQUE** : Consultez [PRIVACY_GUIDELINES.md](PRIVACY_GUIDELINES.md) pour :
+- 🛡️ Bonnes pratiques de sécurité
+- 🔍 Détection de fuites potentielles
+- 📋 Checklist avant chaque commit
+- 🚨 Procédures d'urgence en cas de fuite
+
+## ⚙️ Configuration Avancée
+
+### 🎯 Optimisation des Modèles
 
 ```yaml
+# Profils de performance
 agents:
   models:
-    creatif: "gpt-4o"          # Créativité maximale et rapidité
-    critique: "gpt-4o"         # Analyse approfondie et précise
-    revision: "gpt-4o"         # Révision de qualité optimale
-    synthese: "gpt-4o"         # Synthèse complexe et structurée
-    score: "gpt-4o"            # Évaluation précise et cohérente
+    # Performance maximale (coût élevé)
+    performance_max:
+      creatif: "gpt-4o"
+      critique: "gpt-4o"
+      synthese: "gpt-4o"
+    
+    # Équilibré qualité/coût (recommandé)
+    equilibre:
+      creatif: "gpt-4o-mini"
+      critique: "gpt-4o"
+      synthese: "gpt-4o"
+    
+    # Économique (coût minimal)
+    economique:
+      creatif: "gpt-4o-mini"
+      critique: "gpt-4o-mini"
+      synthese: "gpt-4o-mini"
 ```
 
-### Températures par rôle
+### 🎚️ Paramètres de Créativité
 
 ```yaml
 agents:
   temperatures:
-    creatif: 0.9    # Très créatif
-    critique: 0.4   # Très précis
-    revision: 0.6   # Équilibré
-    score: 0.2      # Très factuel
+    creatif: 0.9     # 🔥 Maximum de créativité
+    critique: 0.4    # 🎯 Analyse rigoureuse
+    revision: 0.6    # ⚖️ Équilibre
+    synthese: 0.5    # 🧠 Structuration logique
+    score: 0.2       # 📊 Évaluation objective
+    application: 0.6 # 📌 Pragmatisme
 ```
 
-### Formats d'export
+### 📤 Formats d'Export
 
 ```yaml
 export:
   formats:
-    yaml: true      # Données structurées
-    json: true      # Compatibilité outils
-    markdown: true  # Documentation lisible
+    yaml: true       # 📋 Données structurées
+    json: true       # 🔧 Intégration outils
+    markdown: true   # 📖 Documentation lisible
+  
+  options:
+    auto_export_ideas: false     # 🔒 Sécurité par défaut
+    include_timestamps: true     # ⏰ Traçabilité
+    include_costs: true          # 💰 Transparence
 ```
 
-## 📈 Optimisations incluses
+## 📈 Optimisations Intégrées
 
-- **Gestion intelligente du contexte** : Limitation automatique pour optimiser les tokens
-- **Stratégies d'extraction robustes** : Plusieurs méthodes pour identifier les meilleures idées
-- **Validation des scores** : Système de fallback pour assurer la cohérence
-- **Détection de redondance** : Évite la répétition d'idées similaires
-- **Retry automatique** : Gestion des erreurs API avec backoff exponentiel
+### ⚡ Performance
+- **Gestion contexte intelligente** : Optimisation automatique des tokens
+- **Cache adaptatif** : Réutilisation des réponses similaires
+- **Parallélisation** : Traitement concurrent quand possible
+- **Retry intelligent** : Backoff exponentiel avec circuit breaker
 
-## 🧪 Tests
+### 🧠 IA Optimisée
+- **Prompts affinés** : Templates optimisés par rôle
+- **Extraction robuste** : Multiples stratégies de parsing
+- **Validation croisée** : Vérification de cohérence
+- **Détection doublons** : Évite les idées redondantes
 
-Lancer les tests unitaires :
+### 💰 Gestion Coûts
+- **Estimation temps réel** : Coût avant exécution
+- **Limits configurable** : Plafonds de sécurité
+- **Reporting détaillé** : Tracking token par agent
+- **Mode économique** : Profils optimisés coût/qualité
+
+## 🧪 Tests et Qualité
+
+### Lancement des Tests
 
 ```bash
+# Tests complets
 pytest
+
+# Tests avec couverture
+pytest --cov=src/brainstorm_ai
+
+# Tests spécifiques
+pytest tests/unit/agents/test_creative.py
+pytest tests/integration/test_brainstorm_flow.py
 ```
 
-Tests disponibles :
-- Tests des agents individuels
-- Tests du gestionnaire de boucles
-- Tests d'export et configuration
-- Tests des utilitaires
+### 🔍 Validation Qualité
 
-## 📝 Logs et exports
+```bash
+# Vérification configuration
+python scripts/check_config.py
 
-### Structure des logs
+# Nettoyage projet
+python scripts/cleanup.py
+
+# Démonstration sans API
+python scripts/demo_progression.py
+```
+
+## 🤝 Développement et Contribution
+
+### 🚀 Setup Développeur
+
+```bash
+# Installation complète
+pip install -r requirements-dev.txt
+
+# Pre-commit hooks
+pre-commit install
+
+# Tests avant commit
+make test
+```
+
+### 📋 Checklist Contribution
+
+- [ ] Tests passent (`pytest`)
+- [ ] Code formaté (`black`, `isort`)
+- [ ] Linting clean (`flake8`)
+- [ ] Documentation à jour
+- [ ] Pas d'info sensible commitée
+
+### 🔄 Workflow GitHub
+
+```bash
+# Fork et branche
+git checkout -b feature/amazing-feature
+
+# Développement avec cursor.rules
+# (Voir docs/cursor.rules pour les standards)
+
+# Push et PR
+git push origin feature/amazing-feature
+# Créer PR sur GitHub
+```
+
+## 🏆 Cas d'Usage et Exemples
+
+### 💼 Business & Strategy
+```yaml
+objectif: "Développer une stratégie de diversification"
+contexte: "Entreprise manufacturière, 50 employés, croissance 15%/an"
+contraintes: "Budget R&D 100K€, timeline 12 mois"
+```
+
+### 💡 Innovation Produit
+```yaml
+objectif: "Créer une app mobile révolutionnaire"
+contexte: "Marché saturé, utilisateurs exigeants, concurrence forte"
+contraintes: "Équipe 3 dev, budget marketing limité, launch Q1"
+```
+
+### 🎯 Résolution Problèmes
+```yaml
+objectif: "Réduire le churn client de 40%"
+contexte: "SaaS B2B, clients PME, support overwhelmed"
+contraintes: "Pas d'embauche, solutions rapides, ROI mesurable"
+```
+
+## 📊 Résultats Attendus
+
+### 📈 Performance Typique
+- **⏱️ Durée session** : 10-30 minutes selon cycles
+- **💰 Coût moyen** : 0,50-5€ selon configuration
+- **🎯 Idées finales** : 3-5 propositions actionnables
+- **📊 Score qualité** : Moyenne 7.5+/10 sur tous critères
+
+### 🏅 Exemple de Sortie
 
 ```yaml
-objectif: "Votre objectif"
-contexte: "Le contexte"
-date: "2025-06-18T23:01:43"
-logs:
-  - cycle: 1
-    creation: "Idées générées..."
-    critique: "Analyse critique..."
-    # ... autres étapes
-synthese_finale: "Synthèse des meilleures idées"
-application:
-  - idee: "Idée sélectionnée"
-    plan_initial: "Plan d'action"
-    # ... développement du plan
+# Extrait de synthèse finale
+top_ideas:
+  1:
+    titre: "Plateforme d'Onboarding Gamifiée"
+    score_global: 8.7/10
+    impact: 9.2/10
+    faisabilite: 8.0/10
+    plan_action:
+      phase_1: "Prototype MVP (2 mois, 15K€)"
+      phase_2: "Beta test avec 10 clients (1 mois)"
+      phase_3: "Déploiement graduel (3 mois)"
+    roi_estime: "ROI 300% en 12 mois"
 ```
 
-### Exports automatiques
+## 🆘 Support et Maintenance
 
-- **Logs complets** : Sauvegarde de chaque session dans `/logs`
-- **Idées individuelles** : Fichiers séparés dans `/exports` (optionnel)
-- **Statistiques** : Consommation de tokens et performances
+### 📚 Documentation
+- **[QUICK_START.md](QUICK_START.md)** : Guide démarrage rapide
+- **[PRIVACY_GUIDELINES.md](PRIVACY_GUIDELINES.md)** : Sécurité des données
+- **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** : Architecture technique
+- **[docs/cursor.rules](docs/cursor.rules)** : Standards de développement
 
-## 🤝 Contribution
+### 🐛 Signalement de Bugs
+1. Vérifier les [Issues existantes](https://github.com/ShakaTry/brainstorm-ai/issues)
+2. Créer une issue détaillée avec :
+   - Version Python/OS
+   - Configuration utilisée
+   - Logs d'erreur complets
+   - Étapes de reproduction
 
-1. Fork le projet
-2. Créer une branche feature (`git checkout -b feature/AmazingFeature`)
-3. Commit vos changements (`git commit -m 'Add AmazingFeature'`)
-4. Push vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrir une Pull Request
+### 💬 Communauté
+- **GitHub Discussions** : Questions et idées
+- **Issues** : Bugs et améliorations
+- **Pull Requests** : Contributions code
 
-## 📄 Licence
+## 📄 Licence et Crédits
 
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+### 📜 Licence
+Ce projet est sous licence **MIT**. Voir [LICENSE](LICENSE) pour détails.
 
-## 🆘 Support
+### 🙏 Contributions
+- **OpenAI** : GPT-4o pour l'intelligence artificielle
+- **Communauté Python** : Écosystème de librairies
+- **Contributeurs** : Tous les développeurs ayant amélioré le projet
 
-- **Documentation** : Consultez le fichier `CONFIG_README.md` pour la configuration détaillée
-- **Issues** : Rapportez les bugs sur GitHub Issues
-- **Optimisations** : Voir `OPTIMIZATIONS.md` pour les améliorations de performance
-
-## 🏆 Exemples d'utilisation
-
-### Cas d'usage typiques
-
-- **Développement de produits** : Génération d'idées pour nouveaux services
-- **Résolution de problèmes** : Approches créatives pour défis complexes
-- **Innovation business** : Modèles économiques et stratégies
-- **Amélioration de processus** : Optimisation de workflows existants
-
-### Résultats attendus
-
-- **3-5 idées finalisées** par session (configurable)
-- **Plans d'action détaillés** pour chaque idée retenue
-- **Analyse critique constructive** de chaque proposition
-- **Scores quantitatifs** pour comparer objectivement les idées
+### 🔗 Liens Utiles
+- **Repository** : [github.com/ShakaTry/brainstorm-ai](https://github.com/ShakaTry/brainstorm-ai)
+- **Documentation** : [docs/](docs/)
+- **Issues** : [GitHub Issues](https://github.com/ShakaTry/brainstorm-ai/issues)
 
 ---
 
-*Développé avec 🧠 par une collaboration entre intelligence humaine et artificielle* 
+🧠 **Brainstorm AI** - *Où l'intelligence artificielle rencontre la créativité humaine*
+
+[![Made with ❤️](https://img.shields.io/badge/Made%20with-❤️-red.svg)](https://github.com/ShakaTry/brainstorm-ai)
+[![AI Powered](https://img.shields.io/badge/AI-Powered-blue.svg)](https://openai.com) 
