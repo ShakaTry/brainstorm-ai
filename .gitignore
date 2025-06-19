@@ -178,13 +178,76 @@ data/logs/*.log
 *.tmp
 *.temp
 
-# API keys and secrets
+# ========================================
+# INFORMATIONS PERSONNELLES ET SENSIBLES
+# ========================================
+
+# API keys et secrets
 .env
+.env.*
+!.env.example
 config_local.yaml
 secrets.yaml
+config/*_local.yaml
+config/*_private.yaml
 
-# IDE and editor specific files
+# Logs avec potentielles informations personnelles
+data/logs/*.yaml
+data/logs/*.json
+data/logs/*.log
+!data/logs/example_*.yaml
+!data/logs/example_*.json
+
+# Exports avec potentielles données personnelles
+data/exports/*.txt
+data/exports/*.md
+data/exports/*.yaml
+data/exports/*.json
+!data/exports/example_*.txt
+!data/exports/example_*.md
+
+# Configurations personnalisées
+config/config_perso.yaml
+*_personal.yaml
+*_private.yaml
+
+# Données utilisateur
+user_data/
+personal_configs/
+private_sessions/
+
+# Authentification GitHub CLI
+.config/gh/
+
+# IDE et éditeur
 .cursor/ 
+.vscode/settings.json
+.vscode/launch.json
 
-# Cache temporaire
-data/cache/ 
+# Cache et temporaires
+data/cache/
+temp/
+*.swp
+*.swo
+*~
+
+# Backups potentiellement sensibles
+*.backup
+*.bak
+*.orig
+
+# Base de données locales
+*.db
+*.sqlite
+*.sqlite3
+
+# Certificats et clés
+*.pem
+*.key
+*.crt
+*.p12
+
+# Archives potentiellement sensibles
+sensitive_*.zip
+private_*.tar.gz
+personal_*.rar 

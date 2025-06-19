@@ -1,0 +1,77 @@
+objectif: Exemple de session de brainstorming anonymisée
+contexte: Démonstration de l'utilisation du système de brainstorming IA
+contraintes: Aucune contrainte spécifique pour cet exemple
+date: '2024-01-01T10:00:00.000000'
+session_id: example_session_001
+user_id: user_example
+logs:
+- cycle: 1
+  timestamp: '2024-01-01T10:01:00.000000'
+  creation: |
+    ### Idées Créatives Générées par l'IA
+    
+    1. **Concept Innovant A**
+       - Description d'une première idée créative
+       - Avantages et bénéfices potentiels
+       - Mise en œuvre possible
+    
+    2. **Concept Innovant B**
+       - Description d'une seconde idée
+       - Analyse des opportunités
+       - Considérations techniques
+    
+    3. **Concept Innovant C**
+       - Troisième proposition créative
+       - Évaluation de faisabilité
+       - Potentiel d'impact
+  
+  critique: |
+    ### Analyse Critique des Propositions
+    
+    #### Clarté
+    Les trois concepts présentés sont clairement articulés avec une structure logique.
+    
+    #### Faisabilité
+    - Concept A: Faisabilité élevée, ressources modérées requises
+    - Concept B: Faisabilité moyenne, défis techniques à considérer
+    - Concept C: Faisabilité bonne, nécessite validation marché
+    
+    #### Coût Estimé
+    - Concept A: Budget estimé 10K-50K€
+    - Concept B: Budget estimé 20K-100K€
+    - Concept C: Budget estimé 5K-25K€
+    
+    #### Recommandations
+    Poursuivre avec le Concept A pour un premier prototype.
+  
+  revision: |
+    ### Idées Révisées et Optimisées
+    
+    #### Concept A Amélioré
+    - Intégration des feedbacks critiques
+    - Ajustements techniques proposés
+    - Plan de déploiement raffiné
+    
+    #### Hybridation des Concepts
+    - Combinaison des meilleurs aspects des trois concepts
+    - Approche itérative de développement
+    - Validation utilisateur continue
+  
+  scores:
+    impact: 8.5
+    faisabilite: 7.2
+    originalite: 8.0
+    clarte: 8.8
+    
+statistiques:
+  nombre_cycles: 1
+  nombre_idees_generees: 3
+  temps_total_minutes: 15
+  cout_estimation_tokens: 2500
+  cout_estimation_euros: 0.05
+  
+metadata:
+  version_systeme: "1.0.0"
+  modele_utilise: "gpt-4o"
+  temperature: 0.7
+  max_tokens: 4000 

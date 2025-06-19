@@ -36,6 +36,7 @@ Brainstorm AI est un outil de génération d'idées qui simule un processus de b
 - **Gestion intelligente** : Détection de redondance et optimisation des tokens
 - **Interface intuitive** : Affichage avec emojis et progression claire
 - **Historique complet** : Sauvegarde de tous les cycles et analyses
+- **🔒 Sécurité renforcée** : Protection automatique des données sensibles
 
 ## 🚀 Installation
 
@@ -136,12 +137,23 @@ brainstorm_ai/
 ├── tests/                 # Tests unitaires et d'intégration
 ├── scripts/               # Scripts utilitaires et démos
 ├── data/                  # Données du projet
-│   ├── exports/           # Exports générés
-│   └── logs/              # Historique des sessions
+│   ├── exports/           # Exports générés (🔒 fichiers réels ignorés)
+│   └── logs/              # Historique des sessions (🔒 fichiers réels ignorés)
 ├── docs/                  # Documentation complète
+├── PRIVACY_GUIDELINES.md  # 🔒 Guide de confidentialité des données
 ├── main.py                # Point d'entrée racine
 └── README.md              # Documentation
 ```
+
+## 🔒 Sécurité et Confidentialité
+
+**IMPORTANT** : Ce projet traite potentiellement des informations sensibles (clés API, objectifs professionnels, idées propriétaires).
+
+📖 **Consultez [PRIVACY_GUIDELINES.md](PRIVACY_GUIDELINES.md) pour :**
+- Protéger vos informations personnelles
+- Éviter les fuites de clés API  
+- Gérer correctement les logs et exports
+- Bonnes pratiques de sécurité
 
 ## ⚙️ Configuration avancée
 
