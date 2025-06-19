@@ -29,13 +29,3 @@ class AgentScore(BaseAgent):
         """
         prompt = PromptRegistry.get_prompt("score", "evaluation")
         return self.execute_prompt(prompt, texte=texte)
-
-
-# Instance globale pour compatibilité avec l'ancien code
-_agent = AgentScore()
-
-
-# Fonction de compatibilité avec l'ancien code
-def prompt_score(texte: str) -> str:
-    """Wrapper pour compatibilité avec l'ancien code."""
-    return _agent.evaluer(texte)

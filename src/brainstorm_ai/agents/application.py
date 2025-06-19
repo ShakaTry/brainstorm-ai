@@ -73,28 +73,3 @@ class AgentApplication(BaseAgent):
         """
         prompt = PromptRegistry.get_prompt("application", "revision_plan")
         return self.execute_prompt(prompt, plan=plan, critique=critique)
-
-
-# Instance globale pour compatibilité avec l'ancien code
-_agent = AgentApplication()
-
-
-# Fonctions de compatibilité avec l'ancien code
-def prompt_plan(idee: str) -> str:
-    """Wrapper pour compatibilité avec l'ancien code."""
-    return _agent.creer_plan(idee)
-
-
-def prompt_critique_plan(plan: str) -> str:
-    """Wrapper pour compatibilité avec l'ancien code."""
-    return _agent.critiquer_plan(plan)
-
-
-def prompt_defense_plan(plan: str, critique: str) -> str:
-    """Wrapper pour compatibilité avec l'ancien code."""
-    return _agent.defendre_plan(plan, critique)
-
-
-def prompt_revision_plan(plan: str, critique: str) -> str:
-    """Wrapper pour compatibilité avec l'ancien code."""
-    return _agent.reviser_plan(plan, critique)

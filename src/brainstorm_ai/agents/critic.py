@@ -44,18 +44,3 @@ class AgentCritique(BaseAgent):
         """
         prompt = PromptRegistry.get_prompt("critique", "replique")
         return self.execute_prompt(prompt, defense=defense, idee=idee)
-
-
-# Instance globale pour compatibilité avec l'ancien code
-_agent = AgentCritique()
-
-
-# Fonctions de compatibilité avec l'ancien code
-def prompt_critique(texte: str) -> str:
-    """Wrapper pour compatibilité avec l'ancien code."""
-    return _agent.analyser(texte)
-
-
-def prompt_replique(defense: str, idee: str) -> str:
-    """Wrapper pour compatibilité avec l'ancien code."""
-    return _agent.repliquer(defense, idee)

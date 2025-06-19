@@ -51,18 +51,3 @@ class AgentCreatif(BaseAgent):
         """
         prompt = PromptRegistry.get_prompt("creatif", "defense")
         return self.execute_prompt(prompt, idee=idee, critique=critique)
-
-
-# Instance globale pour compatibilité avec l'ancien code
-_agent = AgentCreatif()
-
-
-# Fonctions de compatibilité avec l'ancien code
-def prompt_creatif(objectif: str, contexte: str, contraintes: str, historique: str) -> str:
-    """Wrapper pour compatibilité avec l'ancien code."""
-    return _agent.generer_idees(objectif, contexte, contraintes, historique)
-
-
-def prompt_defense(idee: str, critique: str) -> str:
-    """Wrapper pour compatibilité avec l'ancien code."""
-    return _agent.defendre_idee(idee, critique)

@@ -33,13 +33,3 @@ class AgentSynthese(BaseAgent):
         
         prompt = PromptRegistry.get_prompt("synthese", "consolidation")
         return self.execute_prompt(prompt, idees=idees_text)
-
-
-# Instance globale pour compatibilité avec l'ancien code
-_agent = AgentSynthese()
-
-
-# Fonction de compatibilité avec l'ancien code
-def prompt_synthese(idees_revisees: List[str]) -> str:
-    """Wrapper pour compatibilité avec l'ancien code."""
-    return _agent.consolider(idees_revisees)

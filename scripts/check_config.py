@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """
-Script de test pour vérifier le bon fonctionnement de la configuration.
+Script de vérification de la configuration du système.
+Usage: python -m scripts.check_config
 """
 
-import sys
-from pathlib import Path
-# Ajouter le répertoire src au path pour importer les modules
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-
-from brainstorm_ai.core.config import config
+try:
+    from brainstorm_ai.core.config import config
+except ImportError:
+    print("❌ Erreur: Impossible d'importer brainstorm_ai")
+    print("   Assurez-vous d'exécuter ce script depuis la racine du projet avec:")
+    print("   python -m scripts.check_config")
+    print("   ou installez le projet avec: pip install -e .")
+    exit(1)
 
 def test_configuration():
     print("🧪 Test de la configuration du système de brainstorming IA\n")
