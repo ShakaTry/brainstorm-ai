@@ -2,6 +2,19 @@
 
 Un système de brainstorming intelligent utilisant plusieurs agents IA spécialisés pour générer, critiquer, défendre et améliorer des idées de manière collaborative.
 
+## 🚀 Démarrage Ultra-Rapide
+
+**Nouveau utilisateur ?** → Consultez [QUICK_START.md](QUICK_START.md) pour lancer votre premier brainstorm en 5 minutes !
+
+```bash
+# Installation express
+git clone https://github.com/ShakaTry/brainstorm-ai.git
+cd brainstorm-ai
+pip install -e .
+set OPENAI_API_KEY=votre-clé   # Windows
+python run.py                  # Lancement simplifié !
+```
+
 ## 🎯 Description
 
 Brainstorm AI est un outil de génération d'idées qui simule un processus de brainstorming collaboratif en utilisant différents agents IA avec des rôles spécialisés :
