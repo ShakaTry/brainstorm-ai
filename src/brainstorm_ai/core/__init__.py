@@ -11,46 +11,36 @@ Ce module contient toutes les fonctionnalités centrales :
 """
 
 from .config import Config, config
-from .gpt import gpt, get_gpt_stats, reset_gpt_stats, GPTClient
+
 # from .loop_manager import run_brainstorm_loop  # Removed to prevent circular import
-from .exporter import export_yaml, export_json, export_markdown
+from .exporter import export_json, export_markdown, export_yaml
+from .gpt import GPTClient, get_gpt_stats, gpt, reset_gpt_stats
 from .progress_tracker import ProgressTracker
+from .types import ApplicationLog, BrainstormLog, CycleLog, ScoreDict
 from .utils import dedupe
-from .types import (
-    ScoreDict,
-    CycleLog,
-    ApplicationLog,
-    BrainstormLog
-)
 
 __all__ = [
     # Configuration
-    'Config',
-    'config',
-    
+    "Config",
+    "config",
     # GPT
-    'gpt',
-    'get_gpt_stats',
-    'reset_gpt_stats',
-    'GPTClient',
-    
+    "gpt",
+    "get_gpt_stats",
+    "reset_gpt_stats",
+    "GPTClient",
     # Loop Manager
     # 'run_brainstorm_loop',  # Removed to prevent circular import
-    
     # Exporters
-    'export_yaml',
-    'export_json',
-    'export_markdown',
-    
+    "export_yaml",
+    "export_json",
+    "export_markdown",
     # Progress
-    'ProgressTracker',
-    
+    "ProgressTracker",
     # Utils
-    'dedupe',
-    
+    "dedupe",
     # Types
-    'ScoreDict',
-    'CycleLog',
-    'ApplicationLog',
-    'BrainstormLog'
-] 
+    "ScoreDict",
+    "CycleLog",
+    "ApplicationLog",
+    "BrainstormLog",
+]

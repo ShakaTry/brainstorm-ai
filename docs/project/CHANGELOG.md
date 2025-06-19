@@ -10,10 +10,10 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### 🚀 Ajouté
 - Configuration complète pour le développement professionnel
   - `requirements.txt` avec toutes les dépendances
-  - `setup.py` pour l'installation du package
+  - `pyproject.toml` pour l'installation du package
   - `pyproject.toml` pour la configuration des outils
   - `Makefile` pour automatiser les tâches courantes
-  - `.editorconfig` pour standardiser le formatage
+  - `ruff` pour standardiser le formatage
   - `.pre-commit-config.yaml` pour les hooks de pré-commit
   - GitHub Actions CI/CD pipeline
   - Guide de contribution (`CONTRIBUTING.md`)

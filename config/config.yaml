@@ -4,19 +4,19 @@
 # Configuration générale du brainstorming
 general:
   # Objectif principal du brainstorming
-  objectif: "Développer un écosystème d'IA collaborative pour la création de villes intelligentes citoyennes"
+  objectif: "CECI EST UN TEST(objectif)"
   
   # Contexte du projet
-  contexte: "Face à l'urbanisation croissante et aux défis climatiques, les citoyens veulent participer activement à la transformation de leur environnement urbain. Les municipalités cherchent des solutions pour impliquer les habitants dans la co-création de services urbains intelligents."
+  contexte: "CECI EST UN TEST(contexte)"
   
   # Contraintes à respecter
-  contraintes: "Solution open-source et décentralisée, respect strict de la vie privée des citoyens, interopérable avec les systèmes municipaux existants, accessible sans smartphone pour l'inclusion numérique"
+  contraintes: "CECI EST UN TEST(contraintes)"
   
   # Nombre de cycles de brainstorming (optimisé : 3-4 cycles suffisent généralement)
-  cycles: 3
+  cycles: 1
   
   # Nombre d'idées top à extraire pour l'application (augmenté pour plus d'options)
-  top_ideas_count: 5
+  top_ideas_count: 1
   
   # Demander confirmation avant de démarrer
   ask_confirmation: true

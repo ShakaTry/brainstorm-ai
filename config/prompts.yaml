@@ -69,7 +69,7 @@ prompts:
       
       {idees}
       
-      Sélectionne les 3 meilleures idées en les classant par ordre de pertinence. Pour chaque idée, fournis :
+      Sélectionne les {count} meilleures idées en les classant par ordre de pertinence. Pour chaque idée, fournis :
       1. Un titre concis
       2. Une description claire
       3. Les principaux avantages

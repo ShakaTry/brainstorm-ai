@@ -4,14 +4,7 @@ Ce dossier contient des scripts utilitaires pour le développement et la mainten
 
 ## Scripts disponibles
 
-### 📊 benchmark_optimizations.py
-Script de benchmark pour mesurer les performances et optimisations.
-- Analyse la configuration optimisée
-- Compare avec une configuration de base
-- Estime les gains de performance
-```bash
-python scripts/benchmark_optimizations.py
-```
+
 
 ### 🔍 check_config.py
 Vérifie et valide la configuration complète du projet.
@@ -22,23 +15,9 @@ Vérifie et valide la configuration complète du projet.
 python scripts/check_config.py
 ```
 
-### 🧹 cleanup.py
-Nettoie les fichiers temporaires et caches du projet.
-- Supprime les __pycache__, .pyc, .pyo
-- Nettoie .mypy_cache, .pytest_cache
-- Option pour vider le cache de données
-```bash
-python scripts/cleanup.py
-```
 
-### 🐛 debug_config.py
-Outil de débogage pour afficher la configuration détaillée.
-- Affiche la configuration complète
-- Teste les fonctions de configuration
-- Aide au diagnostic des problèmes
-```bash
-python scripts/debug_config.py
-```
+
+
 
 ### 📈 demo_progression.py
 Démonstration du système de progression visuelle.
@@ -49,13 +28,7 @@ Démonstration du système de progression visuelle.
 python scripts/demo_progression.py
 ```
 
-### 📦 generate_requirements.py
-Génère les fichiers requirements.txt depuis pyproject.toml.
-- Extrait les dépendances principales
-- Crée requirements-dev.txt pour le développement
-```bash
-python scripts/generate_requirements.py
-```
+
 
 ### 📤 test_export_fix.py
 Test et validation du système d'export.

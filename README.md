@@ -4,7 +4,7 @@ Un système de brainstorming intelligent utilisant plusieurs agents IA spéciali
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](docker/)
+
 [![Security](https://img.shields.io/badge/security-enhanced-green.svg)](PRIVACY_GUIDELINES.md)
 
 ## 🚀 Démarrage Ultra-Rapide
@@ -29,16 +29,7 @@ python run.py                  # Interface guidée avec assistant
 python start.bat              # Windows : lancement en un clic
 ```
 
-### 🐳 Déploiement Docker
 
-```bash
-# Build et lancement avec Docker Compose
-docker-compose up --build
-
-# Ou avec Docker simple
-docker build -t brainstorm-ai .
-docker run -e OPENAI_API_KEY=votre-clé brainstorm-ai
-```
 
 ## 🎯 Description
 
@@ -58,13 +49,14 @@ Brainstorm AI simule un processus de brainstorming professionnel avec une équip
 
 ## 🏗️ Architecture et Flux d'Exécution
 
-Voici comment tous les composants interagissent lors d'une session de brainstorming :
+Voici comment tous les composants interagissent lors d'une session de brainstorming avec **corrélation garantie config ↔ logs** :
 
 ```mermaid
 graph TD
     A["🚀 Point d'entrée<br/>main.py ou run.py"] --> B["🔧 CLI Module<br/>src/brainstorm_ai/cli/main.py"]
     B --> C["⚙️ Configuration<br/>src/brainstorm_ai/core/config.py"]
     C --> D["📋 Chargement Prompts<br/>config/prompts.yaml"]
+    C --> C1["🎯 top_ideas_count<br/>cycles, formats..."]
     B --> E["🔄 Loop Manager<br/>src/brainstorm_ai/core/loop_manager.py"]
     
     E --> F["🧠 Agents Spécialisés<br/>src/brainstorm_ai/agents/"]
@@ -75,28 +67,69 @@ graph TD
     F --> F5["🧠 Synthesis Agent<br/>synthesis.py"]
     F --> F6["📋 Application Agent<br/>application.py"]
     
+    C1 --> F5
+    F5 --> F5A["📝 Prompt Dynamique<br/>'Sélectionne les {count} idées'"]
+    
     F1 --> G["🔌 GPT Interface<br/>src/brainstorm_ai/core/gpt.py"]
     F2 --> G
     F3 --> G
     F4 --> G
-    F5 --> G
+    F5A --> G
     F6 --> G
     
     G --> H["🤖 OpenAI API<br/>GPT-4o Models"]
     
+    F5 --> L["🔍 Extraction Intelligente<br/>extract_top_ideas_robust()"]
+    L --> L1["✅ Regex Corrigé<br/>count=1 → '^1\\.(.+)$'<br/>count=N → '^[1-N]\\.(.+)$'"]
+    L1 --> F6
+    
     E --> I["📈 Progress Tracker<br/>src/brainstorm_ai/core/progress_tracker.py"]
     E --> J["💾 Exporter<br/>src/brainstorm_ai/core/exporter.py"]
     J --> K["📁 Résultats<br/>data/logs/ et data/exports/"]
+    
+    C1 --> I
+    C1 --> J
+    
+    style C1 fill:#e1f5fe
+    style F5A fill:#f3e5f5
+    style L1 fill:#e8f5e8
 ```
 
-> 📋 **Documentation complète** : [Flux d'Exécution Détaillé](docs/SYSTEM_FLOW.md)
+### 🎯 **Flux de Corrélation Configuration → Résultats**
+
+```mermaid
+sequenceDiagram
+    participant Config as 📋 config.yaml
+    participant Loop as 🔄 Loop Manager
+    participant Synth as 🧠 Synthesis Agent
+    participant Extract as 🔍 Extraction
+    participant Export as 💾 Export
+    
+    Config->>Loop: top_ideas_count = 1
+    Config->>Loop: cycles = 2
+    
+    Loop->>Synth: prompt_synthese(ideas, count=1)
+    Synth->>Synth: "Sélectionne les 1 meilleures idées"
+    
+    Synth->>Extract: synthese_text
+    Extract->>Extract: count=1 → regex "^1\\.(.+)$"
+    Extract->>Loop: [1 idée extraite] ✅
+    
+    Loop->>Export: application_logs (1 idée)
+    Export->>Export: 1 fichier .md généré
+    
+    Note over Config,Export: ✅ Corrélation Respectée !
+```
+
+> 📋 **Documentation complète** : [Flux d'Exécution Détaillé](docs/technical/SYSTEM_FLOW.md)  
+> 🔧 **Corrections récentes** : [Corrélation Config ↔ Logs](docs/project/CORRECTION_CORRELATION_CONFIG.md)
 
 ## ✨ Caractéristiques Avancées
 
 ### 🔥 Nouvelles Fonctionnalités 2024
 - **🚀 Scripts de lancement simplifiés** : `run.py` interactif et `start.bat` Windows
 - **🔒 Sécurité renforcée** : Protection automatique des données sensibles
-- **🐳 Docker optimisé** : Environnement avec GitHub CLI et outils de développement
+
 - **📱 Interface guidée** : Assistant pour configuration et estimations
 - **⚡ Performance** : Architecture src/ optimisée pour la vitesse
 
@@ -108,6 +141,9 @@ graph TD
 - **Gestion intelligente** : Détection de redondance et optimisation des tokens
 - **Interface intuitive** : Affichage avec emojis et progression en temps réel
 - **Historique complet** : Sauvegarde automatique de toutes les sessions
+- **🎯 Corrélation garantie** : Configuration respectée fidèlement dans tous les logs
+- **🔍 Extraction intelligente** : Regex adaptatif selon le nombre d'idées configuré
+- **📊 Validation continue** : Scripts de test pour vérifier la cohérence config ↔ résultats
 
 ## 🛠️ Installation Détaillée
 
@@ -115,7 +151,7 @@ graph TD
 - **Python 3.8+** (testé jusqu'à 3.11)
 - **Clé API OpenAI** ([Obtenir ici](https://platform.openai.com/api-keys))
 - **Git** (pour les fonctionnalités avancées)
-- **Docker** (optionnel, pour l'isolation)
+
 
 ### Installation Pip
 
@@ -180,7 +216,7 @@ general:
   contexte: "PME tech en croissance, budget limité, marché concurrentiel"
   contraintes: "Budget max 50K€, délai 6 mois, équipe de 3 personnes"
   cycles: 3
-  top_ideas_count: 5
+  top_ideas_count: 5      # 🎯 Contrôle précis du nombre d'idées
 
 agents:
   models:
@@ -194,6 +230,27 @@ export:
     json: true
     markdown: true
   auto_export_ideas: false  # Protection confidentialité
+```
+
+### 🔧 Validation et Tests de Corrélation
+
+Le système inclut des outils pour garantir que votre configuration est respectée :
+
+```bash
+# Tester la corrélation config ↔ comportement
+python scripts/test_config_correlation.py
+
+# Débugger la configuration
+python scripts/check_config.py
+
+# Vérifier l'état du système
+python scripts/check_config.py
+```
+
+**Exemple de validation :**
+```yaml
+Configuration: top_ideas_count: 2, cycles: 1
+Résultat garanti: Exactement 2 idées développées en 1 cycle ✅
 ```
 
 ## 📊 Processus de Brainstorming
@@ -224,9 +281,10 @@ graph TD
 ### 🎯 Synthèse Finale
 
 1. **🧠 Compilation intelligente** : Fusion des meilleures idées
-2. **📊 Ranking automatique** : Classement par scores objectifs
-3. **📌 Sélection TOP** : Extraction des 3-5 idées les plus prometteuses
-4. **📋 Plans détaillés** : Roadmap de mise en œuvre pour chaque idée
+2. **📊 Ranking automatique** : Classement par scores objectifs  
+3. **📌 Sélection TOP** : Extraction du nombre exact d'idées configuré (`top_ideas_count`)
+4. **📋 Plans détaillés** : Roadmap de mise en œuvre pour chaque idée sélectionnée
+5. **✅ Validation** : Corrélation garantie entre configuration et résultats exportés
 
 ## 📁 Structure du Projet
 
@@ -260,7 +318,7 @@ brainstorm_ai/
 ├── 🛠️ Outils et scripts
 │   ├── scripts/
 │   │   ├── check_config.py            # Validation configuration
-│   │   ├── cleanup.py                 # Nettoyage projet
+
 │   │   └── demo_progression.py        # Démonstration sans API
 ├── 📊 Données (🔒 protégées)
 │   ├── data/
@@ -268,10 +326,6 @@ brainstorm_ai/
 │   │   │   └── example_*.yaml         # ✅ Exemples publics
 │   │   └── exports/                   # Idées exportées
 │   │       └── example_*.txt          # ✅ Exemples anonymisés
-├── 🐳 Containerisation
-│   ├── docker/
-│   │   ├── Dockerfile                 # Image optimisée avec GitHub CLI
-│   │   └── docker-compose.yml         # Stack complète
 ├── 🧪 Tests
 │   ├── tests/
 │   │   ├── unit/                      # Tests unitaires
@@ -406,7 +460,7 @@ pytest tests/integration/test_brainstorm_flow.py
 python scripts/check_config.py
 
 # Nettoyage projet
-python scripts/cleanup.py
+make clean
 
 # Démonstration sans API
 python scripts/demo_progression.py
@@ -420,8 +474,9 @@ python scripts/demo_progression.py
 # Installation complète
 pip install -r requirements-dev.txt
 
-# Pre-commit hooks
-pre-commit install
+# Vérification du code
+ruff check src/ tests/
+ruff format src/ tests/
 
 # Tests avant commit
 make test

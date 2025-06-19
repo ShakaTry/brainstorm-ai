@@ -16,5 +16,4 @@ python-dotenv>=1.0.0
 # ruff>=0.1.0
 
 # Documentation dependencies (optional)
-# mkdocs>=1.5.0
-# mkdocs-material>=9.0.0 
+ 

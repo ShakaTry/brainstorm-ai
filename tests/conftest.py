@@ -1,5 +1,7 @@
-import pytest
 from unittest.mock import MagicMock
+
+import pytest
+
 
 @pytest.fixture(scope="function", autouse=True)
 def mock_openai_client(mocker):
@@ -9,9 +11,10 @@ def mock_openai_client(mocker):
     Scope is 'function' to match the scope of the 'mocker' fixture.
     """
     # Mock l'environnement pour éviter les erreurs de clé API
-    mocker.patch.dict('os.environ', {'OPENAI_API_KEY': 'sk-test-key-for-tests'})
+    mocker.patch.dict("os.environ", {"OPENAI_API_KEY": "sk-test-key-for-tests"})
     # Mock la classe OpenAI à la source
-    mocker.patch('openai.OpenAI', return_value=MagicMock())
+    mocker.patch("openai.OpenAI", return_value=MagicMock())
+
 
 @pytest.fixture(autouse=True)
 def mock_gpt(mocker):
@@ -22,6 +25,6 @@ def mock_gpt(mocker):
     """
     # Par défaut, retourner un JSON valide pour les tests de score
     # On mock là où c'est importé dans base.py
-    mock = mocker.patch('brainstorm_ai.agents.base.gpt')
+    mock = mocker.patch("brainstorm_ai.agents.base.gpt")
     mock.return_value = '{"impact": 8, "faisabilite": 7, "originalite": 9, "clarte": 8}'
-    return mock 
+    return mock

@@ -10,109 +10,122 @@ Ce module contient tous les agents spécialisés du système :
 - Agent Application : planification de mise en œuvre
 """
 
+from .application import AgentApplication
 from .base import BaseAgent, PromptRegistry
 from .creative import AgentCreatif
 from .critic import AgentCritique
 from .revision import AgentRevision
 from .score import AgentScore
 from .synthesis import AgentSynthese
-from .application import AgentApplication
 
 # Instances singleton des agents
 _agents = {
-    'creatif': None,
-    'critique': None,
-    'revision': None,
-    'score': None,
-    'synthese': None,
-    'application': None
+    "creatif": None,
+    "critique": None,
+    "revision": None,
+    "score": None,
+    "synthese": None,
+    "application": None,
 }
+
 
 def get_agent(agent_type: str):
     """Retourne l'instance singleton de l'agent demandé."""
     if agent_type not in _agents:
         raise ValueError(f"Type d'agent inconnu : {agent_type}")
-    
+
     if _agents[agent_type] is None:
-        if agent_type == 'creatif':
+        if agent_type == "creatif":
             _agents[agent_type] = AgentCreatif()
-        elif agent_type == 'critique':
+        elif agent_type == "critique":
             _agents[agent_type] = AgentCritique()
-        elif agent_type == 'revision':
+        elif agent_type == "revision":
             _agents[agent_type] = AgentRevision()
-        elif agent_type == 'score':
+        elif agent_type == "score":
             _agents[agent_type] = AgentScore()
-        elif agent_type == 'synthese':
+        elif agent_type == "synthese":
             _agents[agent_type] = AgentSynthese()
-        elif agent_type == 'application':
+        elif agent_type == "application":
             _agents[agent_type] = AgentApplication()
-    
+
     return _agents[agent_type]
+
 
 # Fonctions de compatibilité pour l'ancien code
 def prompt_creatif(objectif: str, contexte: str, contraintes: str, historique: str) -> str:
     """Wrapper pour compatibilité avec l'ancien code."""
-    return get_agent('creatif').generer_idees(objectif, contexte, contraintes, historique)
+    return get_agent("creatif").generer_idees(objectif, contexte, contraintes, historique)
+
 
 def prompt_defense(idee: str, critique: str) -> str:
     """Wrapper pour compatibilité avec l'ancien code."""
-    return get_agent('creatif').defendre_idee(idee, critique)
+    return get_agent("creatif").defendre_idee(idee, critique)
+
 
 def prompt_critique(texte: str) -> str:
     """Wrapper pour compatibilité avec l'ancien code."""
-    return get_agent('critique').analyser(texte)
+    return get_agent("critique").analyser(texte)
+
 
 def prompt_replique(defense: str, idee: str) -> str:
     """Wrapper pour compatibilité avec l'ancien code."""
-    return get_agent('critique').repliquer(defense, idee)
+    return get_agent("critique").repliquer(defense, idee)
+
 
 def prompt_revision(idee: str, critique: str) -> str:
     """Wrapper pour compatibilité avec l'ancien code."""
-    return get_agent('revision').ameliorer_idee(idee, critique)
+    return get_agent("revision").ameliorer_idee(idee, critique)
+
 
 def prompt_score(texte: str) -> str:
     """Wrapper pour compatibilité avec l'ancien code."""
-    return get_agent('score').evaluer(texte)
+    return get_agent("score").evaluer(texte)
 
-def prompt_synthese(idees_revisees: list) -> str:
+
+def prompt_synthese(idees_revisees: list, count: int = 3) -> str:
     """Wrapper pour compatibilité avec l'ancien code."""
-    return get_agent('synthese').consolider(idees_revisees)
+    return get_agent("synthese").consolider(idees_revisees, count)
+
 
 def prompt_plan(idee: str) -> str:
     """Wrapper pour compatibilité avec l'ancien code."""
-    return get_agent('application').creer_plan(idee)
+    return get_agent("application").creer_plan(idee)
+
 
 def prompt_critique_plan(plan: str) -> str:
     """Wrapper pour compatibilité avec l'ancien code."""
-    return get_agent('application').critiquer_plan(plan)
+    return get_agent("application").critiquer_plan(plan)
+
 
 def prompt_defense_plan(plan: str, critique: str) -> str:
     """Wrapper pour compatibilité avec l'ancien code."""
-    return get_agent('application').defendre_plan(plan, critique)
+    return get_agent("application").defendre_plan(plan, critique)
+
 
 def prompt_revision_plan(plan: str, critique: str) -> str:
     """Wrapper pour compatibilité avec l'ancien code."""
-    return get_agent('application').reviser_plan(plan, critique)
+    return get_agent("application").reviser_plan(plan, critique)
+
 
 __all__ = [
-    'BaseAgent',
-    'PromptRegistry',
-    'AgentCreatif',
-    'AgentCritique', 
-    'AgentRevision',
-    'AgentScore',
-    'AgentSynthese',
-    'AgentApplication',
-    'get_agent',
-    'prompt_creatif',
-    'prompt_defense',
-    'prompt_critique',
-    'prompt_replique',
-    'prompt_revision',
-    'prompt_score',
-    'prompt_synthese',
-    'prompt_plan',
-    'prompt_critique_plan',
-    'prompt_defense_plan',
-    'prompt_revision_plan'
-] 
+    "BaseAgent",
+    "PromptRegistry",
+    "AgentCreatif",
+    "AgentCritique",
+    "AgentRevision",
+    "AgentScore",
+    "AgentSynthese",
+    "AgentApplication",
+    "get_agent",
+    "prompt_creatif",
+    "prompt_defense",
+    "prompt_critique",
+    "prompt_replique",
+    "prompt_revision",
+    "prompt_score",
+    "prompt_synthese",
+    "prompt_plan",
+    "prompt_critique_plan",
+    "prompt_defense_plan",
+    "prompt_revision_plan",
+]

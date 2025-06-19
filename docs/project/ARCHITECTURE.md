@@ -83,7 +83,7 @@ graph TD
 - **pytest** : Framework de tests
 - **mypy** : Vérification de types
 - **black/isort** : Formatage du code
-- **MkDocs** : Documentation
+- **Markdown** : Documentation simple
 
 ## Conventions
 

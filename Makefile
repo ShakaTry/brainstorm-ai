@@ -1,4 +1,4 @@
-.PHONY: help install install-dev test format lint type-check clean run docs
+.PHONY: help install install-dev test check clean run
 
 # Variables
 PYTHON := python
@@ -19,26 +19,16 @@ install: ## Installe les dépendances de production
 	$(PIP) install -r requirements.txt
 
 install-dev: install ## Installe toutes les dépendances (dev inclus)
-	$(PIP) install -e ".[dev,docs]"
-	pre-commit install -c config/python/.pre-commit-config.yaml
+	$(PIP) install -e ".[dev]"
 
 test: ## Lance les tests avec coverage
-	pytest -c config/python/pytest.ini -v --cov=$(PROJECT_NAME) --cov-report=term-missing --cov-report=html
+	pytest -v --cov=$(PROJECT_NAME) --cov-report=term-missing
 
-format: ## Formate le code avec Black et isort
-	@echo "$(BLUE)Formatage avec Black...$(NC)"
-	black src tests main.py setup.py scripts
-	@echo "$(BLUE)Tri des imports avec isort...$(NC)"
-	isort src tests main.py setup.py scripts
-
-lint: ## Vérifie le code avec flake8 et mypy
-	@echo "$(BLUE)Vérification avec flake8...$(NC)"
-	flake8 src tests main.py scripts
-	@echo "$(BLUE)Vérification des types avec mypy...$(NC)"
-	mypy src main.py
-
-type-check: ## Vérifie les types avec mypy (alias)
-	mypy src main.py
+check: ## Vérifie et formate le code avec ruff
+	@echo "$(BLUE)Vérification du code avec ruff...$(NC)"
+	ruff check src tests main.py scripts
+	@echo "$(BLUE)Formatage du code avec ruff...$(NC)"
+	ruff format src tests main.py scripts
 
 clean: ## Nettoie les fichiers temporaires
 	@echo "$(BLUE)Nettoyage des fichiers temporaires...$(NC)"
@@ -49,31 +39,9 @@ clean: ## Nettoie les fichiers temporaires
 	find . -type f -name ".coverage" -delete
 	find . -type d -name "*.egg-info" -exec rm -rf {} +
 	find . -type d -name ".pytest_cache" -exec rm -rf {} +
-	find . -type d -name ".mypy_cache" -exec rm -rf {} +
-	find . -type d -name "htmlcov" -exec rm -rf {} +
 	find . -type d -name ".ruff_cache" -exec rm -rf {} +
 	@echo "$(GREEN)Nettoyage terminé!$(NC)"
 
 run: ## Lance l'application principale
 	$(PYTHON) main.py
-
-docs: ## Génère la documentation
-	mkdocs build -f config/mkdocs.yml
-
-docs-serve: ## Lance le serveur de documentation
-	mkdocs serve -f config/mkdocs.yml
-
-check: format lint test ## Lance toutes les vérifications
-
-setup: install-dev ## Configure l'environnement de développement complet
-	@echo "$(GREEN)Environnement de développement configuré!$(NC)"
-
-# Commandes pour les releases
-release-patch: ## Crée une release patch (0.0.X)
-	bumpversion --config-file config/python/.bumpversion.cfg patch
-
-release-minor: ## Crée une release mineure (0.X.0)
-	bumpversion --config-file config/python/.bumpversion.cfg minor
-
-release-major: ## Crée une release majeure (X.0.0)
-	bumpversion --config-file config/python/.bumpversion.cfg major 
+ 

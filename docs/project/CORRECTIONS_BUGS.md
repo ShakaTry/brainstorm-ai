@@ -36,7 +36,7 @@ KeyError: 'cycles'
        self.load_config(config_path)
    ```
 
-3. **Script de debug créé** (`debug_config.py`) pour diagnostiquer les problèmes de configuration
+3. **Script de vérification amélioré** (`check_config.py`) pour diagnostiquer les problèmes de configuration
 
 ### 📁 **2. Correction des Exports d'Idées**
 
@@ -93,7 +93,7 @@ for idx, app_log in enumerate(application_logs, 1):
 
 ## 🛠️ **Outils de Debug Ajoutés**
 
-### 📊 **Script de Debug Configuration** (`debug_config.py`)
+### 📊 **Script de Vérification Configuration** (`check_config.py`)
 - Vérifie l'état de la configuration
 - Teste la génération des noms de fichiers
 - Valide les paramètres critiques
@@ -109,7 +109,7 @@ for idx, app_log in enumerate(application_logs, 1):
 
 ### 1. **Problèmes de Configuration**
 ```bash
-python debug_config.py
+python scripts/check_config.py
 ```
 - Vérifie tous les paramètres critiques
 - Force le rechargement de configuration
@@ -136,7 +136,7 @@ python demo_progression.py
 ### ✅ **Bonnes Pratiques**
 
 1. **Tests Réguliers**
-   - Exécuter `debug_config.py` après modifications
+   - Exécuter `check_config.py` après modifications
    - Tester `demo_progression.py` avant utilisation
 
 2. **Validation Configuration**
@@ -160,7 +160,7 @@ python demo_progression.py
 
 3. **Patterns de Noms**
    - Éviter les variables non définies dans les patterns
-   - Tester avec `debug_config.py` après modification
+   - Tester avec `check_config.py` après modification
 
 ## 📈 **Résultat**
 

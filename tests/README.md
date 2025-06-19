@@ -1,56 +1,43 @@
 # Tests - Brainstorm AI
 
-Suite de tests complète pour garantir la qualité du code.
+Tests essentiels pour valider le bon fonctionnement du système.
 
 ## Structure
 
 ```
 tests/
-├── unit/           # Tests unitaires par module
-│   ├── agents/     # Tests des agents IA
-│   └── core/       # Tests des composants centraux
-├── integration/    # Tests d'intégration
-└── conftest.py     # Fixtures pytest partagées
+├── test_config_correlation.py    # Test corrélation config/logs
+├── test_export_fix.py           # Test système d'export  
+├── conftest.py                  # Fixtures pytest
+└── README.md                    # Documentation
 ```
 
 ## Exécution des tests
 
 ### Tous les tests
 ```bash
+make test
+# ou
 pytest
-```
-
-### Tests unitaires uniquement
-```bash
-pytest tests/unit/
-```
-
-### Tests d'intégration uniquement
-```bash
-pytest tests/integration/
 ```
 
 ### Avec couverture
 ```bash
-pytest --cov=src/brainstorm_ai
+pytest --cov=src/brainstorm_ai --cov-report=term-missing
 ```
 
-### Mode verbose
+### Test spécifique
 ```bash
-pytest -v
+pytest tests/test_config_correlation.py -v
 ```
 
-## Conventions
+## Tests disponibles
 
-- Nom des fichiers : `test_<module>.py`
-- Nom des fonctions : `test_<functionality>_<scenario>`
-- Utiliser les fixtures de `conftest.py`
-- Mocker les appels API externes
-- Viser une couverture > 80%
+- **`test_config_correlation.py`** : Valide que la configuration est respectée dans les logs
+- **`test_export_fix.py`** : Vérifie le bon fonctionnement des exports
+- **Scripts de validation** : Dans le dossier `scripts/` pour tests manuels
 
-## Ajout de nouveaux tests
+## Philosophie
 
-1. Créer le fichier dans le bon dossier (unit/ ou integration/)
-2. Importer les modules à tester
-3. Utiliser les fixtures existantes ou en créer de nouvelles
-4. Documenter les cas de test complexes 
+Pour un projet simple, quelques tests ciblés valent mieux qu'une suite complexe. 
+Les tests se concentrent sur les fonctionnalités critiques et les bugs connus. 
