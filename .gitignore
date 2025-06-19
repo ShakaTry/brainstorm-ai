@@ -185,3 +185,6 @@ secrets.yaml
 
 # IDE and editor specific files
 .cursor/ 
+
+# Cache temporaire
+data/cache/ 
