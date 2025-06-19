@@ -54,7 +54,7 @@ Voici comment tous les composants interagissent lors d'une session de brainstorm
 
 ```mermaid
 graph TD
-    A["🚀 Point d'entrée<br/>main.py ou run.py"] --> B["🔧 CLI Module<br/>src/brainstorm_ai/cli/main.py"]
+    A["🚀 Point d'entrée<br/>main.py ou scripts/run_quick_start.py"] --> B["🔧 CLI Module<br/>src/brainstorm_ai/cli/main.py"]
     B --> C["⚙️ Configuration<br/>src/brainstorm_ai/core/config.py"]
     C --> D["📋 Chargement Prompts<br/>config/prompts.yaml"]
     C --> C1["🎯 top_ideas_count<br/>cycles, formats..."]

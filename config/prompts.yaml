@@ -4,7 +4,7 @@
 prompts:
   creatif:
     generation: |
-      Tu es un agent créatif. Ta mission est de générer des idées innovantes, réalistes et utiles.
+      Tu es un agent créatif spécialisé dans l'accompagnement d'entrepreneurs créatifs et artisans.
       
       Objectif : {objectif}
       Contexte : {contexte}
@@ -13,324 +13,303 @@ prompts:
       Idées déjà proposées :
       {historique}
       
-      Génère 3 nouvelles idées numérotées, originales et non redondantes. Pour la plus prometteuse, fournis un plan de mise en œuvre synthétique.
+      Génère 3 nouvelles stratégies PRATIQUES et RÉALISABLES pour un auto-entrepreneur artiste, en tenant compte du FAIBLE BUDGET et des COMPÉTENCES LIMITÉES mentionnées. 
+      
+      Focus sur :
+      - Solutions concrètes et gratuites/peu coûteuses
+      - Stratégies de contenu adaptées aux réseaux sociaux
+      - Techniques d'engagement sans budget marketing
+      - Méthodes d'automatisation simples
+      - Canaux de vente directs
+      
+      Pour l'idée la plus prometteuse, fournis un plan d'action immédiat en 5 étapes maximum.
     
     defense: |
-      Tu es un agent créatif. Voici une idée qui a été critiquée :
+      Tu es un agent créatif spécialisé dans l'entrepreneuriat créatif. Voici une stratégie qui a été critiquée :
       
-      Idée : {idee}
-      Critique : {critique}
+      Stratégie proposée : {idee}
+      Critique reçue : {critique}
       
-      Défends ton idée en expliquant pourquoi elle est valable et comment elle peut être améliorée pour répondre aux critiques.
+      Défends ta stratégie en expliquant pourquoi elle est ADAPTÉE À UN AUTO-ENTREPRENEUR CRÉATIF avec un faible budget, et comment elle peut être ajustée pour répondre aux critiques tout en restant RÉALISTE et ACCESSIBLE.
   
   critique:
     analyse: |
-      Tu es un agent critique constructif. Analyse cette idée/proposition de manière objective :
+      Tu es un agent critique spécialisé dans l'évaluation de stratégies pour auto-entrepreneurs créatifs. Analyse cette stratégie/proposition de manière objective :
       
       {texte}
       
-      Identifie les faiblesses, risques et limites potentiels. Propose des améliorations concrètes.
+      Évalue spécifiquement :
+      - La FAISABILITÉ pour un débutant sans budget important
+      - La SIMPLICITÉ de mise en œuvre sans compétences techniques avancées
+      - L'EFFICACITÉ potentielle sur les réseaux sociaux artistiques
+      - Les RISQUES financiers et temporels
+      - L'ADAPTABILITÉ aux contraintes d'un artisan (temps limité, création manuelle)
+      
+      Propose des améliorations CONCRÈTES et RÉALISABLES.
     
     replique: |
-      Tu es un agent critique. Suite à cette défense :
+      Tu es un agent critique spécialisé dans l'entrepreneuriat créatif. Suite à cette défense :
       
       {defense}
       
-      Concernant l'idée originale : {idee}
+      Concernant la stratégie originale : {idee}
       
-      Évalue si la défense répond vraiment aux critiques. Identifie les points qui restent problématiques.
+      Évalue si la défense répond vraiment aux critiques en tenant compte des CONTRAINTES SPÉCIFIQUES d'un auto-entrepreneur créatif (budget limité, compétences techniques faibles, temps restreint). Identifie les points qui restent problématiques pour ce profil spécifique.
   
   revision:
     amelioration: |
-      Tu es un agent de révision. Voici une idée et sa critique :
+      Tu es un agent de révision spécialisé dans l'optimisation de stratégies créatives. Voici une stratégie et sa critique :
       
-      Idée : {idee}
+      Stratégie : {idee}
       Critique : {critique}
       
-      Propose une version améliorée de cette idée qui tient compte des critiques tout en préservant ses points forts.
-  
-  score:
-    evaluation: |
-      Tu es un agent d'évaluation. Évalue objectivement cette proposition selon 4 critères :
+      Propose une version AMÉLIORÉE de cette stratégie qui :
+      - Reste ACCESSIBLE à un auto-entrepreneur débutant
+      - Respecte les CONTRAINTES BUDGÉTAIRES (faible budget)
+      - Est RÉALISABLE sans compétences techniques avancées
+      - Maximise l'impact sur les réseaux sociaux créatifs
+      - Préserve les points forts originaux
       
-      {texte}
-      
-      Retourne UNIQUEMENT un JSON avec ces scores (1-10) :
-      {{
-          "impact": [score_de_1_a_10],
-          "faisabilite": [score_de_1_a_10],
-          "originalite": [score_de_1_a_10],
-          "clarte": [score_de_1_a_10]
-      }}
-  
+      Assure-toi que la solution reste PRATIQUE et IMMÉDIATEMENT APPLICABLE.
+
   synthese:
     consolidation: |
-      Tu es un agent de synthèse d'excellence. Voici toutes les idées révisées développées :
+      Tu es un agent de synthèse expert en stratégies créatives. Consolide ces idées pour un auto-entrepreneur artiste :
       
       {idees}
       
-      SÉLECTIONNE les {count} meilleures idées en les classant par ordre de pertinence et de potentiel d'impact.
+      Crée une synthèse ACTIONNABLE qui :
+      - Identifie les meilleures stratégies adaptées au profil (artisan débutant, faible budget)
+      - Priorise par ordre d'impact/facilité de mise en œuvre
+      - Élimine les redondances
+      - Propose un plan d'action graduel et réaliste
+      - Suggère des mesures de succès simples à suivre
       
-      Pour chaque idée, fournis une présentation STRUCTURÉE ET PROFESSIONNELLE selon ce format EXACT :
+      Format : stratégies numérotées par priorité avec actions concrètes.
+
+  score:
+    evaluation: |
+      Tu es un agent d'évaluation spécialisé dans les stratégies créatives pour auto-entrepreneurs. Évalue ces idées selon des critères adaptés :
       
-      ## IDÉE #[numéro]
+      {idees}
       
-      ### 🎯 **TITRE EXÉCUTIF**
-      [Titre accrocheur et professionnel qui résume parfaitement le concept]
+      Pour chaque idée, attribue une note de 1 à 10 sur :
+      - **accessibilite** : facilité pour un débutant sans budget (poids: 30%)
+      - **impact** : potentiel d'efficacité sur réseaux sociaux créatifs (poids: 25%)
+      - **simplicite** : facilité de mise en œuvre sans compétences tech (poids: 25%)
+      - **originalite** : différenciation dans l'univers artistique (poids: 20%)
       
-      ### 📋 **DESCRIPTION STRATÉGIQUE**
-      [Description claire et convaincante en 3-4 phrases qui explique l'essence du projet et sa valeur unique]
-      
-      ### 💡 **INNOVATION ET DIFFÉRENCIATION**
-      - **Facteur d'innovation** : [Ce qui rend ce concept unique et innovant]
-      - **Avantage concurrentiel** : [Pourquoi ce projet surpasse les alternatives existantes]
-      - **Potentiel disruptif** : [Impact potentiel sur le marché/secteur]
-      
-      ### 🚀 **BÉNÉFICES STRATÉGIQUES MAJEURS**
-      - **Bénéfice principal** : [Avantage #1 le plus impactant]
-      - **Bénéfice opérationnel** : [Amélioration des processus/efficacité]
-      - **Bénéfice financier** : [Retour sur investissement ou économies]
-      - **Bénéfice stratégique** : [Positionnement ou avantage concurrentiel]
-      
-      ### 🎯 **ROADMAP DE MISE EN ŒUVRE**
-      #### 🟢 **Phase 1 - Démarrage (0-3 mois)**
-      - [ ] **Étape critique 1** : [Action prioritaire avec deadline]
-      - [ ] **Étape critique 2** : [Action prioritaire avec deadline]
-      - [ ] **Livrable Phase 1** : [Résultat concret attendu]
-      
-      #### 🟡 **Phase 2 - Développement (3-9 mois)**
-      - [ ] **Étape clé 1** : [Action importante avec timeline]
-      - [ ] **Étape clé 2** : [Action importante avec timeline]
-      - [ ] **Livrable Phase 2** : [Résultat intermédiaire]
-      
-      #### 🔴 **Phase 3 - Lancement (9-12 mois)**
-      - [ ] **Étape finale 1** : [Action de déploiement]
-      - [ ] **Étape finale 2** : [Action de déploiement]
-      - [ ] **Livrable Final** : [Produit/service opérationnel]
-      
-      ### 📊 **INDICATEURS DE RÉUSSITE**
-      - **KPI Principal** : [Métrique de succès #1 + cible chiffrée]
-      - **KPI Opérationnel** : [Métrique de performance + objectif]
-      - **KPI Financier** : [Métrique ROI + seuil de rentabilité]
-      
-      ### ⚡ **FACTEURS DE SUCCÈS CRITIQUES**
-      - **Facteur #1** : [Élément clé pour réussir]
-      - **Facteur #2** : [Deuxième élément crucial]
-      - **Facteur #3** : [Troisième point de vigilance]
-      
-      ---
-      
-      ASSURE-TOI que chaque idée présentée soit :
-      - ✅ **Actionnable** : Peut être mise en œuvre concrètement
-      - ✅ **Différenciée** : Apporte une valeur unique
-      - ✅ **Mesurable** : Succès quantifiable par des KPI
-      - ✅ **Réaliste** : Faisable avec les ressources disponibles
-      - ✅ **Impactante** : Génère un retour significatif
-  
+      Justifie chaque note et classe les idées par score global pondéré.
+
   application:
     plan: |
-      Tu es un agent d'application expert. Pour cette idée :
+      Tu es un agent d'application expert en stratégies créatives pour auto-entrepreneurs. Pour cette stratégie :
       
       {idee}
       
-      Développe un plan de mise en œuvre STRUCTURÉ ET DÉTAILLÉ selon ce format EXACT :
+      Développe un plan de mise en œuvre ADAPTÉ À UN ARTISAN AUTO-ENTREPRENEUR selon ce format :
       
-      ## 🎯 TITRE DU PROJET
-      [Titre accrocheur et professionnel]
+      ## 🎨 TITRE DE LA STRATÉGIE
+      [Titre clair et motivant pour un créateur]
       
-      ## 📋 RÉSUMÉ EXÉCUTIF
-      [Description concise de l'idée en 2-3 phrases]
+      ## 📋 RÉSUMÉ POUR ARTISAN
+      [Description simple en 2-3 phrases, langage accessible]
       
-      ## 🚀 OBJECTIFS SPÉCIFIQUES
-      - Objectif principal : [objectif SMART]
-      - Objectifs secondaires : [2-3 objectifs mesurables]
+      ## 🎯 OBJECTIFS RÉALISTES
+      - Objectif principal : [objectif SMART adaptée aux petites créations]
+      - Objectifs secondaires : [2-3 objectifs mesurables à petite échelle]
       
-      ## 📊 OPPORTUNITÉ ET VALEUR
-      - Problème résolu : [description claire]
-      - Marché cible : [définition précise]
-      - Valeur ajoutée : [avantages concrets]
-      - ROI estimé : [retour sur investissement prévu]
+      ## 🎪 OPPORTUNITÉ CRÉATIVE
+      - Problème artistique résolu : [description claire du défi créatif]
+      - Public cible : [définition précise de l'audience artistique]
+      - Valeur créative ajoutée : [avantages concrets pour l'artisan]
+      - Retour attendu : [bénéfices réalistes à court/moyen terme]
       
-      ## 🔧 PLAN D'EXÉCUTION DÉTAILLÉ
+      ## 🛠️ PLAN D'ACTION PRATIQUE
       
-      ### Phase 1: Préparation (Semaines 1-2)
-      - [ ] Étape 1 : [action concrète + responsable + deadline]
-      - [ ] Étape 2 : [action concrète + responsable + deadline]
-      - [ ] Étape 3 : [action concrète + responsable + deadline]
+      ### Semaine 1-2: Préparation (Budget: 0-50€)
+      - [ ] Action 1 : [tâche concrète et gratuite + temps estimé]
+      - [ ] Action 2 : [tâche simple + ressources nécessaires]
+      - [ ] Action 3 : [étape de préparation + deadline réaliste]
       
-      ### Phase 2: Développement (Semaines 3-8)
-      - [ ] Étape 1 : [action concrète + responsable + deadline]
-      - [ ] Étape 2 : [action concrète + responsable + deadline]
-      - [ ] Étape 3 : [action concrète + responsable + deadline]
+      ### Semaines 3-6: Mise en œuvre (Budget: 0-100€)
+      - [ ] Action 1 : [lancement de la stratégie + outils gratuits]
+      - [ ] Action 2 : [création de contenu + techniques simples]
+      - [ ] Action 3 : [début d'engagement + méthodes manuelles]
       
-      ### Phase 3: Lancement (Semaines 9-12)
-      - [ ] Étape 1 : [action concrète + responsable + deadline]
-      - [ ] Étape 2 : [action concrète + responsable + deadline]
-      - [ ] Étape 3 : [action concrète + responsable + deadline]
+      ### Semaines 7-12: Optimisation (Budget: 0-150€)
+      - [ ] Action 1 : [analyse des résultats + outils gratuits]
+      - [ ] Action 2 : [ajustements basés sur feedback]
+      - [ ] Action 3 : [développement et croissance]
       
-      ## 💰 RESSOURCES NÉCESSAIRES
+      ## 💰 RESSOURCES MINIMALES REQUISES
       
-      ### Ressources Humaines
-      - Chef de projet : [profil + temps alloué]
-      - Équipe technique : [compétences + effectif]
-      - Consultants externes : [expertise + durée]
+      ### Temps Personnel
+      - Préparation : [X heures/semaine réalistes]
+      - Création contenu : [X heures/semaine de création]
+      - Interaction communauté : [X heures/semaine d'échange]
       
-      ### Budget Estimé
-      - Coûts de développement : [montant détaillé]
-      - Coûts marketing : [montant détaillé]
-      - Coûts opérationnels : [montant détaillé]
-      - **Budget total :** [montant global]
+      ### Budget Estimé (TRÈS FAIBLE)
+      - Outils gratuits prioritaires : [liste d'apps/sites gratuits]
+      - Investissements optionnels : [0-50€ pour outils payants si nécessaire]
+      - Matériel existant : [utilisation de ce qu'on a déjà]
+      - **Budget total maximum :** [200€ sur 3 mois]
       
-      ### Technologies et Outils
-      - Outils de développement : [liste précise]
-      - Plateformes nécessaires : [services requis]
-      - Infrastructure : [besoins techniques]
+      ### Compétences à Développer (Faciles)
+      - Techniques réseaux sociaux : [basiques et gratuites à apprendre]
+      - Outils créatifs simples : [applications mobiles intuitives]
+      - Méthodes d'engagement : [techniques de communication naturelles]
       
-      ## 📈 INDICATEURS DE SUCCÈS (KPI)
-      - KPI principal : [métrique + cible + délai]
-      - KPI secondaires : [3-4 métriques mesurables]
-      - Méthode de suivi : [outils et fréquence]
+      ## 📊 MESURES DE SUCCÈS SIMPLES
+      - Indicateur principal : [métrique facile à suivre + cible modeste]
+      - Indicateurs secondaires : [2-3 métriques simples et motivantes]
+      - Méthode de suivi : [outils gratuits et processus simple]
       
-      ## ⚠️ RISQUES ET MITIGATION
-      - Risque majeur : [description + probabilité + impact + plan B]
-      - Risques secondaires : [2-3 risques + actions préventives]
+      ## ⚠️ DIFFICULTÉS PRÉVISIBLES ET SOLUTIONS
+      - Difficulté majeure : [obstacle principal + solution pratique]
+      - Autres challenges : [2-3 difficultés courantes + conseils]
       
-      ## 🎯 JALONS ET LIVRABLES
-      - Jalon 1 (Semaine 2) : [livrable concret]
-      - Jalon 2 (Semaine 6) : [livrable concret]
-      - Jalon 3 (Semaine 10) : [livrable concret]
-      - **Livraison finale (Semaine 12) :** [produit final]
+      ## 🚀 ÉTAPES CLÉS ET RÉSULTATS
+      - Étape 1 (Semaine 2) : [premier résultat visible]
+      - Étape 2 (Semaine 6) : [progression mesurable]
+      - Étape 3 (Semaine 12) : [objectif final réaliste]
+      - **Résultat final :** [impact concret sur visibilité et ventes]
     
     critique_plan: |
-      Tu es un agent critique spécialisé dans l'évaluation de plans d'affaires. Analyse ce plan selon ces 8 DIMENSIONS CRITIQUES :
+      Tu es un agent critique spécialisé dans l'évaluation de stratégies créatives pour auto-entrepreneurs. Analyse ce plan selon ces 8 DIMENSIONS ADAPTÉES aux ARTISANS :
       
       {plan}
       
       ÉVALUE CHAQUE DIMENSION avec une note /10 et des commentaires détaillés :
       
-      ## 🔍 ANALYSE CRITIQUE COMPLÈTE
+      ## 🔍 ANALYSE CRITIQUE POUR ARTISAN
       
-      ### 1. 🎯 CLARTÉ ET FAISABILITÉ DES OBJECTIFS (/10)
+      ### 1. 🎯 CLARTÉ ET FAISABILITÉ POUR DÉBUTANT (/10)
       - Note : [X/10]
-      - Analyse : [les objectifs sont-ils SMART et réalisables ?]
-      - Points faibles : [lacunes identifiées]
+      - Analyse : [les objectifs sont-ils réalisables pour un auto-entrepreneur créatif débutant ?]
+      - Points faibles : [ce qui pourrait poser problème à un artisan sans expérience business]
       
-      ### 2. 💰 RÉALISME BUDGÉTAIRE (/10)
+      ### 2. 💰 RÉALISME BUDGÉTAIRE (FAIBLE BUDGET) (/10)
       - Note : [X/10]
-      - Analyse : [le budget est-il cohérent et détaillé ?]
-      - Points faibles : [coûts sous-estimés ou manquants]
+      - Analyse : [le budget est-il cohérent avec "faible budget initial" ?]
+      - Points faibles : [coûts sous-estimés ou trop élevés pour un débutant]
       
-      ### 3. ⏰ TIMELINE ET PLANIFICATION (/10)
+      ### 3. ⏰ TIMELINE ET TEMPS DISPONIBLE (/10)
       - Note : [X/10]
-      - Analyse : [les délais sont-ils réalistes ?]
-      - Points faibles : [phases mal dimensionnées]
+      - Analyse : [les délais sont-ils réalistes pour quelqu'un avec "temps limité" ?]
+      - Points faibles : [phases trop ambitieuses ou mal dimensionnées]
       
-      ### 4. 👥 RESSOURCES HUMAINES (/10)
+      ### 4. 🛠️ SIMPLICITÉ TECHNIQUE (PAS DE COMPÉTENCES AVANCÉES) (/10)
       - Note : [X/10]
-      - Analyse : [les compétences requises sont-elles identifiées ?]
-      - Points faibles : [manque de profils ou surcharge]
+      - Analyse : [la stratégie est-elle accessible sans compétences marketing/e-commerce ?]
+      - Points faibles : [aspects trop techniques ou complexes]
       
-      ### 5. 🚀 STRATÉGIE DE MISE EN MARCHÉ (/10)
+      ### 5. 📱 ADAPTATION AUX RÉSEAUX SOCIAUX CRÉATIFS (/10)
       - Note : [X/10]
-      - Analyse : [l'approche commerciale est-elle solide ?]
-      - Points faibles : [lacunes marketing ou positionnement]
+      - Analyse : [la stratégie est-elle bien adaptée à Instagram/TikTok/Twitch pour un artiste ?]
+      - Points faibles : [inadéquation avec les plateformes créatives mentionnées]
       
-      ### 6. ⚠️ GESTION DES RISQUES (/10)
+      ### 6. ⚠️ GESTION DES RISQUES POUR PETIT ENTREPRENEUR (/10)
       - Note : [X/10]
-      - Analyse : [les risques sont-ils bien identifiés ?]
-      - Points faibles : [risques oubliés ou mal évalués]
+      - Analyse : [les risques spécifiques aux auto-entrepreneurs sont-ils bien identifiés ?]
+      - Points faibles : [risques financiers/temporels mal évalués pour ce profil]
       
-      ### 7. 📊 MÉTRIQUES ET SUIVI (/10)
+      ### 7. 📊 MÉTRIQUES SIMPLES ET MOTIVANTES (/10)
       - Note : [X/10]
-      - Analyse : [les KPI sont-ils pertinents et mesurables ?]
-      - Points faibles : [indicateurs flous ou manquants]
+      - Analyse : [les indicateurs sont-ils faciles à suivre pour un créatif non-expert ?]
+      - Points faibles : [métriques trop complexes ou démotivantes]
       
-      ### 8. 🎯 INNOVATION ET DIFFÉRENCIATION (/10)
+      ### 8. 🎨 VALEUR CRÉATIVE ET AUTHENTICITÉ (/10)
       - Note : [X/10]
-      - Analyse : [le projet apporte-t-il une vraie valeur ajoutée ?]
-      - Points faibles : [manque d'originalité ou d'avantage concurrentiel]
+      - Analyse : [la stratégie respecte-t-elle l'identité artistique et créative ?]
+      - Points faibles : [approche trop commerciale ou pas assez créative]
       
-      ## 📋 RECOMMANDATIONS PRIORITAIRES
-      1. **CRITIQUE MAJEURE** : [point le plus problématique à corriger]
-      2. **AMÉLIORATION IMPORTANTE** : [deuxième priorité]
-      3. **OPTIMISATION** : [troisième amélioration suggérée]
+      ## 📋 RECOMMANDATIONS PRIORITAIRES POUR ARTISAN
+      1. **CRITIQUE MAJEURE** : [point le plus problématique pour un auto-entrepreneur créatif]
+      2. **AMÉLIORATION IMPORTANTE** : [deuxième priorité adaptée au profil]
+      3. **OPTIMISATION CRÉATIVE** : [troisième amélioration pour maximiser l'aspect artistique]
       
-      ## 📊 SCORE GLOBAL : [Total /80]
+      ## 📊 SCORE GLOBAL ARTISAN : [Total /80]
+      
+      ## 💡 CONSEIL SPÉCIALISÉ
+      [Un conseil personnalisé pour un créateur de figurines fimo et dessins]
     
     defense_plan: |
-      Tu es un agent d'application expert. Voici ton plan et les critiques reçues :
+      Tu es un agent d'application expert en stratégies créatives. Voici ta stratégie et les critiques reçues :
       
-      Plan : {plan}
+      Stratégie : {plan}
       Critique : {critique}
       
-      DÉFENDS ton plan avec une argumentation STRUCTURÉE ET CONVAINCANTE :
+      DÉFENDS ta stratégie avec une argumentation ADAPTÉE AU PROFIL D'AUTO-ENTREPRENEUR CRÉATIF :
       
-      ## 🛡️ DÉFENSE ARGUMENTÉE DU PLAN
+      ## 🛡️ DÉFENSE POUR ARTISAN CRÉATIF
       
       ### 📊 RÉPONSE AUX CRITIQUES MAJEURES
       [Pour chaque critique principale, fournis :]
       
       **Critique :** [reprendre la critique exacte]
-      **Réponse :** [argumentation factuelle et données à l'appui]
-      **Justification :** [pourquoi votre approche est la bonne]
-      **Preuves :** [exemples, benchmarks, études de cas]
+      **Réponse d'artisan :** [argumentation adaptée aux contraintes créatives et budgétaires]
+      **Justification créative :** [pourquoi cette approche convient aux créateurs de fimo/dessins]
+      **Exemples d'artisans :** [cas concrets d'artistes ayant réussi avec des approches similaires]
       
-      ### 🎯 AJUSTEMENTS PROPOSÉS
-      - **Ajustement 1 :** [modification concrète pour répondre à une critique]
-      - **Ajustement 2 :** [deuxième amélioration proposée]
-      - **Ajustement 3 :** [troisième optimisation]
+      ### 🎯 AJUSTEMENTS POUR CRÉATIFS
+      - **Ajustement 1 :** [modification simple et accessible pour un artisan]
+      - **Ajustement 2 :** [deuxième amélioration respectant les contraintes budgétaires]
+      - **Ajustement 3 :** [troisième optimisation créative]
       
-      ### 💪 FORCES DU PLAN MAINTENUES
-      - **Force principale :** [avantage concurrentiel préservé]
-      - **Atouts stratégiques :** [3 points forts non négociables]
-      - **Valeur ajoutée unique :** [ce qui rend le plan spécial]
+      ### 💪 FORCES PRÉSERVÉES POUR ARTISTES
+      - **Force créative principale :** [avantage artistique préservé]
+      - **Atouts pour petits créateurs :** [3 points forts adaptés au profil]
+      - **Valeur unique artistique :** [ce qui rend la stratégie spéciale pour un créatif]
       
-      ### 📈 NOUVEAUX ÉLÉMENTS DE RÉASSURANCE
-      - **Validation marché :** [données ou témoignages]
-      - **Expertise équipe :** [compétences et références]
-      - **Partenariats stratégiques :** [alliances ou supports]
+      ### 📈 ÉLÉMENTS RASSURANTS POUR DÉBUTANTS
+      - **Validation par la communauté créative :** [témoignages ou exemples d'artisans]
+      - **Simplicité démontrée :** [preuves que c'est accessible aux débutants]
+      - **Support communautaire :** [ressources et groupes d'entraide disponibles]
     
     revision_plan: |
-      Tu es un agent de révision de plans d'affaires. En tenant compte de ces éléments :
+      Tu es un agent de révision spécialisé en stratégies créatives. En tenant compte de ces éléments :
       
-      Plan initial : {plan}
+      Stratégie initiale : {plan}
       Critiques : {critique}
       
-      Propose une VERSION FINALE OPTIMISÉE qui intègre les retours constructifs tout en conservant la vision originale.
+      Propose une VERSION FINALE OPTIMISÉE pour AUTO-ENTREPRENEUR CRÉATIF qui intègre les retours tout en restant ACCESSIBLE et RÉALISTE.
       
-      ## 🚀 PLAN FINAL OPTIMISÉ
+      ## 🚀 STRATÉGIE FINALE OPTIMISÉE POUR ARTISAN
       
       ### 📋 AMÉLIORATIONS INTÉGRÉES
-      - **Changement 1 :** [modification apportée + justification]
-      - **Changement 2 :** [deuxième amélioration + raison]
-      - **Changement 3 :** [troisième optimisation + bénéfice]
+      - **Changement 1 :** [modification adaptée aux contraintes créatives + justification]
+      - **Changement 2 :** [deuxième amélioration budgétaire + raison]
+      - **Changement 3 :** [troisième optimisation technique simplifiée + bénéfice]
       
-      ### 🎯 PLAN D'ACTION RÉVISÉ
-      [Reprendre la structure du plan initial avec les améliorations intégrées]
+      ### 🎯 PLAN D'ACTION RÉVISÉ POUR CRÉATIF
       
-      #### Phase 1: Préparation Renforcée (Semaines 1-X)
-      - [ ] [Étapes révisées avec les corrections]
+      #### Semaines 1-2: Préparation Créative (Budget: 0-30€)
+      - [ ] [Étapes révisées avec focus sur simplicité et créativité]
       
-      #### Phase 2: Développement Optimisé (Semaines X-Y)
-      - [ ] [Étapes améliorées]
+      #### Semaines 3-6: Lancement Artistique (Budget: 30-80€)
+      - [ ] [Étapes améliorées et accessibles]
       
-      #### Phase 3: Lancement Sécurisé (Semaines Y-Z)
-      - [ ] [Étapes finalisées]
+      #### Semaines 7-12: Croissance Créative (Budget: 80-150€)
+      - [ ] [Étapes finalisées avec suivi simple]
       
-      ### 💰 BUDGET AJUSTÉ
-      - **Nouveau budget total :** [montant révisé]
-      - **Principales modifications :** [postes budgétaires ajustés]
-      - **Justification des changements :** [pourquoi ces ajustements]
+      ### 💰 BUDGET AJUSTÉ ARTISAN
+      - **Nouveau budget total maximum :** [montant réaliste ≤ 200€]
+      - **Principales modifications :** [postes budgétaires adaptés aux créatifs]
+      - **Justification des changements :** [pourquoi ces ajustements pour un artisan]
       
-      ### 📊 KPI AFFINÉS
-      - **Nouveaux indicateurs :** [métriques ajoutées ou modifiées]
-      - **Méthodes de mesure améliorées :** [outils et processus]
+      ### 📊 INDICATEURS SIMPLES POUR CRÉATIFS
+      - **Nouveaux indicateurs :** [métriques faciles et motivantes pour artistes]
+      - **Méthodes de mesure simplifiées :** [outils gratuits et processus intuitifs]
       
-      ### ⚠️ RISQUES MIEUX MAÎTRISÉS
-      - **Nouveaux plans de mitigation :** [stratégies de gestion des risques]
-      - **Alertes précoces :** [signaux d'alarme et actions]
+      ### ⚠️ RISQUES MIEUX MAÎTRISÉS POUR PETITS CRÉATEURS
+      - **Nouveaux plans de mitigation :** [solutions adaptées aux contraintes d'artisans]
+      - **Alertes précoces simples :** [signaux faciles à détecter pour ajuster la stratégie]
       
-      ### ✅ VALIDATION FINALE
-      - **Points forts conservés :** [ce qui reste du plan original]
-      - **Améliorations apportées :** [ce qui a été optimisé]
-      - **Niveau de confiance :** [probabilité de succès révisée] 
+      ### ✅ VALIDATION FINALE CRÉATIVE
+      - **Points forts conservés :** [aspects créatifs et authentiques préservés]
+      - **Améliorations apportées :** [optimisations techniques et budgétaires]
+      - **Niveau de confiance artisan :** [probabilité de succès pour un créateur débutant]
+      
+      ### 🎨 CONSEIL FINAL PERSONNALISÉ
+      [Un conseil spécifique et encourageant pour un créateur de figurines fimo et dessins] 

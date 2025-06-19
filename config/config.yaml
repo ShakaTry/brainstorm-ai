@@ -4,19 +4,19 @@
 # Configuration générale du brainstorming
 general:
   # Objectif principal du brainstorming
-  objectif: "CECI EST UN TEST(objectif)"
+  objectif: "Développer une stratégie de communication efficace pour une auto-entreprise de créations artistiques (figurines en pâte fimo, dessins), afin de générer des vues sur les réseaux sociaux et vendre les créations."
   
   # Contexte du projet
-  contexte: "CECI EST UN TEST(contexte)"
+  contexte: "Auto-entrepreneur débutant dans le domaine artistique, avec des créations manuelles uniques (figurines en pâte fimo, illustrations). Recherche d'une approche adaptée aux plateformes comme Instagram, TikTok, Twitch. Besoin de visibilité, d'interaction avec une audience potentielle, et d'un canal de vente performant. BUDGET TRÈS LIMITÉ (moins de 200€), pas de compétences techniques avancées, travail seul depuis chez soi."
   
   # Contraintes à respecter
-  contraintes: "CECI EST UN TEST(contraintes)"
+  contraintes: "BUDGET MAXIMUM 200€ sur 3 mois, temps limité (5-10h/semaine maximum), besoin d'automatiser au maximum avec des outils GRATUITS uniquement, nécessité de contenus engageants adaptés à chaque plateforme (formats courts TikTok, stories Instagram, timelapses Twitch). PAS de compétences en marketing digital, développement web, ou e-commerce. Solutions SIMPLES et IMMÉDIATEMENT APPLICABLES uniquement."
   
-  # Nombre de cycles de brainstorming (optimisé : 3-4 cycles suffisent généralement)
-  cycles: 1
+  # Nombre de cycles de brainstorming (réduit pour test)
+  cycles: 2
   
-  # Nombre d'idées top à extraire pour l'application (augmenté pour plus d'options)
-  top_ideas_count: 1
+  # Nombre d'idées top à extraire pour l'application
+  top_ideas_count: 2
   
   # Demander confirmation avant de démarrer
   ask_confirmation: true
