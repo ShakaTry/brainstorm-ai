@@ -20,10 +20,10 @@ install: ## Installe les dépendances de production
 
 install-dev: install ## Installe toutes les dépendances (dev inclus)
 	$(PIP) install -e ".[dev,docs]"
-	pre-commit install
+	pre-commit install -c config/python/.pre-commit-config.yaml
 
 test: ## Lance les tests avec coverage
-	pytest -v --cov=$(PROJECT_NAME) --cov-report=term-missing --cov-report=html
+	pytest -c config/python/pytest.ini -v --cov=$(PROJECT_NAME) --cov-report=term-missing --cov-report=html
 
 format: ## Formate le code avec Black et isort
 	@echo "$(BLUE)Formatage avec Black...$(NC)"
@@ -58,10 +58,10 @@ run: ## Lance l'application principale
 	$(PYTHON) main.py
 
 docs: ## Génère la documentation
-	mkdocs build
+	mkdocs build -f config/mkdocs.yml
 
 docs-serve: ## Lance le serveur de documentation
-	mkdocs serve
+	mkdocs serve -f config/mkdocs.yml
 
 check: format lint test ## Lance toutes les vérifications
 
@@ -70,10 +70,10 @@ setup: install-dev ## Configure l'environnement de développement complet
 
 # Commandes pour les releases
 release-patch: ## Crée une release patch (0.0.X)
-	bumpversion patch
+	bumpversion --config-file config/python/.bumpversion.cfg patch
 
 release-minor: ## Crée une release mineure (0.X.0)
-	bumpversion minor
+	bumpversion --config-file config/python/.bumpversion.cfg minor
 
 release-major: ## Crée une release majeure (X.0.0)
-	bumpversion major 
+	bumpversion --config-file config/python/.bumpversion.cfg major 
