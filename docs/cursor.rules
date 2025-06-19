@@ -2,191 +2,115 @@
 # ==========================================
 # Projet : Système de brainstorming collaboratif avec agents IA spécialisés
 
-## Règles générales pour Brainstorm AI
-- Toujours répondre en français
-- Maintenir la cohérence du système multi-agents
-- Respecter l'architecture : agents/ pour la logique métier, core/ pour l'infrastructure
-- Préserver la compatibilité avec OpenAI GPT-3.5 et GPT-4
-- Maintenir la configuration centralisée dans config.yaml
-- **INTERDICTION ABSOLUE** : Ne JAMAIS exécuter `main.py` ou lancer le brainstorm complet via des commandes terminal
+## 🎯 Règles générales
+- **Langue** : Toujours répondre en français
+- **Architecture** : Respecter la structure src/brainstorm_ai/ (agents/, core/, cli/)
+- **Tests** : Maintenir une couverture de tests pour les fonctionnalités critiques
+- **Configuration** : Centraliser les paramètres dans config/ (config.yaml, prompts.yaml)
+- **Sécurité** : Ne jamais exposer de clés API dans le code
 
-## Règle d'automatisation Git (OBLIGATOIRE)
-**IMPORTANT** : À chaque amélioration du système Brainstorm AI, tu dois AUTOMATIQUEMENT :
+## 🔧 Commandes et outils
 
-1. **Ajouter les fichiers modifiés** : `git add .` ou fichiers spécifiques
-2. **Créer un commit descriptif** : Message en français spécifique au contexte IA
-3. **Pousser vers GitHub** : `git push origin main`
+### ✅ Privilégier GitHub CLI (gh) dans Cursor
+**Problème identifié** : Les commandes `git` standard causent parfois des suspensions dans l'IDE Cursor
 
-### 🚨 PRÉFÉRENCE OBLIGATOIRE : Commandes GitHub CLI (gh)
-**PROBLÈME IDENTIFIÉ** : Les commandes `git` causent des suspensions dans l'IDE Cursor
-
-#### ✅ UTILISER EN PRIORITÉ :
+**Utiliser en priorité :**
 ```bash
-# Vérifications - UTILISER gh au lieu de git
-gh api repos/ShakaTry/brainstorm-ai/commits --jq '.[0:3]'  # ✅ Au lieu de git log
-gh repo view --json name,pushedAt,defaultBranchRef         # ✅ Infos repository
-gh run list --limit 5                                      # ✅ État CI/CD
-gh browse --no-browser                                      # ✅ URL repository
+# Vérifications repository
+gh repo view --json name,pushedAt,defaultBranchRef
+gh api repos/OWNER/REPO/commits --jq '.[0:3]'
+gh run list --limit 5
 
-# Commits et historique - Plus fiables
-gh api repos/ShakaTry/brainstorm-ai/commits/HASH --jq '{sha, message, stats}'
+# Navigation
+gh browse --no-browser
 ```
 
-#### ❌ ÉVITER (causent des suspensions) :
+**Éviter dans Cursor :**
 ```bash
-git log --oneline    # ❌ Reste en suspend dans Cursor
-git status          # ❌ Parfois bloqué
-git remote -v       # ❌ Sortie tronquée
+git log --oneline    # Peut rester en suspend
+git status           # Parfois bloqué
 ```
 
-#### 🎯 RÈGLE : GitHub CLI First
-- **Vérifications** : Toujours utiliser `gh` pour inspecter l'état GitHub
-- **Git classique** : Uniquement pour add/commit/push locaux
-- **Diagnostic** : `gh` fournit plus d'informations et sans suspension
-
-### ⚠️ RÈGLES CRITIQUES DE SYNCHRONISATION GITHUB
-**LEÇON APPRISE** : Toujours vérifier et maintenir la cohérence des branches GitHub
-
-#### 🔧 Vérifications Obligatoires Avant Chaque Push
+### 📝 Git workflow standard
 ```bash
-# 1. Vérifier la branche par défaut GitHub
-gh api repos/ShakaTry/brainstorm-ai --jq '.default_branch'
-
-# 2. S'assurer qu'on pousse vers la bonne branche
-git branch  # Vérifier la branche locale active
-git status  # Confirmer l'état de synchronisation
-
-# 3. Si changement de branche principale, mettre à jour GitHub
-gh repo edit --default-branch main  # Ou la branche souhaitée
-```
-
-#### 🚨 Problème à Éviter
-- **Ne JAMAIS laisser GitHub afficher une branche obsolète par défaut**
-- **Toujours synchroniser TOUTES les branches actives après changements majeurs**
-- **Vérifier visuellement GitHub après push important**
-
-#### ✅ Workflow de Synchronisation Complet
-```bash
-# Après modifications importantes ou restructurations :
-git push origin main                           # Push branche principale
-git push origin main:reorganization-totale     # Sync autres branches actives
-gh repo edit --default-branch main            # Mettre à jour branche par défaut GitHub
-gh repo view --web                            # Vérification visuelle finale
-```
-
-### Messages de commit spécifiques au projet
-- **Agent** : "Amélioration agent [créatif/critique/révision/synthèse/score/application] - [modification]"
-- **Prompts** : "Optimisation des prompts [agent] - [amélioration]"
-- **Configuration** : "Modification config.yaml - [paramètre IA/cycles/modèles]"
-- **Boucle de brainstorming** : "Amélioration loop_manager - [optimisation workflow]"
-- **Export/Logs** : "Amélioration système d'export - [format/structure]"
-- **Scoring** : "Optimisation système de scoring - [critères/validation]"
-- **Gestion tokens** : "Optimisation consommation tokens - [stratégie]"
-- **Tests agents** : "Tests pour agent [nom] - [couverture]"
-
-### Exemples de workflow Brainstorm AI
-```bash
-# Modification d'un agent
-git add agents/agent_creatif.py
-git commit -m "Amélioration agent créatif - prompts plus innovants"
-git push origin main
-
-# Optimisation de la boucle de brainstorming
-git add core/loop_manager.py
-git commit -m "Amélioration loop_manager - gestion intelligente historique"
-git push origin main
-
-# Configuration des modèles IA
-git add config.yaml
-git commit -m "Modification config.yaml - passage GPT-4 pour agent synthèse"
+# Workflow basique
+git add .
+git commit -m "Description claire des changements"
 git push origin main
 ```
 
-## Règles spécifiques au système Brainstorm AI
+## 🧠 Spécificités Brainstorm AI
 
-### Architecture des agents IA
-- **agents/agent_creatif.py** : Génération d'idées, température élevée (0.9)
-- **agents/agent_critique.py** : Analyse critique, température basse (0.4)
-- **agents/agent_revision.py** : Reformulation, température modérée (0.6)
-- **agents/agent_synthese.py** : Synthèse finale, température équilibrée (0.5)
-- **agents/agent_score.py** : Évaluation quantitative, température très basse (0.2)
-- **agents/agent_application.py** : Plans d'action, température modérée (0.6)
+### Architecture des agents
+- **creative.py** : Génération d'idées innovantes
+- **critic.py** : Analyse critique constructive  
+- **revision.py** : Amélioration et reformulation
+- **score.py** : Évaluation quantitative
+- **synthesis.py** : Synthèse et sélection des meilleures idées
+- **application.py** : Plans de mise en œuvre
 
-### Fichiers critiques à surveiller
-- **config.yaml** : Configuration centrale (modèles, températures, cycles)
-- **core/loop_manager.py** : Orchestration des cycles de brainstorming
-- **core/config.py** : Gestionnaire de configuration
-- **core/gpt.py** : Interface OpenAI avec gestion des tokens
-- **main.py** : Point d'entrée avec confirmation utilisateur
+### Fichiers importants
+- **main.py** / **run.py** : Points d'entrée
+- **config/config.yaml** : Configuration système (modèles, cycles, etc.)
+- **config/prompts.yaml** : Templates des prompts pour chaque agent
+- **src/brainstorm_ai/core/loop_manager.py** : Orchestration du brainstorming
+- **src/brainstorm_ai/core/gpt.py** : Interface OpenAI
 
-### Optimisations spécifiques IA
-- **Gestion contexte** : Limiter l'historique pour optimiser les tokens
-- **Stratégies d'extraction** : Méthodes robustes pour extraire les top idées
-- **Validation scoring** : Fallback intelligent pour les scores malformés
-- **Détection redondance** : Éviter la répétition d'idées similaires
-- **Retry avec backoff** : Gestion des erreurs API OpenAI
+### ⚠️ Précautions importantes
+- **Tests coûteux** : Éviter d'exécuter `main.py` à répétition (consomme des tokens OpenAI)
+- **Clés API** : S'assurer que `OPENAI_API_KEY` est définie mais non exposée
+- **Prompts** : Tester les modifications de prompts avec parcimonie
 
-### Tests spécialisés
-- **tests/test_agent_*.py** : Tests unitaires par agent
-- **tests/test_loop_manager.py** : Tests des cycles de brainstorming
-- **tests/test_exporter.py** : Tests d'export multi-format
-- Vérifier les prompts et les réponses IA dans les tests
+## ✅ Checklist avant commit
 
-## Checklist spécifique Brainstorm AI
+### Fonctionnalité
+- [ ] Code testé et fonctionnel
+- [ ] Pas de clés API hardcodées
+- [ ] Configuration YAML valide
+- [ ] Imports résolus correctement
 
-### Avant chaque commit/push
-- [ ] **Agents IA** : Prompts testés et réponses cohérentes
-- [ ] **Configuration** : config.yaml valide (YAML syntax)
-- [ ] **Tokens** : Optimisation consommation OpenAI vérifiée
-- [ ] **Cycles** : Workflow de brainstorming fonctionnel
-- [ ] **Export** : Formats YAML/JSON/Markdown générés correctement
-- [ ] **Scoring** : Validation des scores (impact, faisabilité, originalité, clarté)
-- [ ] **Historique** : Gestion mémoire et contexte optimisée
-- [ ] **Variables environnement** : OPENAI_API_KEY non exposée dans le code
+### Qualité
+- [ ] Messages de commit descriptifs
+- [ ] Documentation mise à jour si nécessaire
+- [ ] Tests unitaires passent
 
-### ⚠️ Vérifications GitHub (CRITIQUE)
-- [ ] **Branche par défaut** : `gh api repos/ShakaTry/brainstorm-ai --jq '.default_branch'` = main
-- [ ] **Synchronisation** : Toutes les branches actives pushées
-- [ ] **Vérification visuelle** : `gh repo view --web` après push important
-- [ ] **Cohérence branches** : Pas de décalage entre local et remote
+### Déploiement
+- [ ] Vérification avec `gh` si possible
+- [ ] Push vers la bonne branche
 
-### 🔧 Vérifications Techniques Obligatoires
-- [ ] **Commandes GitHub CLI** : Utiliser `gh` au lieu de `git` pour toutes vérifications
-- [ ] **Pas de suspension** : Éviter `git log`, `git status` qui bloquent dans Cursor  
-- [ ] **API GitHub** : Privilégier `gh api` pour données détaillées
-- [ ] **Workflows CI/CD** : Toujours vérifier avec `gh run list` après push
+## 🚀 Bonnes pratiques de développement
 
-### Tests critiques à valider
-- [ ] **main.py** s'exécute sans erreur
-- [ ] **Confirmation utilisateur** fonctionne
-- [ ] **Statistiques tokens** s'affichent correctement
-- [ ] **Logs** sauvegardés dans le bon format
-- [ ] **Agents** répondent dans le bon rôle (créatif vs analytique)
+### Messages de commit
+- **Fonctionnalité** : "✨ Ajout [description]"
+- **Correction** : "🐛 Fix [problème résolu]"
+- **Amélioration** : "⚡ Amélioration [composant]"
+- **Documentation** : "📖 Docs [section mise à jour]"
+- **Tests** : "🧪 Tests [couverture ajoutée]"
+- **Configuration** : "⚙️ Config [paramètre modifié]"
 
-## Commandes INTERDITES pour Brainstorm AI
-**ATTENTION** : Ne JAMAIS exécuter ces commandes :
-- `python main.py` - Lance le brainstorm complet avec consommation de tokens OpenAI
-- `python main.py --any-flags` - Toute variante d'exécution du script principal
-- Exécutions directes du système de brainstorming en production
+### Structure de développement
+1. **Comprendre** le besoin/problème
+2. **Analyser** l'architecture existante  
+3. **Implémenter** la solution
+4. **Tester** les modifications
+5. **Documenter** si nécessaire
+6. **Commiter** et **pusher**
 
-**Commandes AUTORISÉES pour les tests** :
-- `python demo_progression.py` - Démonstration sans API
-- `python -m pytest tests/` - Tests unitaires
-- `python test_config.py` - Tests de configuration
-- Scripts utilitaires sans appels API OpenAI
+## 🎨 Style et conventions
 
-## Exceptions pour Brainstorm AI
-Ne PAS faire de commit/push automatique dans ces cas :
-- **Tests expérimentaux** de nouveaux prompts
-- **Modifications des clés API** (sécurité)
-- **Refactoring majeur** de l'architecture multi-agents
-- **Changements breaking** dans config.yaml
+### Code Python
+- Suivre PEP 8 autant que possible
+- Noms de variables explicites
+- Docstrings pour les fonctions importantes
+- Gestion d'erreurs appropriée
 
-## Priorités de développement Brainstorm AI
-1. **Performance IA** : Optimiser les prompts et la consommation tokens
-2. **Qualité brainstorming** : Améliorer la pertinence des idées générées
-3. **Robustesse** : Gestion d'erreurs API et validation des réponses
-4. **Expérience utilisateur** : Interface claire avec emojis et progression
-5. **Extensibilité** : Faciliter l'ajout de nouveaux agents ou critères
+### Organisation
+- Agents dans `src/brainstorm_ai/agents/`
+- Logique core dans `src/brainstorm_ai/core/`
+- Tests dans `tests/` avec structure miroir
+- Configuration dans `config/`
+- Documentation dans `docs/`
 
-**RÈGLE D'OR : Chaque amélioration du système de brainstorming doit être immédiatement commitée et pushée !** 
+---
+
+*Ces règles sont évolutives et peuvent être adaptées selon les besoins du projet.* 
