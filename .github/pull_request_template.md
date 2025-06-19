@@ -9,7 +9,7 @@
 - [ ] 🐛 Bug fix (changement non-breaking qui corrige un problème)
 - [ ] ✨ Nouvelle fonctionnalité (changement non-breaking qui ajoute une fonctionnalité)
 - [ ] 💥 Breaking change (fix ou feature qui causerait un dysfonctionnement de l'existant)
-- [ ] 📚 Documentation (changements dans la documentation uniquement)
+- [ ] 📖 Documentation (changements dans la documentation uniquement)
 - [ ] 🎨 Style (formatage, missing semi-colons, etc; pas de changement de code)
 - [ ] 🔧 Refactoring (changement de code qui ne corrige pas de bug ni n'ajoute de feature)
 - [ ] ⚡ Performance (changement de code qui améliore les performances)
@@ -33,10 +33,10 @@ Fixes #(issue)
 <!-- Fournissez des instructions pour que nous puissions reproduire -->
 <!-- Listez tous les détails pertinents pour votre configuration de test -->
 
-- [ ] Tests unitaires
-- [ ] Tests d'intégration
-- [ ] Tests manuels
-- [ ] Tests de performance
+- [ ] Tests manuels de fonctionnement
+- [ ] Vérification import et CLI (`python -c "import brainstorm_ai"`)
+- [ ] Validation avec `make check` (ruff linting)
+- [ ] Tests de performance si applicable
 
 **Configuration de test**:
 - Version de Python:
@@ -56,8 +56,8 @@ Fixes #(issue)
 - [ ] J'ai commenté mon code, particulièrement dans les zones difficiles à comprendre
 - [ ] J'ai fait les changements correspondants dans la documentation
 - [ ] Mes changements ne génèrent pas de nouveaux warnings
-- [ ] J'ai ajouté des tests qui prouvent que mon fix est efficace ou que ma feature fonctionne
-- [ ] Les tests unitaires nouveaux et existants passent localement avec mes changements
+- [ ] J'ai testé manuellement que mon fix/feature fonctionne correctement
+- [ ] La validation `make check` (ruff) passe sans erreur
 - [ ] Les changements dépendants ont été mergés et publiés
 - [ ] J'ai vérifié que mon code ne contient pas de secrets ou d'informations sensibles
 - [ ] J'ai mis à jour le CHANGELOG.md si nécessaire

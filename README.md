@@ -5,17 +5,17 @@ Un système de brainstorming intelligent utilisant plusieurs agents IA spéciali
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[![Security](https://img.shields.io/badge/security-enhanced-green.svg)](PRIVACY_GUIDELINES.md)
+[![Security](https://img.shields.io/badge/security-enhanced-green.svg)](docs/guides/PRIVACY_GUIDELINES.md)
 
 ## 🚀 Démarrage Ultra-Rapide
 
-**Nouveau utilisateur ?** → Consultez [QUICK_START.md](QUICK_START.md) pour lancer votre premier brainstorm en 5 minutes !
+**Nouveau utilisateur ?** → Consultez [QUICK_START.md](docs/guides/QUICK_START.md) pour lancer votre premier brainstorm en 5 minutes !
 
 ### 💻 Installation Express
 
 ```bash
 # Clonage et installation
-git clone https://github.com/ShakaTry/brainstorm-ai.git
+git clone https://github.com/votre-username/brainstorm-ai.git
 cd brainstorm-ai
 pip install -e .
 
@@ -24,9 +24,11 @@ cp config/env.example .env
 # Éditez .env avec votre clé API OpenAI
 
 # Lancement simplifié
-python run.py                  # Interface guidée avec assistant
+python main.py                           # Point d'entrée principal
 # ou
-python start.bat              # Windows : lancement en un clic
+python scripts/run_quick_start.py        # Assistant interactif guidé
+# ou Windows :
+quick_start.bat                          # Lancement Windows en un clic
 ```
 
 
@@ -39,13 +41,12 @@ Brainstorm AI simule un processus de brainstorming professionnel avec une équip
 
 | Agent | Rôle | Température | Spécialité |
 |-------|------|-------------|------------|
-| **💡 Créatif** | Génération d'idées | 0.9 | Innovation et originalité |
-| **🔍 Critique** | Analyse objective | 0.4 | Évaluation rigoureuse |
-| **🛡️ Défense** | Amélioration | 0.6 | Argumentation et renforcement |
+| **💡 Créatif** | Génération d'idées + Défense | 0.9 | Innovation, originalité et argumentation |
+| **🔍 Critique** | Analyse objective + Réplique | 0.4 | Évaluation rigoureuse et contre-argumentation |
 | **✏️ Révision** | Reformulation | 0.6 | Clarification et optimisation |
 | **🧠 Synthèse** | Compilation | 0.5 | Structuration et hiérarchisation |
 | **📊 Score** | Évaluation | 0.2 | Notation quantitative |
-| **📌 Application** | Plans d'action | 0.6 | Mise en œuvre concrète |
+| **📌 Application** | Plans d'action | 0.6 | Mise en œuvre concrète et planification |
 
 ## 🏗️ Architecture et Flux d'Exécution
 
@@ -185,7 +186,7 @@ git status  # .env doit être ignoré
 
 #### 1. Assistant Interactif (Recommandé)
 ```bash
-python run.py
+python scripts/run_quick_start.py
 ```
 - Interface guidée pas à pas
 - Estimation de coût et durée
@@ -194,7 +195,7 @@ python run.py
 
 #### 2. Lancement Windows Simplifié
 ```bash
-start.bat
+quick_start.bat
 ```
 - Double-clic pour lancer
 - Gestion d'erreur automatique
@@ -217,19 +218,24 @@ general:
   contraintes: "Budget max 50K€, délai 6 mois, équipe de 3 personnes"
   cycles: 3
   top_ideas_count: 5      # 🎯 Contrôle précis du nombre d'idées
+  ask_confirmation: true
 
 agents:
   models:
     creatif: "gpt-4o"      # Créativité maximale
     critique: "gpt-4o"     # Analyse approfondie
+    revision: "gpt-4o"     # Révision optimisée
     synthese: "gpt-4o"     # Synthèse de qualité
+    score: "gpt-4o"        # Évaluation précise
+    application: "gpt-4o"  # Plans d'action
+    default: "gpt-4o"      # Modèle par défaut
 
 export:
   formats:
     yaml: true
     json: true
     markdown: true
-  auto_export_ideas: false  # Protection confidentialité
+  save_individual_ideas: true  # Sauvegarde automatique des idées
 ```
 
 ### 🔧 Validation et Tests de Corrélation
@@ -237,14 +243,11 @@ export:
 Le système inclut des outils pour garantir que votre configuration est respectée :
 
 ```bash
-# Tester la corrélation config ↔ comportement
-python scripts/test_config_correlation.py
-
-# Débugger la configuration
+# Débugger et vérifier la configuration
 python scripts/check_config.py
 
-# Vérifier l'état du système
-python scripts/check_config.py
+# Démonstration du système sans API
+python scripts/demo_progression.py
 ```
 
 **Exemple de validation :**
@@ -261,7 +264,7 @@ Résultat garanti: Exactement 2 idées développées en 1 cycle ✅
 graph TD
     A[💡 Génération] --> B[🔍 Critique]
     B --> C[🛡️ Défense]
-    C --> D[🔄 Contre-critique]
+    C --> D[🔄 Réplique]
     D --> E[✏️ Révision finale]
     E --> F[📊 Scoring]
     F --> G{Nouveau cycle ?}
@@ -291,9 +294,12 @@ graph TD
 ```
 brainstorm_ai/
 ├── 🚀 Lancement rapide
-│   ├── run.py                          # Assistant interactif
-│   ├── start.bat                       # Lancement Windows
-│   └── QUICK_START.md                  # Guide 5 minutes
+│   ├── main.py                         # Point d'entrée principal
+│   ├── quick_start.bat                 # Lancement Windows rapide
+│   ├── scripts/
+│   │   ├── run_quick_start.py         # Assistant interactif
+│   │   └── start.bat                  # Script Windows avancé
+│   └── docs/guides/QUICK_START.md     # Guide 5 minutes
 ├── 🧠 Code source
 │   └── src/brainstorm_ai/
 │       ├── agents/                     # Agents IA spécialisés
@@ -317,9 +323,10 @@ brainstorm_ai/
 │   │   └── env.example                # Modèle environnement
 ├── 🛠️ Outils et scripts
 │   ├── scripts/
+│   │   ├── run_quick_start.py         # Assistant de démarrage rapide
 │   │   ├── check_config.py            # Validation configuration
-
-│   │   └── demo_progression.py        # Démonstration sans API
+│   │   ├── demo_progression.py        # Démonstration sans API
+│   │   └── start.bat                  # Script Windows avancé
 ├── 📊 Données (🔒 protégées)
 │   ├── data/
 │   │   ├── logs/                      # Historique sessions
@@ -356,7 +363,7 @@ Le projet protège automatiquement vos informations sensibles :
 
 ### 📖 Guide Complet
 
-**CRITIQUE** : Consultez [PRIVACY_GUIDELINES.md](PRIVACY_GUIDELINES.md) pour :
+**CRITIQUE** : Consultez [PRIVACY_GUIDELINES.md](docs/guides/PRIVACY_GUIDELINES.md) pour :
 - 🛡️ Bonnes pratiques de sécurité
 - 🔍 Détection de fuites potentielles
 - 📋 Checklist avant chaque commit
@@ -396,10 +403,11 @@ agents:
   temperatures:
     creatif: 0.9     # 🔥 Maximum de créativité
     critique: 0.4    # 🎯 Analyse rigoureuse
-    revision: 0.6    # ⚖️ Équilibre
+    revision: 0.6    # ⚖️ Équilibre et amélioration
     synthese: 0.5    # 🧠 Structuration logique
     score: 0.2       # 📊 Évaluation objective
-    application: 0.6 # 📌 Pragmatisme
+    application: 0.6 # 📌 Pragmatisme et planification
+    default: 0.7     # ⚡ Température équilibrée par défaut
 ```
 
 ### 📤 Formats d'Export
@@ -411,10 +419,12 @@ export:
     json: true       # 🔧 Intégration outils
     markdown: true   # 📖 Documentation lisible
   
-  options:
-    auto_export_ideas: false     # 🔒 Sécurité par défaut
-    include_timestamps: true     # ⏰ Traçabilité
-    include_costs: true          # 💰 Transparence
+  paths:
+    logs_dir: "data/logs"        # 📁 Dossier des logs complets
+    exports_dir: "data/exports"  # 📁 Dossier des exports d'idées
+  
+  save_individual_ideas: true    # 💾 Sauvegarde automatique des idées
+  log_filename_pattern: "brainstorm_{timestamp}"  # 🏷️ Pattern des noms de fichiers
 ```
 
 ## 📈 Optimisations Intégrées
@@ -472,23 +482,25 @@ python scripts/demo_progression.py
 
 ```bash
 # Installation complète
-pip install -r requirements-dev.txt
+make install-dev
 
-# Vérification du code
-ruff check src/ tests/
-ruff format src/ tests/
+# Vérification et formatage du code
+make check
 
-# Tests avant commit
+# Tests avec couverture
 make test
+
+# Nettoyage des fichiers temporaires
+make clean
 ```
 
 ### 📋 Checklist Contribution
 
-- [ ] Tests passent (`pytest`)
-- [ ] Code formaté (`black`, `isort`)
-- [ ] Linting clean (`flake8`)
+- [ ] Tests passent (`make test`)
+- [ ] Code vérifié et formaté (`make check`)
+- [ ] Aucune erreur ruff
 - [ ] Documentation à jour
-- [ ] Pas d'info sensible commitée
+- [ ] Pas d'info sensible commitée (`.env`, logs privés)
 
 ### 🔄 Workflow GitHub
 
@@ -508,60 +520,85 @@ git push origin feature/amazing-feature
 
 ### 💼 Business & Strategy
 ```yaml
-objectif: "Développer une stratégie de diversification"
+objectif: "Développer une stratégie de diversification d'activité"
 contexte: "Entreprise manufacturière, 50 employés, croissance 15%/an"
-contraintes: "Budget R&D 100K€, timeline 12 mois"
+contraintes: "Budget R&D 100K€, timeline 12 mois, équipe limitée"
+cycles: 3
+top_ideas_count: 3
 ```
 
 ### 💡 Innovation Produit
 ```yaml
-objectif: "Créer une app mobile révolutionnaire"
-contexte: "Marché saturé, utilisateurs exigeants, concurrence forte"
-contraintes: "Équipe 3 dev, budget marketing limité, launch Q1"
+objectif: "Créer une application de micro-apprentissage pour adultes"
+contexte: "Marché éducatif en évolution, besoins flexibilité"
+contraintes: "Équipe 3 développeurs, budget marketing 50K€"
+cycles: 2
+top_ideas_count: 5
 ```
 
 ### 🎯 Résolution Problèmes
 ```yaml
-objectif: "Réduire le churn client de 40%"
-contexte: "SaaS B2B, clients PME, support overwhelmed"
-contraintes: "Pas d'embauche, solutions rapides, ROI mesurable"
+objectif: "Réduire le taux de désabonnement client de 40%"
+contexte: "SaaS B2B, clients PME, support débordé"
+contraintes: "Pas d'embauche possible, solutions rapides, ROI mesurable"
+cycles: 3
+top_ideas_count: 2
 ```
 
 ## 📊 Résultats Attendus
 
 ### 📈 Performance Typique
-- **⏱️ Durée session** : 10-30 minutes selon cycles
-- **💰 Coût moyen** : 0,50-5€ selon configuration
-- **🎯 Idées finales** : 3-5 propositions actionnables
-- **📊 Score qualité** : Moyenne 7.5+/10 sur tous critères
+- **⏱️ Durée session** : 5-20 minutes selon cycles et complexité
+- **💰 Coût moyen** : 0,05-2€ avec GPT-4o (optimisé)
+- **🎯 Idées finales** : Configurable via `top_ideas_count` (1-10)
+- **📊 Score qualité** : Moyenne 7.0-8.5/10 sur tous critères
+- **🔄 Cycles recommandés** : 1-3 cycles pour un équilibre qualité/coût
 
 ### 🏅 Exemple de Sortie
 
+**Format YAML (logs complets)** :
 ```yaml
-# Extrait de synthèse finale
-top_ideas:
-  1:
-    titre: "Plateforme d'Onboarding Gamifiée"
-    score_global: 8.7/10
-    impact: 9.2/10
-    faisabilite: 8.0/10
-    plan_action:
-      phase_1: "Prototype MVP (2 mois, 15K€)"
-      phase_2: "Beta test avec 10 clients (1 mois)"
-      phase_3: "Déploiement graduel (3 mois)"
-    roi_estime: "ROI 300% en 12 mois"
+# Extrait de brainstorm_2024-XX-XX.yaml
+objectif: "Développer une stratégie de marketing digital innovante"
+logs:
+- cycle: 1
+  creation: "### Idées Créatives Générées..."
+  critique: "### Analyse Critique des Propositions..."
+  revision: "### Idées Révisées et Optimisées..."
+  scores:
+    impact: 8.5
+    faisabilite: 7.2
+    originalite: 8.0
+    clarte: 8.8
+    
+statistiques:
+  cout_estimation_euros: 0.05
+  temps_total_minutes: 15
+```
+
+**Format TXT (idées individuelles)** :
+```
+🚀 **Concept Innovant : Plateforme d'Onboarding Gamifiée**
+
+Description : Système intégrant intelligence artificielle...
+
+📊 Scores d'évaluation :
+- Impact : 8.5/10
+- Faisabilité : 7.2/10
+- Originalité : 8.0/10
+- Clarté : 8.8/10
 ```
 
 ## 🆘 Support et Maintenance
 
 ### 📚 Documentation
-- **[QUICK_START.md](QUICK_START.md)** : Guide démarrage rapide
-- **[PRIVACY_GUIDELINES.md](PRIVACY_GUIDELINES.md)** : Sécurité des données
-- **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** : Architecture technique
+- **[docs/guides/QUICK_START.md](docs/guides/QUICK_START.md)** : Guide démarrage rapide
+- **[docs/guides/PRIVACY_GUIDELINES.md](docs/guides/PRIVACY_GUIDELINES.md)** : Sécurité des données
+- **[docs/project/ARCHITECTURE.md](docs/project/ARCHITECTURE.md)** : Architecture technique
 - **[docs/cursor.rules](docs/cursor.rules)** : Standards de développement
 
 ### 🐛 Signalement de Bugs
-1. Vérifier les [Issues existantes](https://github.com/ShakaTry/brainstorm-ai/issues)
+1. Vérifier les [Issues existantes](https://github.com/votre-username/brainstorm-ai/issues)
 2. Créer une issue détaillée avec :
    - Version Python/OS
    - Configuration utilisée
@@ -584,13 +621,13 @@ Ce projet est sous licence **MIT**. Voir [LICENSE](LICENSE) pour détails.
 - **Contributeurs** : Tous les développeurs ayant amélioré le projet
 
 ### 🔗 Liens Utiles
-- **Repository** : [github.com/ShakaTry/brainstorm-ai](https://github.com/ShakaTry/brainstorm-ai)
+- **Repository** : [github.com/votre-username/brainstorm-ai](https://github.com/votre-username/brainstorm-ai)
 - **Documentation** : [docs/](docs/)
-- **Issues** : [GitHub Issues](https://github.com/ShakaTry/brainstorm-ai/issues)
+- **Issues** : [GitHub Issues](https://github.com/votre-username/brainstorm-ai/issues)
 
 ---
 
 🧠 **Brainstorm AI** - *Où l'intelligence artificielle rencontre la créativité humaine*
 
-[![Made with ❤️](https://img.shields.io/badge/Made%20with-❤️-red.svg)](https://github.com/ShakaTry/brainstorm-ai)
+[![Made with ❤️](https://img.shields.io/badge/Made%20with-❤️-red.svg)](https://github.com/votre-username/brainstorm-ai)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-blue.svg)](https://openai.com) 

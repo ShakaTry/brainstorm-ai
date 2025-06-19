@@ -266,30 +266,86 @@ def save_full_log(
             for idx, app_log in enumerate(application_logs, 1):
                 idee = app_log["idee"]
                 safe_title = re.sub(r"[^a-zA-Z0-9_\-]", "_", idee[:40]).strip("_")
-                filename = Path(config.exports_dir) / f"{idx}_{safe_title}.md"
+                # Utiliser le format configuré ou format par défaut
+                if config.get("export.project_presentation.filename_pattern"):
+                    filename_pattern = config.get("export.project_presentation.filename_pattern")
+                    filename_formatted = filename_pattern.format(index=idx, title_slug=safe_title)
+                    filename = Path(config.exports_dir) / f"{filename_formatted}.md"
+                else:
+                    filename = Path(config.exports_dir) / f"PROJET_{idx:02d}_{safe_title}.md"
 
-                # Créer un contenu détaillé avec l'idée et son plan développé
-                content = f"""# Idée #{idx}: {idee}
+                # Créer un document de présentation professionnel
+                content = f"""# 🚀 PROJET #{idx:02d} - PRÉSENTATION EXÉCUTIVE
 
-## 📋 Plan Initial
+## 💡 **CONCEPT PRINCIPAL**
+> {idee}
+
+---
+
+## 📋 **PLAN D'AFFAIRES DÉTAILLÉ**
+
 {app_log["plan_initial"]}
 
-## 🔍 Critique du Plan
+---
+
+## 🔍 **ANALYSE CRITIQUE ET ÉVALUATION**
+
+### ⚠️ Points d'Attention Identifiés
 {app_log["critique"]}
 
-## 🛡️ Défense du Plan
+---
+
+## 🛡️ **ARGUMENTATION ET JUSTIFICATIONS**
+
+### 💪 Défense Stratégique du Projet
 {app_log["defense"]}
 
-## ✏️ Plan Final Révisé
+---
+
+## ✅ **PLAN FINAL OPTIMISÉ**
+
+### 🎯 Version Finale Intégrant Tous les Retours
 {app_log["revision"]}
 
 ---
-*Généré automatiquement par le système de brainstorm AI*
+
+## 📊 **FICHE TECHNIQUE DU PROJET**
+
+| **Critère** | **Détail** |
+|-------------|------------|
+| **🎯 Projet** | Projet #{idx:02d} |
+| **📅 Date de création** | {datetime.datetime.now().strftime("%d/%m/%Y à %H:%M")} |
+| **🏷️ Statut** | Prêt pour mise en œuvre |
+| **📈 Niveau de maturité** | Plan d'affaires complet |
+| **🔄 Processus** | Idée → Critique → Défense → Optimisation |
+
+---
+
+## 🎯 **RÉSUMÉ EXÉCUTIF - PRÊT À PRÉSENTER**
+
+Ce projet a été développé et affiné par un système de brainstorming multi-agents comprenant :
+- ✅ **Génération créative** de l'idée originale
+- ✅ **Analyse critique** approfondie par des experts
+- ✅ **Défense argumentée** avec justifications
+- ✅ **Optimisation finale** intégrant tous les retours
+
+**Le projet est maintenant prêt pour :**
+- 📋 Présentation aux parties prenantes
+- 💰 Recherche de financement
+- 🚀 Mise en œuvre opérationnelle
+- 📊 Suivi et mesure des résultats
+
+---
+
+*📝 Document généré automatiquement par Brainstorm AI*  
+*🤖 Système de brainstorming intelligent multi-agents*  
+*⚡ Optimisé pour la prise de décision et l'action*
 """
 
                 try:
                     with open(filename, "w", encoding="utf-8") as f:
                         f.write(content)
+                    logger.info(f"📄 Export projet #{idx}: {filename}")
                 except OSError as e:
                     logger.error(f"Erreur lors de l'écriture du fichier {filename}: {e}")
         except OSError as e:

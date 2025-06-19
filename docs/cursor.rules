@@ -5,11 +5,142 @@
 ## 🎯 Règles générales
 - **Langue** : Toujours répondre en français
 - **Architecture** : Respecter la structure src/brainstorm_ai/ (agents/, core/, cli/)
-- **Tests** : Maintenir une couverture de tests pour les fonctionnalités critiques
+- **Qualité code** : Utiliser ruff pour linting et formatage
 - **Configuration** : Centraliser les paramètres dans config/ (config.yaml, prompts.yaml)
 - **Sécurité** : Ne jamais exposer de clés API dans le code
+- **Versioning** : Utiliser bump2version pour les releases
+
+## 🖥️ Spécificités environnement Windows/PowerShell
+
+### ❌ Erreurs courantes et solutions
+
+#### 1. **Commande `make` non reconnue**
+```powershell
+# ❌ Problème
+make help  # "make: The term 'make' is not recognized"
+
+# ✅ Solutions
+# Option 1: Scripts PowerShell équivalents
+.\scripts\bump_version.ps1
+.\scripts\run_quick_start.py
+
+# Option 2: Installation make pour Windows
+choco install make  # Avec Chocolatey
+# ou utiliser WSL si disponible
+```
+
+#### 2. **Commandes Linux sous PowerShell**
+```powershell
+# ❌ Éviter
+ls -la | grep pattern    # Commandes Unix non reconnues
+find . -name "*.py"
+
+# ✅ Utiliser les équivalents PowerShell
+Get-ChildItem -Force | Where-Object {$_.Name -like "*pattern*"}
+Get-ChildItem -Recurse -Filter "*.py"
+```
+
+#### 3. **Gestion des chemins**
+```powershell
+# ❌ Problème avec les chemins
+cat /path/to/file        # Style Unix
+
+# ✅ PowerShell natif
+Get-Content .\path\to\file
+Get-Content "C:\Full\Path\To\File"
+```
+
+#### 4. **Commits Git multi-lignes**
+```bash
+# ❌ Éviter les messages multi-lignes via tool
+git commit -m "Ligne 1
+Ligne 2"  # Cause des erreurs dans les outils
+
+# ✅ Messages simples ou via editor
+git commit -m "Description courte et claire"
+git commit  # Ouvre l'éditeur pour messages longs
+```
+
+### 🛠️ Outils et commandes recommandés
+
+#### **Versioning automatique**
+```powershell
+# Commandes make recommandées (cross-platform)
+make bump-patch   # Version patch (1.0.0 -> 1.0.1)
+make bump-minor   # Version minor (1.0.0 -> 1.1.0)  
+make bump-major   # Version major (1.0.0 -> 2.0.0)
+
+# Script PowerShell alternatif
+.\scripts\bump_version.ps1 patch   # Avec confirmation
+
+# Commande directe bump2version
+bump2version patch
+```
+
+#### **Gestion de projets Python**
+```powershell
+# Installation avec make (recommandé)
+make install      # Production seulement
+make install-dev  # Dev + production
+
+# Installation manuelle
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+pip install -e .  # Mode développement
+
+# Vérifications
+python -c "import brainstorm_ai; print(brainstorm_ai.__version__)"
+```
+
+#### **Diagnostic et dépannage**
+```powershell
+# État Git robuste
+git status --porcelain  # Sortie scriptable
+git log --oneline -5 | cat  # Éviter le pager
+
+# Variables d'environnement
+$env:OPENAI_API_KEY      # Vérifier sans exposer
+Get-Content .env | Select-String "OPENAI"  # Vérifier config
+```
+
+### ⚡ Scripts et automatisation
+
+#### **bump2version - Sécurités intégrées**
+- ✅ Vérification répertoire Git propre
+- ✅ Validation fichiers synchronisés  
+- ✅ Commits et tags automatiques
+- ✅ Mode dry-run pour tests
+
+#### **Scripts PowerShell robustes**
+```powershell
+# Gestion d'erreur exemple
+try {
+    $null = Get-Command bump2version -ErrorAction Stop
+} catch {
+    Write-Host "Installation bump2version..." -ForegroundColor Yellow
+    pip install bump2version
+}
+```
 
 ## 🔧 Commandes et outils
+
+### 🏗️ Outils de développement configurés
+
+#### **Qualité de code avec ruff**
+```bash
+# Commandes make (recommandées)
+make check          # Linting + formatage automatique
+
+# Commandes directes ruff
+ruff check src main.py scripts     # Vérification
+ruff format src main.py scripts    # Formatage
+```
+
+#### **Build et nettoyage**
+```bash
+make clean          # Supprime fichiers temporaires
+make run            # Lance main.py
+```
 
 ### ✅ Privilégier GitHub CLI (gh) dans Cursor
 **Problème identifié** : Les commandes `git` standard causent parfois des suspensions dans l'IDE Cursor
@@ -50,11 +181,14 @@ git push origin main
 - **application.py** : Plans de mise en œuvre
 
 ### Fichiers importants
-- **main.py** / **run.py** : Points d'entrée
+- **main.py** : Point d'entrée principal
+- **scripts/run_quick_start.py** : Assistant interactif de démarrage
 - **config/config.yaml** : Configuration système (modèles, cycles, etc.)
 - **config/prompts.yaml** : Templates des prompts pour chaque agent
 - **src/brainstorm_ai/core/loop_manager.py** : Orchestration du brainstorming
 - **src/brainstorm_ai/core/gpt.py** : Interface OpenAI
+- **Makefile** : Commandes de développement
+- **pyproject.toml** : Configuration du projet et outils
 
 ### ⚠️ Précautions importantes
 - **Tests coûteux** : Éviter d'exécuter `main.py` à répétition (consomme des tokens OpenAI)
@@ -64,19 +198,20 @@ git push origin main
 ## ✅ Checklist avant commit
 
 ### Fonctionnalité
-- [ ] Code testé et fonctionnel
+- [ ] Code testé manuellement et fonctionnel
 - [ ] Pas de clés API hardcodées
 - [ ] Configuration YAML valide
 - [ ] Imports résolus correctement
 
-### Qualité
-- [ ] Messages de commit descriptifs
+### Qualité code
+- [ ] `make check` passé (ruff linting + formatage)
+- [ ] Messages de commit descriptifs avec emojis
 - [ ] Documentation mise à jour si nécessaire
-- [ ] Tests unitaires passent
 
 ### Déploiement
 - [ ] Vérification avec `gh` si possible
 - [ ] Push vers la bonne branche
+- [ ] Version bumped si nécessaire (`make bump-patch`)
 
 ## 🚀 Bonnes pratiques de développement
 

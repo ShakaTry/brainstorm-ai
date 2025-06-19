@@ -86,27 +86,13 @@ def export_json(data: Dict[str, Any], filename: str = "logs/brainstorm_export.js
 
 
 def escape_markdown(text: str) -> str:
-    """Échappe les caractères spéciaux pour le Markdown."""
+    """Échappe les caractères spéciaux critiques pour le Markdown."""
     if not isinstance(text, str):
         text = str(text)
-    # Échapper les caractères spéciaux Markdown
+    # Échapper seulement les caractères critiques qui peuvent casser la structure
+    # Éviter d'échapper les caractères courants comme les points, parenthèses etc.
     chars_to_escape = [
-        "\\",
-        "`",
-        "*",
-        "_",
-        "{",
-        "}",
-        "[",
-        "]",
-        "(",
-        ")",
-        "#",
-        "+",
-        "-",
-        ".",
-        "!",
-        "|",
+        "|",  # Casse les tableaux
     ]
     for char in chars_to_escape:
         text = text.replace(char, f"\\{char}")
@@ -185,22 +171,94 @@ def export_markdown(data: Dict[str, Any], filename: str = "logs/brainstorm_expor
 
             # Applications
             if "application" in data and data["application"]:
-                f.write("## 💡 Plans d'Application\n\n")
+                f.write("## 💡 **PROJETS DÉVELOPPÉS - PRÊTS POUR MISE EN ŒUVRE**\n\n")
+                
+                # Table de synthèse des projets
+                f.write("### 📊 **TABLEAU DE BORD EXÉCUTIF**\n\n")
+                f.write("| **Projet** | **Concept Principal** | **Statut** | **Priorité** |\n")
+                f.write("|------------|----------------------|------------|-------------|\n")
+                
                 for idx, app in enumerate(data["application"], 1):
-                    f.write(f"### Idée {idx}\n\n")
-                    f.write(f"**Idée:** {escape_markdown(app.get('idee', ''))}\n\n")
-
+                    concept_short = app.get('idee', '')[:60] + "..." if len(app.get('idee', '')) > 60 else app.get('idee', '')
+                    f.write(f"| **#{idx:02d}** | {escape_markdown(concept_short)} | ✅ Finalisé | ⭐ Haute |\n")
+                
+                f.write("\n---\n\n")
+                
+                # Détail de chaque projet
+                for idx, app in enumerate(data["application"], 1):
+                    f.write(f"### 🚀 **PROJET #{idx:02d} - PRÉSENTATION COMPLÈTE**\n\n")
+                    
+                    # Concept principal en highlight
+                    f.write(f"#### 💡 **CONCEPT PRINCIPAL**\n")
+                    f.write(f"> **{escape_markdown(app.get('idee', ''))}**\n\n")
+                    
+                    # Plan d'affaires structuré
+                    f.write(f"#### 📋 **PLAN D'AFFAIRES DÉTAILLÉ**\n\n")
                     if "plan_initial" in app:
-                        f.write("#### Plan Initial\n")
-                        f.write("```\n")
+                        f.write("```markdown\n")
                         f.write(app.get("plan_initial", ""))
                         f.write("\n```\n\n")
 
+                    # Analyse critique avec évaluation
+                    f.write(f"#### 🔍 **ANALYSE CRITIQUE ET ÉVALUATION**\n\n")
+                    if "critique" in app:
+                        f.write("**⚠️ Points d'Attention Identifiés :**\n\n")
+                        f.write("```markdown\n")
+                        f.write(app.get("critique", ""))
+                        f.write("\n```\n\n")
+                    
+                    # Défense argumentée
+                    f.write(f"#### 🛡️ **ARGUMENTATION ET JUSTIFICATIONS**\n\n")
+                    if "defense" in app:
+                        f.write("**💪 Défense Stratégique du Projet :**\n\n")
+                        f.write("```markdown\n")
+                        f.write(app.get("defense", ""))
+                        f.write("\n```\n\n")
+
+                    # Plan final optimisé
+                    f.write(f"#### ✅ **PLAN FINAL OPTIMISÉ**\n\n")
                     if "revision" in app:
-                        f.write("#### Plan Révisé\n")
-                        f.write("```\n")
+                        f.write("**🎯 Version Finale Intégrant Tous les Retours :**\n\n")
+                        f.write("```markdown\n")
                         f.write(app.get("revision", ""))
                         f.write("\n```\n\n")
+                    
+                    # Fiche technique du projet
+                    f.write(f"#### 📊 **FICHE TECHNIQUE**\n\n")
+                    f.write("| **Critère** | **Détail** |\n")
+                    f.write("|-------------|------------|\n")
+                    f.write(f"| **🎯 Projet** | Projet #{idx:02d} |\n")
+                    f.write(f"| **📅 Date** | {datetime.now().strftime('%d/%m/%Y à %H:%M')} |\n")
+                    f.write(f"| **🏷️ Statut** | Prêt pour mise en œuvre |\n")
+                    f.write(f"| **📈 Maturité** | Plan d'affaires complet |\n")
+                    f.write(f"| **🔄 Processus** | Idée → Critique → Défense → Optimisation |\n\n")
+                    
+                    # Résumé exécutif
+                    f.write(f"#### 🎯 **RÉSUMÉ EXÉCUTIF**\n\n")
+                    f.write("Ce projet a été développé et affiné par un système de brainstorming multi-agents :\n\n")
+                    f.write("- ✅ **Génération créative** de l'idée originale\n")
+                    f.write("- ✅ **Analyse critique** approfondie par des experts\n")
+                    f.write("- ✅ **Défense argumentée** avec justifications\n")
+                    f.write("- ✅ **Optimisation finale** intégrant tous les retours\n\n")
+                    
+                    f.write("**Le projet est maintenant prêt pour :**\n")
+                    f.write("- 📋 Présentation aux parties prenantes\n")
+                    f.write("- 💰 Recherche de financement\n")
+                    f.write("- 🚀 Mise en œuvre opérationnelle\n")
+                    f.write("- 📊 Suivi et mesure des résultats\n\n")
+                    
+                    f.write("---\n\n")
+                
+                # Synthèse finale de tous les projets
+                f.write("### 🏆 **SYNTHÈSE FINALE - PORTEFEUILLE DE PROJETS**\n\n")
+                f.write(f"**🎯 Nombre total de projets développés :** {len(data['application'])}\n\n")
+                f.write("**📈 Niveau de qualité :** Chaque projet a été rigoureusement analysé, critiqué, défendu et optimisé\n\n")
+                f.write("**✅ Statut :** Tous les projets sont prêts pour la mise en œuvre immédiate\n\n")
+                f.write("**🚀 Prochaines étapes recommandées :**\n")
+                f.write("1. **Priorisation** : Classer les projets selon vos critères business\n")
+                f.write("2. **Validation** : Présenter les concepts aux parties prenantes\n")
+                f.write("3. **Planification** : Détailler la roadmap de mise en œuvre\n")
+                f.write("4. **Lancement** : Démarrer les projets prioritaires\n\n")
 
         logger.info(f"Export Markdown réussi : {filename}")
 

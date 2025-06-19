@@ -67,10 +67,37 @@ jobs:
       with:
         sarif_file: 'trivy-results.sarif'
 
+  manual-test:
+    name: Manual Integration Test
+    runs-on: ubuntu-latest
+    needs: [lint]
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -e .
+    
+    - name: Test import
+      run: |
+        python -c "import brainstorm_ai; print('✅ Import successful')"
+        python -c "from brainstorm_ai.cli.main import main; print('✅ CLI import successful')"
+    
+    - name: Test scripts
+      run: |
+        python scripts/check_config.py || echo "⚠️ Config check failed (expected without API key)"
+
   build:
     name: Build Package
     runs-on: ubuntu-latest
-    needs: [lint]
+    needs: [manual-test]
     steps:
     - uses: actions/checkout@v4
     
@@ -110,12 +137,14 @@ jobs:
     - name: Check if release needed
       id: check_release
       run: |
-        # Check if there's a version tag for this commit
+        # Check if there's a version tag for this commit (created by bump2version)
         if git describe --exact-match --tags HEAD 2>/dev/null; then
           echo "release_needed=true" >> $GITHUB_OUTPUT
           echo "version=$(git describe --exact-match --tags HEAD)" >> $GITHUB_OUTPUT
+          echo "✅ Release tag found: $(git describe --exact-match --tags HEAD)"
         else
           echo "release_needed=false" >> $GITHUB_OUTPUT
+          echo "ℹ️ No release tag found - skipping release"
         fi
     
     - name: Create Release
@@ -124,4 +153,11 @@ jobs:
       with:
         tag_name: ${{ steps.check_release.outputs.version }}
         files: dist/*
-        generate_release_notes: true 
+        generate_release_notes: true
+        body: |
+          🚀 **Release automatique depuis bump2version**
+          
+          Cette release a été créée automatiquement via `bump2version` et le workflow CI.
+          
+          📦 **Changelog**: Voir les commits depuis la dernière version
+          📋 **Installation**: `pip install brainstorm-ai==${{ steps.check_release.outputs.version }}` 

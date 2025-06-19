@@ -92,6 +92,33 @@ export:
   
   # Sauvegarder automatiquement les idées individuelles
   save_individual_ideas: true
+  
+  # ✨ NOUVELLES OPTIONS DE PRÉSENTATION PROFESSIONNELLE
+  project_presentation:
+    # Format de nommage des projets exportés
+    filename_pattern: "PROJET_{index:02d}_{title_slug}"
+    
+    # Inclure les métadonnées dans les exports
+    include_metadata: true
+    
+    # Ajouter un résumé exécutif à chaque projet
+    include_executive_summary: true
+    
+    # Créer un index des projets
+    create_project_index: true
+    
+    # Formatage avancé des documents
+    advanced_formatting:
+      use_professional_headers: true
+      include_status_badges: true
+      add_priority_indicators: true
+      include_readiness_score: true
+    
+    # Templates de présentation
+    templates:
+      individual_project: "professional"  # Options: basic, professional, executive
+      summary_report: "executive"         # Options: standard, executive, detailed
+      project_index: "dashboard"          # Options: simple, dashboard, detailed
 
 # Configuration de l'affichage
 display:

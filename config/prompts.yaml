@@ -65,48 +65,272 @@ prompts:
   
   synthese:
     consolidation: |
-      Tu es un agent de synthèse. Voici toutes les idées révisées :
+      Tu es un agent de synthèse d'excellence. Voici toutes les idées révisées développées :
       
       {idees}
       
-      Sélectionne les {count} meilleures idées en les classant par ordre de pertinence. Pour chaque idée, fournis :
-      1. Un titre concis
-      2. Une description claire
-      3. Les principaux avantages
-      4. Les étapes clés de mise en œuvre
+      SÉLECTIONNE les {count} meilleures idées en les classant par ordre de pertinence et de potentiel d'impact.
+      
+      Pour chaque idée, fournis une présentation STRUCTURÉE ET PROFESSIONNELLE selon ce format EXACT :
+      
+      ## IDÉE #[numéro]
+      
+      ### 🎯 **TITRE EXÉCUTIF**
+      [Titre accrocheur et professionnel qui résume parfaitement le concept]
+      
+      ### 📋 **DESCRIPTION STRATÉGIQUE**
+      [Description claire et convaincante en 3-4 phrases qui explique l'essence du projet et sa valeur unique]
+      
+      ### 💡 **INNOVATION ET DIFFÉRENCIATION**
+      - **Facteur d'innovation** : [Ce qui rend ce concept unique et innovant]
+      - **Avantage concurrentiel** : [Pourquoi ce projet surpasse les alternatives existantes]
+      - **Potentiel disruptif** : [Impact potentiel sur le marché/secteur]
+      
+      ### 🚀 **BÉNÉFICES STRATÉGIQUES MAJEURS**
+      - **Bénéfice principal** : [Avantage #1 le plus impactant]
+      - **Bénéfice opérationnel** : [Amélioration des processus/efficacité]
+      - **Bénéfice financier** : [Retour sur investissement ou économies]
+      - **Bénéfice stratégique** : [Positionnement ou avantage concurrentiel]
+      
+      ### 🎯 **ROADMAP DE MISE EN ŒUVRE**
+      #### 🟢 **Phase 1 - Démarrage (0-3 mois)**
+      - [ ] **Étape critique 1** : [Action prioritaire avec deadline]
+      - [ ] **Étape critique 2** : [Action prioritaire avec deadline]
+      - [ ] **Livrable Phase 1** : [Résultat concret attendu]
+      
+      #### 🟡 **Phase 2 - Développement (3-9 mois)**
+      - [ ] **Étape clé 1** : [Action importante avec timeline]
+      - [ ] **Étape clé 2** : [Action importante avec timeline]
+      - [ ] **Livrable Phase 2** : [Résultat intermédiaire]
+      
+      #### 🔴 **Phase 3 - Lancement (9-12 mois)**
+      - [ ] **Étape finale 1** : [Action de déploiement]
+      - [ ] **Étape finale 2** : [Action de déploiement]
+      - [ ] **Livrable Final** : [Produit/service opérationnel]
+      
+      ### 📊 **INDICATEURS DE RÉUSSITE**
+      - **KPI Principal** : [Métrique de succès #1 + cible chiffrée]
+      - **KPI Opérationnel** : [Métrique de performance + objectif]
+      - **KPI Financier** : [Métrique ROI + seuil de rentabilité]
+      
+      ### ⚡ **FACTEURS DE SUCCÈS CRITIQUES**
+      - **Facteur #1** : [Élément clé pour réussir]
+      - **Facteur #2** : [Deuxième élément crucial]
+      - **Facteur #3** : [Troisième point de vigilance]
+      
+      ---
+      
+      ASSURE-TOI que chaque idée présentée soit :
+      - ✅ **Actionnable** : Peut être mise en œuvre concrètement
+      - ✅ **Différenciée** : Apporte une valeur unique
+      - ✅ **Mesurable** : Succès quantifiable par des KPI
+      - ✅ **Réaliste** : Faisable avec les ressources disponibles
+      - ✅ **Impactante** : Génère un retour significatif
   
   application:
     plan: |
-      Tu es un agent d'application. Pour cette idée :
+      Tu es un agent d'application expert. Pour cette idée :
       
       {idee}
       
-      Développe un plan de mise en œuvre détaillé avec :
-      - Objectifs spécifiques
-      - Étapes concrètes
-      - Ressources nécessaires
-      - Timeline réaliste
-      - Indicateurs de succès
+      Développe un plan de mise en œuvre STRUCTURÉ ET DÉTAILLÉ selon ce format EXACT :
+      
+      ## 🎯 TITRE DU PROJET
+      [Titre accrocheur et professionnel]
+      
+      ## 📋 RÉSUMÉ EXÉCUTIF
+      [Description concise de l'idée en 2-3 phrases]
+      
+      ## 🚀 OBJECTIFS SPÉCIFIQUES
+      - Objectif principal : [objectif SMART]
+      - Objectifs secondaires : [2-3 objectifs mesurables]
+      
+      ## 📊 OPPORTUNITÉ ET VALEUR
+      - Problème résolu : [description claire]
+      - Marché cible : [définition précise]
+      - Valeur ajoutée : [avantages concrets]
+      - ROI estimé : [retour sur investissement prévu]
+      
+      ## 🔧 PLAN D'EXÉCUTION DÉTAILLÉ
+      
+      ### Phase 1: Préparation (Semaines 1-2)
+      - [ ] Étape 1 : [action concrète + responsable + deadline]
+      - [ ] Étape 2 : [action concrète + responsable + deadline]
+      - [ ] Étape 3 : [action concrète + responsable + deadline]
+      
+      ### Phase 2: Développement (Semaines 3-8)
+      - [ ] Étape 1 : [action concrète + responsable + deadline]
+      - [ ] Étape 2 : [action concrète + responsable + deadline]
+      - [ ] Étape 3 : [action concrète + responsable + deadline]
+      
+      ### Phase 3: Lancement (Semaines 9-12)
+      - [ ] Étape 1 : [action concrète + responsable + deadline]
+      - [ ] Étape 2 : [action concrète + responsable + deadline]
+      - [ ] Étape 3 : [action concrète + responsable + deadline]
+      
+      ## 💰 RESSOURCES NÉCESSAIRES
+      
+      ### Ressources Humaines
+      - Chef de projet : [profil + temps alloué]
+      - Équipe technique : [compétences + effectif]
+      - Consultants externes : [expertise + durée]
+      
+      ### Budget Estimé
+      - Coûts de développement : [montant détaillé]
+      - Coûts marketing : [montant détaillé]
+      - Coûts opérationnels : [montant détaillé]
+      - **Budget total :** [montant global]
+      
+      ### Technologies et Outils
+      - Outils de développement : [liste précise]
+      - Plateformes nécessaires : [services requis]
+      - Infrastructure : [besoins techniques]
+      
+      ## 📈 INDICATEURS DE SUCCÈS (KPI)
+      - KPI principal : [métrique + cible + délai]
+      - KPI secondaires : [3-4 métriques mesurables]
+      - Méthode de suivi : [outils et fréquence]
+      
+      ## ⚠️ RISQUES ET MITIGATION
+      - Risque majeur : [description + probabilité + impact + plan B]
+      - Risques secondaires : [2-3 risques + actions préventives]
+      
+      ## 🎯 JALONS ET LIVRABLES
+      - Jalon 1 (Semaine 2) : [livrable concret]
+      - Jalon 2 (Semaine 6) : [livrable concret]
+      - Jalon 3 (Semaine 10) : [livrable concret]
+      - **Livraison finale (Semaine 12) :** [produit final]
     
     critique_plan: |
-      Tu es un agent critique spécialisé dans l'évaluation de plans. Analyse ce plan :
+      Tu es un agent critique spécialisé dans l'évaluation de plans d'affaires. Analyse ce plan selon ces 8 DIMENSIONS CRITIQUES :
       
       {plan}
       
-      Identifie les lacunes, les risques d'exécution et les points d'amélioration.
+      ÉVALUE CHAQUE DIMENSION avec une note /10 et des commentaires détaillés :
+      
+      ## 🔍 ANALYSE CRITIQUE COMPLÈTE
+      
+      ### 1. 🎯 CLARTÉ ET FAISABILITÉ DES OBJECTIFS (/10)
+      - Note : [X/10]
+      - Analyse : [les objectifs sont-ils SMART et réalisables ?]
+      - Points faibles : [lacunes identifiées]
+      
+      ### 2. 💰 RÉALISME BUDGÉTAIRE (/10)
+      - Note : [X/10]
+      - Analyse : [le budget est-il cohérent et détaillé ?]
+      - Points faibles : [coûts sous-estimés ou manquants]
+      
+      ### 3. ⏰ TIMELINE ET PLANIFICATION (/10)
+      - Note : [X/10]
+      - Analyse : [les délais sont-ils réalistes ?]
+      - Points faibles : [phases mal dimensionnées]
+      
+      ### 4. 👥 RESSOURCES HUMAINES (/10)
+      - Note : [X/10]
+      - Analyse : [les compétences requises sont-elles identifiées ?]
+      - Points faibles : [manque de profils ou surcharge]
+      
+      ### 5. 🚀 STRATÉGIE DE MISE EN MARCHÉ (/10)
+      - Note : [X/10]
+      - Analyse : [l'approche commerciale est-elle solide ?]
+      - Points faibles : [lacunes marketing ou positionnement]
+      
+      ### 6. ⚠️ GESTION DES RISQUES (/10)
+      - Note : [X/10]
+      - Analyse : [les risques sont-ils bien identifiés ?]
+      - Points faibles : [risques oubliés ou mal évalués]
+      
+      ### 7. 📊 MÉTRIQUES ET SUIVI (/10)
+      - Note : [X/10]
+      - Analyse : [les KPI sont-ils pertinents et mesurables ?]
+      - Points faibles : [indicateurs flous ou manquants]
+      
+      ### 8. 🎯 INNOVATION ET DIFFÉRENCIATION (/10)
+      - Note : [X/10]
+      - Analyse : [le projet apporte-t-il une vraie valeur ajoutée ?]
+      - Points faibles : [manque d'originalité ou d'avantage concurrentiel]
+      
+      ## 📋 RECOMMANDATIONS PRIORITAIRES
+      1. **CRITIQUE MAJEURE** : [point le plus problématique à corriger]
+      2. **AMÉLIORATION IMPORTANTE** : [deuxième priorité]
+      3. **OPTIMISATION** : [troisième amélioration suggérée]
+      
+      ## 📊 SCORE GLOBAL : [Total /80]
     
     defense_plan: |
-      Tu es un agent d'application. Voici ton plan et les critiques :
+      Tu es un agent d'application expert. Voici ton plan et les critiques reçues :
       
       Plan : {plan}
       Critique : {critique}
       
-      Défends la viabilité du plan et propose des ajustements pour répondre aux critiques.
+      DÉFENDS ton plan avec une argumentation STRUCTURÉE ET CONVAINCANTE :
+      
+      ## 🛡️ DÉFENSE ARGUMENTÉE DU PLAN
+      
+      ### 📊 RÉPONSE AUX CRITIQUES MAJEURES
+      [Pour chaque critique principale, fournis :]
+      
+      **Critique :** [reprendre la critique exacte]
+      **Réponse :** [argumentation factuelle et données à l'appui]
+      **Justification :** [pourquoi votre approche est la bonne]
+      **Preuves :** [exemples, benchmarks, études de cas]
+      
+      ### 🎯 AJUSTEMENTS PROPOSÉS
+      - **Ajustement 1 :** [modification concrète pour répondre à une critique]
+      - **Ajustement 2 :** [deuxième amélioration proposée]
+      - **Ajustement 3 :** [troisième optimisation]
+      
+      ### 💪 FORCES DU PLAN MAINTENUES
+      - **Force principale :** [avantage concurrentiel préservé]
+      - **Atouts stratégiques :** [3 points forts non négociables]
+      - **Valeur ajoutée unique :** [ce qui rend le plan spécial]
+      
+      ### 📈 NOUVEAUX ÉLÉMENTS DE RÉASSURANCE
+      - **Validation marché :** [données ou témoignages]
+      - **Expertise équipe :** [compétences et références]
+      - **Partenariats stratégiques :** [alliances ou supports]
     
     revision_plan: |
-      Tu es un agent de révision de plans. En tenant compte de ces éléments :
+      Tu es un agent de révision de plans d'affaires. En tenant compte de ces éléments :
       
       Plan initial : {plan}
       Critiques : {critique}
       
-      Propose une version finale optimisée du plan qui intègre les retours constructifs. 
+      Propose une VERSION FINALE OPTIMISÉE qui intègre les retours constructifs tout en conservant la vision originale.
+      
+      ## 🚀 PLAN FINAL OPTIMISÉ
+      
+      ### 📋 AMÉLIORATIONS INTÉGRÉES
+      - **Changement 1 :** [modification apportée + justification]
+      - **Changement 2 :** [deuxième amélioration + raison]
+      - **Changement 3 :** [troisième optimisation + bénéfice]
+      
+      ### 🎯 PLAN D'ACTION RÉVISÉ
+      [Reprendre la structure du plan initial avec les améliorations intégrées]
+      
+      #### Phase 1: Préparation Renforcée (Semaines 1-X)
+      - [ ] [Étapes révisées avec les corrections]
+      
+      #### Phase 2: Développement Optimisé (Semaines X-Y)
+      - [ ] [Étapes améliorées]
+      
+      #### Phase 3: Lancement Sécurisé (Semaines Y-Z)
+      - [ ] [Étapes finalisées]
+      
+      ### 💰 BUDGET AJUSTÉ
+      - **Nouveau budget total :** [montant révisé]
+      - **Principales modifications :** [postes budgétaires ajustés]
+      - **Justification des changements :** [pourquoi ces ajustements]
+      
+      ### 📊 KPI AFFINÉS
+      - **Nouveaux indicateurs :** [métriques ajoutées ou modifiées]
+      - **Méthodes de mesure améliorées :** [outils et processus]
+      
+      ### ⚠️ RISQUES MIEUX MAÎTRISÉS
+      - **Nouveaux plans de mitigation :** [stratégies de gestion des risques]
+      - **Alertes précoces :** [signaux d'alarme et actions]
+      
+      ### ✅ VALIDATION FINALE
+      - **Points forts conservés :** [ce qui reste du plan original]
+      - **Améliorations apportées :** [ce qui a été optimisé]
+      - **Niveau de confiance :** [probabilité de succès révisée] 
