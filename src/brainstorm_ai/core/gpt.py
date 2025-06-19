@@ -96,8 +96,16 @@ class GPTClient:
         self._api_calls = 0
 
 
-# Instance globale du client
-_gpt_client = GPTClient()
+# Instance globale du client (initialisation lazy)
+_gpt_client = None
+
+
+def get_gpt_client() -> GPTClient:
+    """Retourne l'instance GPT client (initialisation lazy)."""
+    global _gpt_client
+    if _gpt_client is None:
+        _gpt_client = GPTClient()
+    return _gpt_client
 
 
 def gpt(
@@ -139,7 +147,8 @@ def gpt(
             )
 
             # Appel à l'API OpenAI
-            response = _gpt_client.client.chat.completions.create(
+            client = get_gpt_client()
+            response = client.client.chat.completions.create(
                 model=model, messages=[{"role": "user", "content": prompt}], temperature=temperature
             )
 
@@ -152,7 +161,7 @@ def gpt(
             cost = config.calculate_cost(model, prompt_tokens, completion_tokens)
 
             # Mise à jour des statistiques
-            _gpt_client.add_usage(prompt_tokens, completion_tokens, cost)
+            client.add_usage(prompt_tokens, completion_tokens, cost)
 
             logger.info(
                 f"Appel GPT réussi - Tokens: {prompt_tokens}+{completion_tokens}, Coût: ${cost:.4f}"
@@ -196,12 +205,12 @@ def gpt(
 
 def get_gpt_stats() -> Dict[str, Any]:
     """Retourne les statistiques globales d'utilisation de l'API."""
-    return _gpt_client.get_stats()
+    return get_gpt_client().get_stats()
 
 
 def reset_gpt_stats():
     """Réinitialise les statistiques d'utilisation."""
-    _gpt_client.reset_stats()
+    get_gpt_client().reset_stats()
     logger.info("Statistiques GPT réinitialisées")
 
 
