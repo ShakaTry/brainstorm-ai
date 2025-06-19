@@ -1,4 +1,4 @@
-.PHONY: help install install-dev test check clean run
+.PHONY: help install install-dev test check clean run bump-patch bump-minor bump-major
 
 # Variables
 PYTHON := python
@@ -44,4 +44,16 @@ clean: ## Nettoie les fichiers temporaires
 
 run: ## Lance l'application principale
 	$(PYTHON) main.py
+
+bump-patch: ## Incrémente la version patch (2.1.0 -> 2.1.1)
+	@echo "$(BLUE)Bump version patch...$(NC)"
+	bump2version patch
+
+bump-minor: ## Incrémente la version minor (2.1.0 -> 2.2.0)
+	@echo "$(BLUE)Bump version minor...$(NC)"
+	bump2version minor
+
+bump-major: ## Incrémente la version major (2.1.0 -> 3.0.0)
+	@echo "$(BLUE)Bump version major...$(NC)"
+	bump2version major
  
