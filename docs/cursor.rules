@@ -17,6 +17,33 @@
 2. **Créer un commit descriptif** : Message en français spécifique au contexte IA
 3. **Pousser vers GitHub** : `git push origin main`
 
+### 🚨 PRÉFÉRENCE OBLIGATOIRE : Commandes GitHub CLI (gh)
+**PROBLÈME IDENTIFIÉ** : Les commandes `git` causent des suspensions dans l'IDE Cursor
+
+#### ✅ UTILISER EN PRIORITÉ :
+```bash
+# Vérifications - UTILISER gh au lieu de git
+gh api repos/ShakaTry/brainstorm-ai/commits --jq '.[0:3]'  # ✅ Au lieu de git log
+gh repo view --json name,pushedAt,defaultBranchRef         # ✅ Infos repository
+gh run list --limit 5                                      # ✅ État CI/CD
+gh browse --no-browser                                      # ✅ URL repository
+
+# Commits et historique - Plus fiables
+gh api repos/ShakaTry/brainstorm-ai/commits/HASH --jq '{sha, message, stats}'
+```
+
+#### ❌ ÉVITER (causent des suspensions) :
+```bash
+git log --oneline    # ❌ Reste en suspend dans Cursor
+git status          # ❌ Parfois bloqué
+git remote -v       # ❌ Sortie tronquée
+```
+
+#### 🎯 RÈGLE : GitHub CLI First
+- **Vérifications** : Toujours utiliser `gh` pour inspecter l'état GitHub
+- **Git classique** : Uniquement pour add/commit/push locaux
+- **Diagnostic** : `gh` fournit plus d'informations et sans suspension
+
 ### ⚠️ RÈGLES CRITIQUES DE SYNCHRONISATION GITHUB
 **LEÇON APPRISE** : Toujours vérifier et maintenir la cohérence des branches GitHub
 
@@ -122,6 +149,12 @@ git push origin main
 - [ ] **Synchronisation** : Toutes les branches actives pushées
 - [ ] **Vérification visuelle** : `gh repo view --web` après push important
 - [ ] **Cohérence branches** : Pas de décalage entre local et remote
+
+### 🔧 Vérifications Techniques Obligatoires
+- [ ] **Commandes GitHub CLI** : Utiliser `gh` au lieu de `git` pour toutes vérifications
+- [ ] **Pas de suspension** : Éviter `git log`, `git status` qui bloquent dans Cursor  
+- [ ] **API GitHub** : Privilégier `gh api` pour données détaillées
+- [ ] **Workflows CI/CD** : Toujours vérifier avec `gh run list` après push
 
 ### Tests critiques à valider
 - [ ] **main.py** s'exécute sans erreur
