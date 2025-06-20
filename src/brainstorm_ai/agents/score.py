@@ -26,7 +26,7 @@ class AgentScore(BaseAgent):
             Un JSON avec les scores d'évaluation
         """
         prompt = PromptRegistry.get_prompt("score", "evaluation")
-        return self.execute_prompt(prompt, texte=texte)
+        return self.execute_prompt(prompt, idees=texte)
 
 
 # Instance globale pour les fonctions de compatibilité
